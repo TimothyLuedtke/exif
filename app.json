@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b945da74-ba38-4429-9efe-d27c28d3982a"
+      }
+    },
+    "owner": "timothyluedtke"
   }
 }

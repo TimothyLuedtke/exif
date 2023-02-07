@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './src/screens/Home';
-import SettingsScreen from './src/screens/Settings';  
+import FilterScreen from './src/screens/Filter';  
 import PhotosScreen from './src/screens/Photos';
 
 
@@ -16,7 +16,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Photos" component={PhotosScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Filter" component={FilterScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -1,4 +1,4 @@
-import { Button, Dimensions, SafeAreaView, Text, StyleSheet, Image } from 'react-native';
+import { Button, Dimensions, SafeAreaView, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
@@ -7,6 +7,7 @@ const { width } = Dimensions.get('window');
 
 export default function PhotosScreen() {
     const [image, setImage] = useState(null);
+    const [filteredImage, setFilteredImage] = useState(null);
     const [exif, setExif] = useState(null);
 
     useEffect(() => {
@@ -28,23 +29,24 @@ export default function PhotosScreen() {
             quality: 1,
         });
 
-        console.log(result);
-
         if (!result.canceled) {
-            setImage(result.assets.map((item) => item.uri));
             setExif(result.assets.map((item) => item.exif));
+            setImage(result.assets.map((item) => item.uri));
+            setFilteredImage(result.assets.map((item) => item.uri));
             console.log(result.assets.map((item) => item.exif));
         } else {
             alert('You have not selected any image');
         }
     };
 
+        
     return (
         <SafeAreaView style={styles.container}>
-            {image != null ? (
+
+            {filteredImage != null ? (
                 <FlatGrid
                     itemDimension={width / 2}
-                    data={image}
+                    data={filteredImage}
                     style={styles.gridView}
                     spacing={0}
                     renderItem={({ item }) => (

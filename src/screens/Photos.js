@@ -2,17 +2,17 @@ import { Button, Dimensions, SafeAreaView, StyleSheet, Image } from 'react-nativ
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
-import { storeData, retrieveData, removeData, clearStorage } from '../storage/AsyncStorage';
+import { clearStorage, storeData, retrieveData, removeData } from '../storage/AsyncStorage';
 
 
 const { width } = Dimensions.get('window');
 
-const PHOTOS_STORAGE_KEY = 'photos_data';
+// const PHOTOS_STORAGE_KEY = 'photos_data';
 const PHOTOS_ASSETS_STORAGE_KEY = 'photos_assets';
 
 export default function PhotosScreen({ navigation, route }) {
     const [key, setKey] = useState(0);
-    const [photos, setPhotos] = useState([]);
+    // const [photos, setPhotos] = useState([]);
     const [photoAssets, setPhotoAssets] = useState([]);
 
 
@@ -24,14 +24,14 @@ export default function PhotosScreen({ navigation, route }) {
                     alert('Sorry, we need camera roll permissions to make this work!');
                 }
             }
-            const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
-            if (storedPhotos) {
-                setPhotos(storedPhotos);
-                console.log('Stored photo URIs: ', storedPhotos);
-            } else {
-                setPhotos([]);
-                console.log('No stored photo URIs');
-            }
+            // const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
+            // if (storedPhotos) {
+            //     setPhotos(storedPhotos);
+            //     console.log('Stored photo URIs: ', storedPhotos);
+            // } else {
+            //     setPhotos([]);
+            //     console.log('No stored photo URIs');
+            // }
             const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
             if (storedPhotoAssets) {
                 setPhotoAssets(storedPhotoAssets);
@@ -45,9 +45,30 @@ export default function PhotosScreen({ navigation, route }) {
 
     const resetStorage = async () => {
         await clearStorage();
-        setPhotos([]);
+        // setPhotos([]);
         setPhotoAssets([]);
+        console.log('Storage cleared');
     };
+
+    const refresh = async () => {
+        // const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
+        const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
+        // if (storedPhotos) {
+        //     setPhotos(storedPhotos);
+        //     console.log('Stored photo URIs: ', storedPhotos);
+        // } else {
+        //     setPhotos([]);
+        //     console.log('No stored photo URIs');
+        // }
+        if (storedPhotoAssets) {
+            setPhotoAssets(storedPhotoAssets);
+            console.log('Stored photo assets: ', storedPhotoAssets);
+        } else {
+            setPhotoAssets([]);
+            console.log('No stored photo assets');
+        }
+    };
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -57,9 +78,9 @@ export default function PhotosScreen({ navigation, route }) {
         });
         if (!result.canceled) {
             setKey(key + 1);
-            const newPhotos = [...photos, ...result.assets.map((item) => item.uri)];
-            setPhotos(newPhotos);
-            await storeData(PHOTOS_STORAGE_KEY, newPhotos);
+            // const newPhotos = [...photos, ...result.assets.map((item) => item.uri)];
+            // setPhotos(newPhotos);
+            // await storeData(PHOTOS_STORAGE_KEY, newPhotos);
             const newPhotoAssets = [...photoAssets, ...result.assets.map((item) => {
                 return {
                     assetId: item.assetId,
@@ -77,20 +98,6 @@ export default function PhotosScreen({ navigation, route }) {
     };
 
 
-    const refresh = async () => {
-        const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
-        const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
-        if (storedPhotos) {
-            setPhotos(storedPhotos);
-        } else {
-            setPhotos([]);
-        }
-        if (storedPhotoAssets) {
-            setPhotoAssets(storedPhotoAssets);
-        } else {
-            setPhotoAssets([]);
-        }
-    };
 
     return (
 
@@ -98,18 +105,18 @@ export default function PhotosScreen({ navigation, route }) {
             <FlatGrid
                 key={key}
                 itemDimension={width / 2}
-                data={route.params ? route.params.filteredData : photos}
+                data={photoAssets}
                 style={styles.gridView}
                 spacing={0}
                 renderItem={({ item }) => (
                     <Image
-                        source={{ uri: item }}
+                        source={{ uri: item.uri }}
                         style={styles.image}
                     />
                 )}
             />
             <Button title="Add Photo" onPress={pickImage} />
-            <Button title="Reset" onPress={refresh} />
+            <Button title="Refresh" onPress={refresh} />
             <Button title="Clear Storage" onPress={resetStorage} />
             <Button title="Filters" onPress={() => navigation.navigate('Filters')} />
         </SafeAreaView>

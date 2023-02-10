@@ -8,12 +8,13 @@ import { storeData, retrieveData, removeData, clearStorage } from '../storage/As
 const { width } = Dimensions.get('window');
 
 const PHOTOS_STORAGE_KEY = 'photos_data';
-// const EXIF_STORAGE_KEY = 'exif_data';
+const PHOTOS_ASSETS_STORAGE_KEY = 'photos_assets';
 
 export default function PhotosScreen({ navigation, route }) {
     const [key, setKey] = useState(0);
     const [photos, setPhotos] = useState([]);
-    // const [exif, setExif] = useState([]);
+    const [photoAssets, setPhotoAssets] = useState([]);
+
 
     useEffect(() => {
         (async () => {
@@ -25,16 +26,28 @@ export default function PhotosScreen({ navigation, route }) {
             }
             const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
             if (storedPhotos) {
-                setPhotos(clearStorage);
-                console.log(storedPhotos);
-                // setExif(await retrieveData(EXIF_STORAGE_KEY));
+                setPhotos(storedPhotos);
+                console.log('Stored photo URIs: ', storedPhotos);
             } else {
                 setPhotos([]);
-                // setExif([]);
+                console.log('No stored photo URIs');
+            }
+            const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
+            if (storedPhotoAssets) {
+                setPhotoAssets(storedPhotoAssets);
+                console.log('Stored photo assets: ', storedPhotoAssets);
+            } else {  
+                setPhotoAssets([]);
+                console.log('No stored photo assets');
             }
         })();
     }, []);
 
+    const resetStorage = async () => {
+        await clearStorage();
+        setPhotos([]);
+        setPhotoAssets([]);
+    };
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -47,30 +60,37 @@ export default function PhotosScreen({ navigation, route }) {
             const newPhotos = [...photos, ...result.assets.map((item) => item.uri)];
             setPhotos(newPhotos);
             await storeData(PHOTOS_STORAGE_KEY, newPhotos);
-            // const newExif = [...exif, ...result.assets.map((item) => item.exif)];
-            // setExif(newExif);
-            // await storeData(EXIF_STORAGE_KEY, newExif);
-            // console.log(newExif);
+            const newPhotoAssets = [...photoAssets, ...result.assets.map((item) => {
+                return {
+                    assetId: item.assetId,
+                    exif: item.exif,
+                    uri: item.uri,
+                };
+            
+            })];
+            setPhotoAssets(newPhotoAssets);
+            await storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
+
         } else {
             alert('You have not selected any image');
         }
     };
 
-    const clearStorage = async () => {
-        await removeData(PHOTOS_STORAGE_KEY);  
-        // await removeData(EXIF_STORAGE_KEY);
-        setPhotos([]);
-        // setExif([]);
-    };
 
-    // const reset = async () => {
-    //     const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
-    //     if (storedPhotos) {
-    //         setPhotos(storedPhotos);
-    //     } else {
-    //         setPhotos([]);
-    //     }
-    // };
+    const refresh = async () => {
+        const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
+        const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
+        if (storedPhotos) {
+            setPhotos(storedPhotos);
+        } else {
+            setPhotos([]);
+        }
+        if (storedPhotoAssets) {
+            setPhotoAssets(storedPhotoAssets);
+        } else {
+            setPhotoAssets([]);
+        }
+    };
 
     return (
 
@@ -89,8 +109,8 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
             />
             <Button title="Add Photo" onPress={pickImage} />
-            {/* <Button title="Reset" onPress={reset} /> */}
-            <Button title="Clear Storage" onPress={clearStorage} />
+            <Button title="Reset" onPress={refresh} />
+            <Button title="Clear Storage" onPress={resetStorage} />
             <Button title="Filters" onPress={() => navigation.navigate('Filters')} />
         </SafeAreaView>
     );

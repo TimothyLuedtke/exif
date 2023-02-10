@@ -2,14 +2,13 @@ import { Button, Dimensions, SafeAreaView, StyleSheet, Image } from 'react-nativ
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
-import DeleteButton from '../components/DeleteButton';
-import AddButton from '../components/AddButton';
+
 
 const { width } = Dimensions.get('window');
 
 export default function PhotosScreen() {
     const [image, setImage] = useState([]);
-    const [exif, setExif] = useState(null);
+    const [exif, setExif] = useState([]);
     const [key, setKey] = useState(0);
 
     useEffect(() => {
@@ -22,13 +21,6 @@ export default function PhotosScreen() {
             }
         })();
     }, []);
-
-    const deletePhoto = (index) => {
-        const newImage = [...image];
-        newImage.splice(index, 1);
-        setImage(newImage);
-        setKey(key + 1);    
-    };
     
 
     const pickImage = async () => {
@@ -52,8 +44,6 @@ export default function PhotosScreen() {
         
     return (
         <SafeAreaView style={styles.container}>
-
-            {filteredImage != null ? (
                 <FlatGrid
                     key={key}
                     itemDimension={width / 2}
@@ -67,13 +57,7 @@ export default function PhotosScreen() {
                         />                                  
                     )}
                 />
-            ) : (
-                <Button title="Pick an image from camera roll" onPress={pickImage} />
-            )}
-            <DeleteButton onPress={deletePhoto} />
-            <AddButton onPress={pickImage} />
-
-            {/* {exif && <Text>{JSON.stringify(exif)}</Text>} */}
+            <Button title="Add Photo" onPress={pickImage} />
         </SafeAreaView>
     );
 }

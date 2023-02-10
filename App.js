@@ -1,22 +1,40 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 
 import PhotosScreen from './src/screens/Photos';
 import FilterScreen from './src/screens/Filters';
 
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+
   return (
     <NavigationContainer>
-      {/* <StatusBar style="auto" /> */}
-      <Tab.Navigator>
-        <Tab.Screen name="Photos" component={PhotosScreen} />
-        <Tab.Screen name="Filters" component={FilterScreen} />
-      </Tab.Navigator>
+      <StatusBar style='auto' />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Photos"
+          component={PhotosScreen}
+          options={{
+              headerTransparent: true,
+              headerTitle: '',
+
+          }}
+        />
+        <Stack.Screen
+          name="Filters"
+          component={FilterScreen}
+          options={{
+            headerTransparent: true,
+            headerTitle: '',
+
+          }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

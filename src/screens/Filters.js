@@ -4,7 +4,9 @@ import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function FilterScreen({ navigation, route }) {
-  
+
+  const { photoAssets } = route.params;
+
   const [locationValue, setLocationValue] = useState([]);
   const [locationItems, setLocationItems] = useState([]);
 
@@ -16,43 +18,40 @@ export default function FilterScreen({ navigation, route }) {
   const onlocationOpen = useCallback(() => {
     setDateTimeOpen(false);
   }, []);
-  
+
   // sets the location picker to close when the date/time picker is opened
   const [dateTimeOpen, setDateTimeOpen] = useState(false);
   const onDateTimeOpen = useCallback(() => {
     setLocationOpen(false);
   }, []);
 
-  const { photoAssets } = route.params;
-
   useEffect(() => {
-    setLocationItems(locationPickerItems);
-    setDateTimeItems(dateTimePickerItems);
-    console.log('The transfered photoAssets into Filters.js: ', photoAssets);
+    setLocationItems(filterAssets);
+    setDateTimeItems(filterAssets);
+    console.log('PhotoAssets received in Filters.js: ')
+    console.log(filterAssets);
   }, [photoAssets]);
 
-  const distilledExifData = photoAssets.map((photo) => {
-    return {
-      assetId: photo.assetId,
-      DateTime: photo.exif.DateTime,
-      uri: photo.uri,
-      location: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
-    };
-  });
-
-  const locationPickerItems = distilledExifData.map((photo) => {
-    return {
-      label: photo.location,
-      value: photo.location,
-    };
-  })
-
-  const dateTimePickerItems = distilledExifData.map((photo) => {
-    return {
-      label: photo.DateTime,
-      value: photo.DateTime,
-    };
-  });
+  const filterAssets = photoAssets.map((photo) => {
+    if (photo.exif.DateTime !== undefined && photo.exif.GPSLatitudeRef !== undefined && photo.exif.GPSLatitude !== undefined && photo.exif.GPSLongitudeRef !== undefined && photo.exif.GPSLongitude !== undefined) {
+      return {
+        // DateTimeLabel: photo.exif.DateTime,
+        DateTimeValue: photo.exif.DateTime,
+        // locationLabel: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
+        locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
+      };
+    } else if (photo.exif.DateTime !== undefined) {
+      return {
+        // DateTimeLabel: photo.exif.DateTime,
+        DateTimeValue: photo.exif.DateTime,
+      };
+    } else if (photo.exif.GPSLatitudeRef !== undefined && photo.exif.GPSLatitude !== undefined && photo.exif.GPSLongitudeRef !== undefined && photo.exif.GPSLongitude !== undefined) {
+      return {
+        // locationLabel: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
+        locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
+      };
+    }
+  }); 
 
   function onFilter() {
     console.log('Location value: ', locationValue);
@@ -68,28 +67,21 @@ export default function FilterScreen({ navigation, route }) {
         return photo;
       }
     });
-    console.log('Filtered photos that transport back to Photos.js: ', filteredPhotos);
+    console.log('Transfering filteredPhotos to Photos.js: ', filteredPhotos);
     navigation.navigate('Photos', { filteredPhotos: filteredPhotos });
   }
 
   return (
     <SafeAreaView style={styles.container}>
-        <Text>Selected Items</Text>
-        {/* <Text>Location</Text>
-        <Text>{locationValue}</Text>
-        <Text>Date/Time</Text>
-        <Text>{dateTimeValue}</Text> */}
+      <Text>Selected Items</Text>
       {/* location Dropdown */}
-      {/* <DropDownPicker
-        // schema={{
-        //   label: 'label',
-        //   value: 'value',
-        //   icon: () => <Text>Icon</Text>,
-        //   hidden: true,
-        // }
-        // }
+      <DropDownPicker
         open={locationOpen}
         onOpen={onlocationOpen}
+        schema={{
+          label: 'locationValue',
+          value: 'locationValue',
+        }}
         value={locationValue}
         items={locationItems}
         setOpen={setLocationOpen}
@@ -99,39 +91,33 @@ export default function FilterScreen({ navigation, route }) {
         multipleText={`${locationValue}, `}
         min={0}
         max={10}
-        zIndex={5000}
-        zIndexInverse={1000}
-        placeholder="Locations"
-        // onChangeValue={value => console.log(value)}
-        style={styles.picker}
-      /> */}
+        zIndex={4000}
+        zIndexInverse={2000}
+        placeholder="Location"
+      />
       {/* DateTime Dropdown */}
       <DropDownPicker
-        // schema={{
-        //   label: 'label',
-        //   value: 'value',
-        //   icon: () => <Text>{ `${dateTimeValue},    `  }</Text>,
-        //   hidden: true,
-        // }
-        // }
         open={dateTimeOpen}
         onOpen={onDateTimeOpen}
+        schema={{
+          label: 'DateTimeValue',
+          value: 'DateTimeValue',
+        }}
         value={dateTimeValue}
         items={dateTimeItems}
         setOpen={setDateTimeOpen}
         setValue={setDateTimeValue}
         setItems={setDateTimeItems}
         multiple={true}
-        multipleText={`${dateTimeValue}`}
+        multipleText={`${dateTimeValue}, `}
         min={0}
         max={10}
-        zIndex={4000}
-        zIndexInverse={2000}
+        zIndex={5000}
+        zIndexInverse={1000}
         placeholder="Date/Time"
-      style={styles.picker}
       />
       {/* Filter Button */}
-      <Text onPress={onFilter}>Filter</Text>
+      <Text onPress={onFilter} style={styles.button}>Filter</Text>
 
     </SafeAreaView>
   );
@@ -143,21 +129,14 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
-  picker: {
-    width: 300,
-    marginHorizontal: 40,
-    height: 40,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  pickedItem: {
+  button: {
+    padding: 7,
+    backgroundColor: 'transparent',
     borderStyle: 'solid',
     borderWidth: 1,
+    borderRadius: 10,
     borderColor: 'black',
-    borderRadius: 5,
-    padding: 5,
-    margin: 5,
+    textAlign: 'center',
   },
 })

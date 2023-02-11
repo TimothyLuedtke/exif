@@ -1,4 +1,4 @@
-import { Button, Dimensions, Platform, SafeAreaView, StyleSheet, Image } from 'react-native';
+import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
@@ -24,21 +24,13 @@ export default function PhotosScreen({ navigation, route }) {
                     alert('Sorry, we need camera roll permissions to make this work!');
                 }
             }
-            // const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
-            // if (storedPhotos) {
-                //     setPhotos(storedPhotos);
-                //     console.log('Stored photo URIs: ', storedPhotos);
-            // } else {
-            //     setPhotos([]);
-            //     console.log('No stored photo URIs');
-            // }
             const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
             if (storedPhotoAssets) {
                 setPhotoAssets(storedPhotoAssets);
-                console.log('Stored photo assets: ', storedPhotoAssets);
+                console.log('Stored photoAssets: ', storedPhotoAssets);
             } else {
                 setPhotoAssets([]);
-                console.log('No stored photo assets');
+                console.log('No stored photoAssets');
             }
         })();
     }, []);
@@ -46,30 +38,21 @@ export default function PhotosScreen({ navigation, route }) {
     useEffect(() => {
     if (filteredPhotos && filteredPhotos.length > 0) {
         setPhotoAssets(filteredPhotos);
-        console.log('Filtered photos received by Photos.js: ', filteredPhotos);
-        console.log('PhotoAssets filtered: ', photoAssets);
+        console.log('FilteredPhotos received...');
+        console.log('Filtered photoAssets: ', photoAssets);
     } else {
-        console.log('No filtered photos received by Photos.js');
+        console.log('No filtered photos');
     }  
     }, [filteredPhotos]); 
     
     const resetStorage = async () => {
         await clearStorage();
-        // setPhotos([]);
         setPhotoAssets([]);
         console.log('Storage cleared');
     };
 
     const refresh = async () => {
-        // const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
         const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
-        // if (storedPhotos) {
-        //     setPhotos(storedPhotos);
-        //     console.log('Stored photo URIs: ', storedPhotos);
-        // } else {
-        //     setPhotos([]);
-        //     console.log('No stored photo URIs');
-        // }
         if (storedPhotoAssets) {
             setPhotoAssets(storedPhotoAssets);
             filteredPhotos = null;
@@ -87,9 +70,6 @@ export default function PhotosScreen({ navigation, route }) {
         });
         if (!result.canceled) {
             setKey(key + 1);
-            // const newPhotos = [...photos, ...result.assets.map((item) => item.uri)];
-            // setPhotos(newPhotos);
-            // await storeData(PHOTOS_STORAGE_KEY, newPhotos);
             const newPhotoAssets = [...photoAssets, ...result.assets.map((item) => {
                 return {
                     assetId: item.assetId,
@@ -100,6 +80,7 @@ export default function PhotosScreen({ navigation, route }) {
             })];
             setPhotoAssets(newPhotoAssets);
             await storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
+            console.log('Updated Stored photoAssets.');
 
         } else {
             alert('You have not selected any image');
@@ -124,18 +105,16 @@ export default function PhotosScreen({ navigation, route }) {
                     />
                 )}
             />
-            <Button title="Add Photo" onPress={pickImage} />
-            <Button title="Refresh" onPress={refresh} />
-            <Button title="Clear Storage" onPress={resetStorage} />
-            <Button title="Filter" onPress={
+            <View style={styles.inline}>
+            <Text style={styles.button} onPress={pickImage}>Add</Text>
+            <Text style={styles.button} onPress={refresh}>Refresh</Text>
+            <Text style={styles.button} onPress={resetStorage}>Reset Storage</Text>
+            <Text style={styles.button} onPress={
                 () => navigation.navigate('Filters', {
-                    // photos: photos,
                     photoAssets: photoAssets,                                  
                 })}
-            />
-            {/* <Button title="Filters" onPress={
-                () => navigation.navigate('Filters')}
-            /> */}
+            >Filters</Text>
+            </View>
         </SafeAreaView>
     );
 }
@@ -154,5 +133,22 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         width: width / 2,
         height: width / 2,
+    },
+    button: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        margin: 7,
+        padding: 7,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderRadius: 12,
+        borderColor: 'black',
+        textAlign: 'center',
+      },
+    inline: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
     },
 })

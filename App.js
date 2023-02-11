@@ -31,8 +31,8 @@ export default function App() {
           options={{
             headerTransparent: true,
             headerTitle: '',
-
           }}
+          initialParams={{ photoAssets: [] }}
         />
       </Stack.Navigator>
     </NavigationContainer>

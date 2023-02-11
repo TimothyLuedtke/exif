@@ -1,16 +1,15 @@
-import { Button, Dimensions, SafeAreaView, StyleSheet, Image } from 'react-native';
+import { Button, Dimensions, Platform, SafeAreaView, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../storage/AsyncStorage';
-
 
 const { width } = Dimensions.get('window');
 
 // const PHOTOS_STORAGE_KEY = 'photos_data';
 const PHOTOS_ASSETS_STORAGE_KEY = 'photos_assets';
 
-export default function PhotosScreen({ navigation, route }) {
+export default function PhotosScreen({ navigation }) {
     const [key, setKey] = useState(0);
     // const [photos, setPhotos] = useState([]);
     const [photoAssets, setPhotoAssets] = useState([]);
@@ -36,7 +35,7 @@ export default function PhotosScreen({ navigation, route }) {
             if (storedPhotoAssets) {
                 setPhotoAssets(storedPhotoAssets);
                 console.log('Stored photo assets: ', storedPhotoAssets);
-            } else {  
+            } else {
                 setPhotoAssets([]);
                 console.log('No stored photo assets');
             }
@@ -62,7 +61,7 @@ export default function PhotosScreen({ navigation, route }) {
         // }
         if (storedPhotoAssets) {
             setPhotoAssets(storedPhotoAssets);
-            console.log('Stored photo assets: ', storedPhotoAssets);
+            console.log('Stored photo assets successfully stored in photoAssets: ', storedPhotoAssets);
         } else {
             setPhotoAssets([]);
             console.log('No stored photo assets');
@@ -87,7 +86,7 @@ export default function PhotosScreen({ navigation, route }) {
                     exif: item.exif,
                     uri: item.uri,
                 };
-            
+
             })];
             setPhotoAssets(newPhotoAssets);
             await storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
@@ -118,7 +117,15 @@ export default function PhotosScreen({ navigation, route }) {
             <Button title="Add Photo" onPress={pickImage} />
             <Button title="Refresh" onPress={refresh} />
             <Button title="Clear Storage" onPress={resetStorage} />
-            <Button title="Filters" onPress={() => navigation.navigate('Filters')} />
+            <Button title="Filter" onPress={
+                () => navigation.navigate('Filters', {
+                    // photos: photos,
+                    photoAssets: photoAssets,                                  
+                })}
+            />
+            {/* <Button title="Filters" onPress={
+                () => navigation.navigate('Filters')}
+            /> */}
         </SafeAreaView>
     );
 }

@@ -106,14 +106,16 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
             />
             <View style={styles.inline}>
-            <Text style={styles.button} onPress={pickImage}>Add</Text>
-            <Text style={styles.button} onPress={refresh}>Refresh</Text>
-            <Text style={styles.button} onPress={resetStorage}>Reset Storage</Text>
+                <Text style={styles.button} onPress={pickImage}>Add</Text>
             <Text style={styles.button} onPress={
                 () => navigation.navigate('Filters', {
                     photoAssets: photoAssets,                                  
                 })}
             >Filters</Text>
+            </View>
+            <View style={styles.inline}>
+            <Text style={styles.button} onPress={refresh}>Refresh</Text>
+            <Text style={styles.button} onPress={resetStorage}>Reset Storage</Text>
             </View>
         </SafeAreaView>
     );

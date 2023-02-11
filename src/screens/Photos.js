@@ -9,12 +9,13 @@ const { width } = Dimensions.get('window');
 // const PHOTOS_STORAGE_KEY = 'photos_data';
 const PHOTOS_ASSETS_STORAGE_KEY = 'photos_assets';
 
-export default function PhotosScreen({ navigation }) {
+export default function PhotosScreen({ navigation, route }) {
     const [key, setKey] = useState(0);
-    // const [photos, setPhotos] = useState([]);
     const [photoAssets, setPhotoAssets] = useState([]);
+    
+    const { filteredPhotos } = route.params;
 
-
+    
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
@@ -25,8 +26,8 @@ export default function PhotosScreen({ navigation }) {
             }
             // const storedPhotos = await retrieveData(PHOTOS_STORAGE_KEY);
             // if (storedPhotos) {
-            //     setPhotos(storedPhotos);
-            //     console.log('Stored photo URIs: ', storedPhotos);
+                //     setPhotos(storedPhotos);
+                //     console.log('Stored photo URIs: ', storedPhotos);
             // } else {
             //     setPhotos([]);
             //     console.log('No stored photo URIs');
@@ -41,7 +42,17 @@ export default function PhotosScreen({ navigation }) {
             }
         })();
     }, []);
-
+    
+    useEffect(() => {
+    if (filteredPhotos && filteredPhotos.length > 0) {
+        setPhotoAssets(filteredPhotos);
+        console.log('Filtered photos received by Photos.js: ', filteredPhotos);
+        console.log('PhotoAssets filtered: ', photoAssets);
+    } else {
+        console.log('No filtered photos received by Photos.js');
+    }  
+    }, [filteredPhotos]); 
+    
     const resetStorage = async () => {
         await clearStorage();
         // setPhotos([]);
@@ -61,10 +72,9 @@ export default function PhotosScreen({ navigation }) {
         // }
         if (storedPhotoAssets) {
             setPhotoAssets(storedPhotoAssets);
-            console.log('Stored photo assets successfully stored in photoAssets: ', storedPhotoAssets);
+            filteredPhotos = null;
         } else {
             setPhotoAssets([]);
-            console.log('No stored photo assets');
         }
     };
 

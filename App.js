@@ -24,6 +24,7 @@ export default function App() {
               headerTitle: '',
 
           }}
+          initialParams={{ filteredPhotos: [] }}
         />
         <Stack.Screen
           name="Filters"

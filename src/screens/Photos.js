@@ -114,7 +114,7 @@ export default function PhotosScreen({ navigation, route }) {
             >Filters</Text>
             </View>
             <View style={styles.inline}>
-            <Text style={styles.button} onPress={refresh}>Refresh</Text>
+            <Text style={styles.button} onPress={refresh}>Reset Filters</Text>
             <Text style={styles.button} onPress={resetStorage}>Reset Storage</Text>
             </View>
         </SafeAreaView>

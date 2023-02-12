@@ -26,28 +26,35 @@ export default function FilterScreen({ navigation, route }) {
   }, []);
 
   useEffect(() => {
-    setLocationItems(filterAssets);
-    setDateTimeItems(filterAssets);
+    setLocationItems(removeDuplicates(filterAssets, 'locationValue'));
+    setDateTimeItems(removeDuplicates(filterAssets, 'DateTimeValue'));
     console.log('PhotoAssets received in Filters.js: ')
     console.log(filterAssets);
   }, [photoAssets]);
 
+  // removes duplicate values from the array
+  function removeDuplicates(arr, prop) {
+    var obj = {};
+    for (var i = 0, len = arr.length; i < len; i++) {
+      if (!obj[arr[i][prop]]) obj[arr[i][prop]] = arr[i];
+    }
+    var newArr = [];
+    for (var key in obj) newArr.push(obj[key]);
+    return newArr;
+  }
+
   const filterAssets = photoAssets.map((photo) => {
     if (photo.exif.DateTime !== undefined && photo.exif.GPSLatitudeRef !== undefined && photo.exif.GPSLatitude !== undefined && photo.exif.GPSLongitudeRef !== undefined && photo.exif.GPSLongitude !== undefined) {
       return {
-        // DateTimeLabel: photo.exif.DateTime,
         DateTimeValue: photo.exif.DateTime,
-        // locationLabel: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
         locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
       };
     } else if (photo.exif.DateTime !== undefined) {
       return {
-        // DateTimeLabel: photo.exif.DateTime,
         DateTimeValue: photo.exif.DateTime,
       };
     } else if (photo.exif.GPSLatitudeRef !== undefined && photo.exif.GPSLatitude !== undefined && photo.exif.GPSLongitudeRef !== undefined && photo.exif.GPSLongitude !== undefined) {
       return {
-        // locationLabel: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
         locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
       };
     }

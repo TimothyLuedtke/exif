@@ -144,7 +144,7 @@ export default function PhotosScreen({ navigation, route }) {
                 />
                 <IconTextButton
                     iconName={'refresh'}
-                    text={"Filters"}
+                    text={"Reset"}
                     onPress={refresh}
                 />
                 <IconTextButton

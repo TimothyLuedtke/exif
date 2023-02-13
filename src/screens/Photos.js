@@ -11,11 +11,9 @@ const PHOTOS_ASSETS_STORAGE_KEY = 'photos_assets';
 
 export default function PhotosScreen({ navigation, route }) {
     const [key, setKey] = useState(0);
-    const [photoAssets, setPhotoAssets] = useState([]);
-    
-    const { filteredPhotos } = route.params;
+    const [displayedAssets, setDisplayedAssets] = useState([]);
+    const [filteredAssets, setFilteredAssets] = useState([]);
 
-    
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
@@ -24,40 +22,58 @@ export default function PhotosScreen({ navigation, route }) {
                     alert('Sorry, we need camera roll permissions to make this work!');
                 }
             }
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
             const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
             if (storedPhotoAssets) {
-                setPhotoAssets(storedPhotoAssets);
-                console.log('Stored photoAssets: ', storedPhotoAssets);
+                setDisplayedAssets(storedPhotoAssets);
+                console.log('Stored Assets: ', storedPhotoAssets);
             } else {
-                setPhotoAssets([]);
-                console.log('No stored photoAssets');
+                setDisplayedAssets([]);
+                console.log('No stored Assets.');
             }
         })();
     }, []);
     
     useEffect(() => {
-    if (filteredPhotos && filteredPhotos.length > 0) {
-        setPhotoAssets(filteredPhotos);
-        console.log('FilteredPhotos received...');
-        console.log('Filtered photoAssets: ', photoAssets);
-    } else {
-        console.log('No filtered photos');
-    }  
-    }, [filteredPhotos]); 
+        (async () => {
+            if (route.params) {
+                setFilteredAssets(route.params.filteredAssets);
+                console.log('Filtered assets received...', filteredAssets);
+            } else {
+                console.log('No filtered assets recieved to display.');
+            }
+        })();
+    }, [route.params]);
     
+    useEffect(() => {
+        if (filteredAssets && filteredAssets.length > 0) {
+            setDisplayedAssets(filteredAssets);
+            console.log('Displaying filtered assets...');
+        } else {
+            console.log('No filtered assets to display.');
+        }
+    }, [filteredAssets]);
+
     const resetStorage = async () => {
         await clearStorage();
-        setPhotoAssets([]);
-        console.log('Storage cleared');
+        setDisplayedAssets([]);
+        console.log('Storage cleared.');
     };
 
     const refresh = async () => {
         const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
         if (storedPhotoAssets) {
-            setPhotoAssets(storedPhotoAssets);
-            filteredPhotos = null;
+            setDisplayedAssets(storedPhotoAssets);
+            setFilteredAssets([]);
+            console.log('Reset filters and displaying stored assets.');
         } else {
-            setPhotoAssets([]);
+            setDisplayedAssets([]);
+            setFilteredAssets([]);
+            console.log('No stored assets to refresh.');
         }
     };
 
@@ -70,7 +86,7 @@ export default function PhotosScreen({ navigation, route }) {
         });
         if (!result.canceled) {
             setKey(key + 1);
-            const newPhotoAssets = [...photoAssets, ...result.assets.map((item) => {
+            const newPhotoAssets = [...displayedAssets, ...result.assets.map((item) => {
                 return {
                     assetId: item.assetId,
                     exif: item.exif,
@@ -78,12 +94,12 @@ export default function PhotosScreen({ navigation, route }) {
                 };
 
             })];
-            setPhotoAssets(newPhotoAssets);
+            setDisplayedAssets(newPhotoAssets);
             await storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
-            console.log('Updated Stored photoAssets.');
+            console.log('Updated Asset Storage.');
 
         } else {
-            alert('You have not selected any image');
+            alert('No assets selected.');
         }
     };
 
@@ -95,7 +111,7 @@ export default function PhotosScreen({ navigation, route }) {
             <FlatGrid
                 key={key}
                 itemDimension={width / 2}
-                data={photoAssets}
+                data={displayedAssets}
                 style={styles.gridView}
                 spacing={0}
                 renderItem={({ item }) => (
@@ -107,15 +123,15 @@ export default function PhotosScreen({ navigation, route }) {
             />
             <View style={styles.inline}>
                 <Text style={styles.button} onPress={pickImage}>Add</Text>
-            <Text style={styles.button} onPress={
-                () => navigation.navigate('Filters', {
-                    photoAssets: photoAssets,                                  
-                })}
-            >Filters</Text>
+                <Text style={styles.button} onPress={
+                    () => navigation.navigate('Filters', {
+                        displayedAssets: displayedAssets,
+                    })}
+                >Filters</Text>
             </View>
             <View style={styles.inline}>
-            <Text style={styles.button} onPress={refresh}>Reset Filters</Text>
-            <Text style={styles.button} onPress={resetStorage}>Reset Storage</Text>
+                <Text style={styles.button} onPress={refresh}>Reset Filters</Text>
+                <Text style={styles.button} onPress={resetStorage}>Reset Storage</Text>
             </View>
         </SafeAreaView>
     );
@@ -147,7 +163,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: 'black',
         textAlign: 'center',
-      },
+    },
     inline: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',

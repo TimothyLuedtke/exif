@@ -5,7 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function FilterScreen({ navigation, route }) {
 
-  const { photoAssets } = route.params;
+  const [displayedAssets, setDisplayedAssets] = useState([]);
 
   const [locationValue, setLocationValue] = useState([]);
   const [locationItems, setLocationItems] = useState([]);
@@ -26,11 +26,25 @@ export default function FilterScreen({ navigation, route }) {
   }, []);
 
   useEffect(() => {
-    setLocationItems(removeDuplicates(filterAssets, 'locationValue'));
-    setDateTimeItems(removeDuplicates(filterAssets, 'DateTimeValue'));
-    console.log('PhotoAssets received in Filters.js: ')
-    console.log(filterAssets);
-  }, [photoAssets]);
+    (async () => {
+    setLocationItems(removeDuplicates(assetFilterer, 'locationValue'));
+    setDateTimeItems(removeDuplicates(assetFilterer, 'DateTimeValue'));
+    console.log('Assets distributed to filter dropdowns.')
+  })();
+}, [displayedAssets]);
+
+useEffect(() => {
+  (async () => {
+  if (route.params) {
+    setDisplayedAssets(route.params.displayedAssets);
+    console.log('Assets received in Filters.js: ')
+  } else {
+    console.log('No displayedAssets received in Filters.js');
+  }
+})();
+}, [route.params]);
+
+    
 
   // removes duplicate values from the array
   function removeDuplicates(arr, prop) {
@@ -43,7 +57,7 @@ export default function FilterScreen({ navigation, route }) {
     return newArr;
   }
 
-  const filterAssets = photoAssets.map((photo) => {
+  const assetFilterer = displayedAssets.map((photo) => {
     if (photo.exif.DateTime !== undefined && photo.exif.GPSLatitudeRef !== undefined && photo.exif.GPSLatitude !== undefined && photo.exif.GPSLongitudeRef !== undefined && photo.exif.GPSLongitude !== undefined) {
       return {
         DateTimeValue: photo.exif.DateTime,
@@ -61,9 +75,9 @@ export default function FilterScreen({ navigation, route }) {
   }); 
 
   function onFilter() {
-    console.log('Location value: ', locationValue);
-    console.log('Date/Time value: ', dateTimeValue);
-    const filteredPhotos = photoAssets.filter((photo) => {
+    // console.log('Location value: ', locationValue);
+    // console.log('Date/Time value: ', dateTimeValue);
+    const filteredAssets = displayedAssets.filter((photo) => {
       if (locationValue.length > 0 && dateTimeValue.length > 0) {
         return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude) && dateTimeValue.includes(photo.exif.DateTime);
       } else if (locationValue.length > 0) {
@@ -74,8 +88,12 @@ export default function FilterScreen({ navigation, route }) {
         return photo;
       }
     });
-    console.log('Transfering filteredPhotos to Photos.js: ', filteredPhotos);
-    navigation.navigate('Photos', { filteredPhotos: filteredPhotos });
+    if (filteredAssets.length > 0) {
+      console.log('Sending filtered assets to Photos.js');
+      navigation.navigate('Photos', { filteredAssets: filteredAssets });
+    } else {
+      console.log('No photos match the selected filters');
+    }
   }
 
   return (

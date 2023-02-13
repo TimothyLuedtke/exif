@@ -24,7 +24,7 @@ export default function App() {
               headerTitle: '',
 
           }}
-          initialParams={{ filteredPhotos: [] }}
+          initialParams={{ filteredAssets: null }}
         />
         <Stack.Screen
           name="Filters"
@@ -33,7 +33,7 @@ export default function App() {
             headerTransparent: true,
             headerTitle: '',
           }}
-          initialParams={{ photoAssets: [] }}
+          initialParams={{ displayedAssets: [] }}
         />
       </Stack.Navigator>
     </NavigationContainer>

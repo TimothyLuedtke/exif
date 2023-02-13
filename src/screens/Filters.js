@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Text, SafeAreaView, View } from 'react-native';
+import { Text, SafeAreaView, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import IconTextButton from '../components/Button';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -27,24 +28,24 @@ export default function FilterScreen({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
-    setLocationItems(removeDuplicates(assetFilterer, 'locationValue'));
-    setDateTimeItems(removeDuplicates(assetFilterer, 'DateTimeValue'));
-    console.log('Assets distributed to filter dropdowns.')
-  })();
-}, [displayedAssets]);
+      setLocationItems(removeDuplicates(assetFilterer, 'locationValue'));
+      setDateTimeItems(removeDuplicates(assetFilterer, 'DateTimeValue'));
+      console.log('Assets distributed to filter dropdowns.')
+    })();
+  }, [displayedAssets]);
 
-useEffect(() => {
-  (async () => {
-  if (route.params) {
-    setDisplayedAssets(route.params.displayedAssets);
-    console.log('Assets received in Filters.js: ')
-  } else {
-    console.log('No displayedAssets received in Filters.js');
-  }
-})();
-}, [route.params]);
+  useEffect(() => {
+    (async () => {
+      if (route.params) {
+        setDisplayedAssets(route.params.displayedAssets);
+        console.log('Assets received in Filters.js: ')
+      } else {
+        console.log('No displayedAssets received in Filters.js');
+      }
+    })();
+  }, [route.params]);
 
-    
+
 
   // removes duplicate values from the array
   function removeDuplicates(arr, prop) {
@@ -72,33 +73,49 @@ useEffect(() => {
         locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
       };
     }
-  }); 
+  });
 
-  function onFilter() {
-    // console.log('Location value: ', locationValue);
-    // console.log('Date/Time value: ', dateTimeValue);
-    const filteredAssets = displayedAssets.filter((photo) => {
-      if (locationValue.length > 0 && dateTimeValue.length > 0) {
-        return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude) && dateTimeValue.includes(photo.exif.DateTime);
-      } else if (locationValue.length > 0) {
-        return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude);
-      } else if (dateTimeValue.length > 0) {
-        return dateTimeValue.includes(photo.exif.DateTime);
-      } else {
-        return photo;
-      }
-    });
+  const filteredAssets = displayedAssets.filter((photo) => {
+    if (locationValue.length > 0 && dateTimeValue.length > 0) {
+      return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude) && dateTimeValue.includes(photo.exif.DateTime);
+    } else if (locationValue.length > 0) {
+      return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude);
+    } else if (dateTimeValue.length > 0) {
+      return dateTimeValue.includes(photo.exif.DateTime);
+    } else {
+      return photo;
+    }
+  });
+
+  function navigateToPhotos() {
     if (filteredAssets.length > 0) {
       console.log('Sending filtered assets to Photos.js');
       navigation.navigate('Photos', { filteredAssets: filteredAssets });
     } else {
       console.log('No photos match the selected filters');
+      alert('No photos match the selected filters');
     }
   }
 
+  function onClear() {
+    console.log('Clearing filters');
+    setLocationValue([]);
+    setDateTimeValue([]);
+  }
+
+  const assetsSelected = filteredAssets.length;
+
+  const filtersSelected = locationValue.length + dateTimeValue.length;
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Selected Items</Text>
+      {
+        assetsSelected === 1 ? (
+          <Text style={{ fontSize: 18, margin: 20 }}>{assetsSelected} result</Text>
+        ) : (
+          <Text style={{ fontSize: 18, margin: 20 }}>{assetsSelected} results</Text>
+        )
+      }
       {/* location Dropdown */}
       <DropDownPicker
         open={locationOpen}
@@ -106,6 +123,7 @@ useEffect(() => {
         schema={{
           label: 'locationValue',
           value: 'locationValue',
+          containerStyle: { zIndex: 2 },
         }}
         value={locationValue}
         items={locationItems}
@@ -116,8 +134,8 @@ useEffect(() => {
         multipleText={`${locationValue}, `}
         min={0}
         max={10}
-        zIndex={4000}
-        zIndexInverse={2000}
+        // zIndexInverse={}
+        mode="BADGE"
         placeholder="Location"
       />
       {/* DateTime Dropdown */}
@@ -137,13 +155,29 @@ useEffect(() => {
         multipleText={`${dateTimeValue}, `}
         min={0}
         max={10}
-        zIndex={5000}
-        zIndexInverse={1000}
+        zIndex={1}
+        // zIndexInverse={}
+        mode="BADGE"
         placeholder="Date/Time"
       />
-      {/* Filter Button */}
-      <Text onPress={onFilter} style={styles.button}>Filter</Text>
 
+        { filtersSelected === 1 ? (
+          <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filter selected</Text>
+        ) : (
+          <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filters selected</Text>
+        )}
+      <View style={styles.inline}>
+        <IconTextButton
+          iconName={'refresh'}
+          text={'Clear'}
+          onPress={onClear}
+        />
+        <IconTextButton
+          iconName={'filter-alt'}
+          text={'Apply'}
+          onPress={navigateToPhotos}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -155,16 +189,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  button: {
-    fontSize: 17,
-    fontWeight: 'semibold',
-    margin: 7,
-    padding: 7,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'black',
-    textAlign: 'center',
+  inline: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
 })

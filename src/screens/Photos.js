@@ -1,8 +1,10 @@
-import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Button, Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import { MaterialIcons } from '@expo/vector-icons';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../storage/AsyncStorage';
+import IconTextButton from '../components/Button';
 
 const { width } = Dimensions.get('window');
 
@@ -37,7 +39,7 @@ export default function PhotosScreen({ navigation, route }) {
             }
         })();
     }, []);
-    
+
     useEffect(() => {
         (async () => {
             if (route.params) {
@@ -48,7 +50,7 @@ export default function PhotosScreen({ navigation, route }) {
             }
         })();
     }, [route.params]);
-    
+
     useEffect(() => {
         if (filteredAssets && filteredAssets.length > 0) {
             setDisplayedAssets(filteredAssets);
@@ -103,6 +105,11 @@ export default function PhotosScreen({ navigation, route }) {
         }
     };
 
+    const navigateToFilters = () => {
+        navigation.navigate('Filters', {
+            displayedAssets: displayedAssets,
+        });
+    };
 
 
     return (
@@ -121,18 +128,37 @@ export default function PhotosScreen({ navigation, route }) {
                     />
                 )}
             />
-            <View style={styles.inline}>
+            {/* <View style={styles.inline}>
                 <Text style={styles.button} onPress={pickImage}>Add</Text>
                 <Text style={styles.button} onPress={
                     () => navigation.navigate('Filters', {
                         displayedAssets: displayedAssets,
                     })}
                 >Filters</Text>
-            </View>
+            </View>  */}
             <View style={styles.inline}>
-                <Text style={styles.button} onPress={refresh}>Reset Filters</Text>
-                <Text style={styles.button} onPress={resetStorage}>Reset Storage</Text>
+                <IconTextButton
+                    iconName={'delete'}
+                    text={"Storage"}
+                    onPress={resetStorage}
+                />
+                <IconTextButton
+                    iconName={'refresh'}
+                    text={"Filters"}
+                    onPress={refresh}
+                />
+                <IconTextButton
+                    iconName={'filter-alt'}
+                    text={"Filters"}
+                    onPress={navigateToFilters}
+                />
+                <IconTextButton
+                    iconName={'add'}
+                    text={"Photos"}
+                    onPress={pickImage}
+                />
             </View>
+
         </SafeAreaView>
     );
 }
@@ -151,18 +177,6 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         width: width / 2,
         height: width / 2,
-    },
-    button: {
-        fontSize: 17,
-        fontWeight: 'semibold',
-        margin: 7,
-        padding: 7,
-        backgroundColor: 'transparent',
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderRadius: 5,
-        borderColor: 'black',
-        textAlign: 'center',
     },
     inline: {
         flexDirection: 'row',

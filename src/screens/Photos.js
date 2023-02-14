@@ -30,7 +30,7 @@ export default function PhotosScreen({ navigation, route }) {
             const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
             if (storedPhotoAssets) {
                 setDisplayedAssets(storedPhotoAssets);
-                // console.log('Stored Assets: ', storedPhotoAssets);
+                console.log('Stored Assets: ', storedPhotoAssets);
                 console.log('Displaying stored Assets...');
             } else {
                 setDisplayedAssets([]);
@@ -95,7 +95,7 @@ export default function PhotosScreen({ navigation, route }) {
                     uri: item.uri,
                 };
             })];
-
+    
             setDisplayedAssets(newPhotoAssets);
             await storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
             console.log('Updated Asset Storage.');

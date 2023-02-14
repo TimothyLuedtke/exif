@@ -20,9 +20,3 @@ export const combineObjsInArr = (arr) => {
     return newArr; // return the array
 };
 
-export const removeDupPhotos = (newAsset, currentAssets) => {  // newAsset is an array of objects and currentAssets is an array of objects
-    const existingAssetIds = currentAssets.map((asset) => asset.id); // create an array of the ids of the current assets
-    const filteredNewAssets = newAsset.filter((asset) => !existingAssetIds.includes(asset.id)); // filter the new assets to remove any that already exist in the current assets
-    return filteredNewAssets; // return the filtered new assets
-};
-

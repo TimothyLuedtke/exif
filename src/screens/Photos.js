@@ -1,14 +1,12 @@
-import { Button, Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { MaterialIcons } from '@expo/vector-icons';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../storage/AsyncStorage';
 import IconTextButton from '../components/Button';
 
 const { width } = Dimensions.get('window');
 
-// const PHOTOS_STORAGE_KEY = 'photos_data';
 const PHOTOS_ASSETS_STORAGE_KEY = 'photos_assets';
 
 export default function PhotosScreen({ navigation, route }) {
@@ -32,7 +30,8 @@ export default function PhotosScreen({ navigation, route }) {
             const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
             if (storedPhotoAssets) {
                 setDisplayedAssets(storedPhotoAssets);
-                console.log('Stored Assets: ', storedPhotoAssets);
+                // console.log('Stored Assets: ', storedPhotoAssets);
+                console.log('Displaying stored Assets...');
             } else {
                 setDisplayedAssets([]);
                 console.log('No stored Assets.');
@@ -88,14 +87,15 @@ export default function PhotosScreen({ navigation, route }) {
         });
         if (!result.canceled) {
             setKey(key + 1);
+            console.log('Picked image(s).');
+            // console.log('Result: ', result);
             const newPhotoAssets = [...displayedAssets, ...result.assets.map((item) => {
                 return {
-                    assetId: item.assetId,
                     exif: item.exif,
                     uri: item.uri,
                 };
-
             })];
+
             setDisplayedAssets(newPhotoAssets);
             await storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
             console.log('Updated Asset Storage.');
@@ -110,7 +110,6 @@ export default function PhotosScreen({ navigation, route }) {
             displayedAssets: displayedAssets,
         });
     };
-
 
     return (
 
@@ -128,34 +127,26 @@ export default function PhotosScreen({ navigation, route }) {
                     />
                 )}
             />
-            {/* <View style={styles.inline}>
-                <Text style={styles.button} onPress={pickImage}>Add</Text>
-                <Text style={styles.button} onPress={
-                    () => navigation.navigate('Filters', {
-                        displayedAssets: displayedAssets,
-                    })}
-                >Filters</Text>
-            </View>  */}
             <View style={styles.inline}>
                 <IconTextButton
                     iconName={'delete'}
-                    text={"Storage"}
+                    // text={"Storage"}
                     onPress={resetStorage}
                 />
                 <IconTextButton
                     iconName={'refresh'}
-                    text={"Reset"}
+                    // text={"Reset"}
                     onPress={refresh}
                 />
                 <IconTextButton
-                    iconName={'filter-alt'}
-                    text={"Filters"}
-                    onPress={navigateToFilters}
+                    iconName={'add'}
+                    // text={"Photos"}
+                    onPress={pickImage}
                 />
                 <IconTextButton
-                    iconName={'add'}
-                    text={"Photos"}
-                    onPress={pickImage}
+                    iconName={'filter-alt'}
+                    // text={"Filters"}
+                    onPress={navigateToFilters}
                 />
             </View>
 

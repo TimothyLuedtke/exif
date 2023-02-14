@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Text, SafeAreaView, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { removeDuplicates } from '../utils/ArrayUtils';
 import IconTextButton from '../components/Button';
 
 export default function FilterScreen({ navigation, route }) {
@@ -26,40 +27,35 @@ export default function FilterScreen({ navigation, route }) {
     setLocationOpen(false);
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { // sets the locationItems and dateTimeItems to the values of the selected filters
     (async () => {
-      setLocationItems(removeDuplicates(assetFilterer, 'locationValue'));
-      setDateTimeItems(removeDuplicates(assetFilterer, 'DateTimeValue'));
-      console.log('Assets distributed to filter dropdowns.')
+      // setLocationItems(removeDuplicates(assetFilterer, 'locationValue')); 
+      // setDateTimeItems(removeDuplicates(assetFilterer, 'DateTimeValue'));
+      setLocationItems(assetFilterer);
+      setDateTimeItems(assetFilterer);
+      console.log('Assets distributed to filter dropdowns from Filters.js: ')
+      // console.log(displayedAssets);
+      console.log(assetFilterer);
     })();
   }, [displayedAssets]);
 
-  useEffect(() => {
+  useEffect(() => { // sets the displayedAssets to the assets received from the Photos.js screen
     (async () => {
       if (route.params) {
         setDisplayedAssets(route.params.displayedAssets);
         console.log('Assets received in Filters.js: ')
       } else {
-        console.log('No displayedAssets received in Filters.js');
+        console.log('No assets received in Filters.js');
       }
     })();
   }, [route.params]);
 
-
-
-  // removes duplicate values from the array
-  function removeDuplicates(arr, prop) {
-    var obj = {};
-    for (var i = 0, len = arr.length; i < len; i++) {
-      if (!obj[arr[i][prop]]) obj[arr[i][prop]] = arr[i];
-    }
-    var newArr = [];
-    for (var key in obj) newArr.push(obj[key]);
-    return newArr;
-  }
-
-  const assetFilterer = displayedAssets.map((photo) => {
-    if (photo.exif.DateTime !== undefined && photo.exif.GPSLatitudeRef !== undefined && photo.exif.GPSLatitude !== undefined && photo.exif.GPSLongitudeRef !== undefined && photo.exif.GPSLongitude !== undefined) {
+  const assetFilterer = displayedAssets.map((photo) => { // maps the assets to an array of objects with the values of the selected filters
+    if (photo.exif.DateTime !== undefined 
+      && photo.exif.GPSLatitudeRef !== undefined 
+      && photo.exif.GPSLatitude !== undefined 
+      && photo.exif.GPSLongitudeRef !== undefined 
+      && photo.exif.GPSLongitude !== undefined) {
       return {
         DateTimeValue: photo.exif.DateTime,
         locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
@@ -68,26 +64,30 @@ export default function FilterScreen({ navigation, route }) {
       return {
         DateTimeValue: photo.exif.DateTime,
       };
-    } else if (photo.exif.GPSLatitudeRef !== undefined && photo.exif.GPSLatitude !== undefined && photo.exif.GPSLongitudeRef !== undefined && photo.exif.GPSLongitude !== undefined) {
+    } else if (photo.exif.GPSLatitudeRef !== undefined 
+      && photo.exif.GPSLatitude !== undefined 
+      && photo.exif.GPSLongitudeRef !== undefined 
+      && photo.exif.GPSLongitude !== undefined) {
       return {
         locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
       };
     }
   });
 
-  const filteredAssets = displayedAssets.filter((photo) => {
-    if (locationValue.length > 0 && dateTimeValue.length > 0) {
-      return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude) && dateTimeValue.includes(photo.exif.DateTime);
-    } else if (locationValue.length > 0) {
+  const filteredAssets = displayedAssets.filter((photo) => { // filters the assets based on the selected filters
+    if (locationValue.length > 0 && dateTimeValue.length > 0) {  // if both filters are selected
+      return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude) 
+      && dateTimeValue.includes(photo.exif.DateTime);
+    } else if (locationValue.length > 0) {  // if only the location filter is selected
       return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude);
-    } else if (dateTimeValue.length > 0) {
+    } else if (dateTimeValue.length > 0) { // if only the date/time filter is selected
       return dateTimeValue.includes(photo.exif.DateTime);
     } else {
-      return photo;
+      return photo; // if no filters are selected
     }
   });
 
-  function navigateToPhotos() {
+  function navigateToPhotos() { // navigates to the Photos screen with the filtered assets
     if (filteredAssets.length > 0) {
       console.log('Sending filtered assets to Photos.js');
       navigation.navigate('Photos', { filteredAssets: filteredAssets });
@@ -97,15 +97,16 @@ export default function FilterScreen({ navigation, route }) {
     }
   }
 
-  function onClear() {
+  function onClear() { // clears the filters
     console.log('Clearing filters');
     setLocationValue([]);
     setDateTimeValue([]);
   }
 
-  const assetsSelected = filteredAssets.length;
+  
+  const assetsSelected = filteredAssets.length; // number of assets that match the selected filters
 
-  const filtersSelected = locationValue.length + dateTimeValue.length;
+  const filtersSelected = locationValue.length + dateTimeValue.length; // number of filters that have been selected
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,6 +121,7 @@ export default function FilterScreen({ navigation, route }) {
       <DropDownPicker
         open={locationOpen}
         onOpen={onlocationOpen}
+        key={locationValue}
         schema={{
           label: 'locationValue',
           value: 'locationValue',
@@ -139,9 +141,10 @@ export default function FilterScreen({ navigation, route }) {
         placeholder="Location"
       />
       {/* DateTime Dropdown */}
-      <DropDownPicker
+      {/* <DropDownPicker
         open={dateTimeOpen}
         onOpen={onDateTimeOpen}
+        key={dateTimeValue}
         schema={{
           label: 'DateTimeValue',
           value: 'DateTimeValue',
@@ -159,7 +162,7 @@ export default function FilterScreen({ navigation, route }) {
         // zIndexInverse={}
         mode="BADGE"
         placeholder="Date/Time"
-      />
+      /> */}
 
         { filtersSelected === 1 ? (
           <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filter selected</Text>

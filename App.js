@@ -24,7 +24,7 @@ export default function App() {
               headerTitle: '',
 
           }}
-          initialParams={{ filteredAssets: null }}
+          initialParams={{ filteredAssets: [] }}
         />
         <Stack.Screen
           name="Filters"

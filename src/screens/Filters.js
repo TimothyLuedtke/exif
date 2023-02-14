@@ -51,34 +51,30 @@ export default function FilterScreen({ navigation, route }) {
 
   const assetFilterer = displayedAssets.map((photo) => { // maps the assets to an array of objects with the values of the selected filters
     if (photo.exif.DateTime !== undefined 
-      && photo.exif.GPSLatitudeRef !== undefined 
-      && photo.exif.GPSLatitude !== undefined 
-      && photo.exif.GPSLongitudeRef !== undefined 
+      && photo.exif.GPSLatitude !== undefined  
       && photo.exif.GPSLongitude !== undefined) {
       return {
         DateTimeValue: photo.exif.DateTime,
-        locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
+        locationValue: photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude,
       };
     } else if (photo.exif.DateTime !== undefined) {
       return {
         DateTimeValue: photo.exif.DateTime,
       };
-    } else if (photo.exif.GPSLatitudeRef !== undefined 
-      && photo.exif.GPSLatitude !== undefined 
-      && photo.exif.GPSLongitudeRef !== undefined 
+    } else if (photo.exif.GPSLatitude !== undefined 
       && photo.exif.GPSLongitude !== undefined) {
       return {
-        locationValue: photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude,
+        locationValue: photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude,
       };
     }
   });
 
   const filteredAssets = displayedAssets.filter((photo) => { // filters the assets based on the selected filters
     if (locationValue.length > 0 && dateTimeValue.length > 0) {  // if both filters are selected
-      return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude) 
+      return locationValue.includes(photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude) 
       && dateTimeValue.includes(photo.exif.DateTime);
     } else if (locationValue.length > 0) {  // if only the location filter is selected
-      return locationValue.includes(photo.exif.GPSLatitudeRef + photo.exif.GPSLatitude + photo.exif.GPSLongitudeRef + photo.exif.GPSLongitude);
+      return locationValue.includes(photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude);
     } else if (dateTimeValue.length > 0) { // if only the date/time filter is selected
       return dateTimeValue.includes(photo.exif.DateTime);
     } else {

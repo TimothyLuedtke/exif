@@ -2,7 +2,7 @@ import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, View } from 'rea
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
-import { clearStorage, storeData, retrieveData, removeData } from '../storage/AsyncStorage';
+import { clearStorage, storeData, retrieveData, removeData } from '../storage/asyncStorage';
 import IconTextButton from '../components/Button';
 
 const { width } = Dimensions.get('window');

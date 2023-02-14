@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Text, SafeAreaView, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { removeDuplicates } from '../utils/ArrayUtils';
 import IconTextButton from '../components/Button';
 
 export default function FilterScreen({ navigation, route }) {

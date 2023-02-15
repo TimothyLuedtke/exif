@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Text, SafeAreaView, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { uniqueElByProps } from '../utils/ArrayUtils';
 import IconTextButton from '../components/Button';
 
 export default function FilterScreen({ navigation, route }) {
@@ -28,10 +29,10 @@ export default function FilterScreen({ navigation, route }) {
 
   useEffect(() => { // sets the locationItems and dateTimeItems to the values of the selected filters
     (async () => {
-      // setLocationItems(removeDuplicates(assetFilterer, 'locationValue')); 
-      // setDateTimeItems(removeDuplicates(assetFilterer, 'DateTimeValue'));
-      setLocationItems(assetFilterer);
-      setDateTimeItems(assetFilterer);
+      setLocationItems(uniqueElByProps(assetFilterer, 'locationValue')); 
+      setDateTimeItems(uniqueElByProps(assetFilterer, 'DateTimeValue'));
+      // setLocationItems(assetFilterer);
+      // setDateTimeItems(assetFilterer);
       console.log('Assets distributed to filter dropdowns from Filters.js: ')
       // console.log(displayedAssets);
       console.log(assetFilterer);
@@ -50,23 +51,10 @@ export default function FilterScreen({ navigation, route }) {
   }, [route.params]);
 
   const assetFilterer = displayedAssets.map((photo) => { // maps the assets to an array of objects with the values of the selected filters
-    if (photo.exif.DateTime !== undefined 
-      && photo.exif.GPSLatitude !== undefined  
-      && photo.exif.GPSLongitude !== undefined) {
-      return {
-        DateTimeValue: photo.exif.DateTime,
-        locationValue: photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude,
-      };
-    } else if (photo.exif.DateTime !== undefined) {
-      return {
-        DateTimeValue: photo.exif.DateTime,
-      };
-    } else if (photo.exif.GPSLatitude !== undefined 
-      && photo.exif.GPSLongitude !== undefined) {
-      return {
-        locationValue: photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude,
-      };
-    }
+    return {
+      locationValue: photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude,
+      DateTimeValue: photo.exif.DateTime,
+    };
   });
 
   const filteredAssets = displayedAssets.filter((photo) => { // filters the assets based on the selected filters

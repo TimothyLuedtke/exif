@@ -19,4 +19,3 @@ export const combineObjsInArr = (arr) => {
     for (const key in obj) newArr.push(obj[key]); // loop through the object and push the values to the array (this removes the duplicates)
     return newArr; // return the array
 };
-

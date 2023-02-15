@@ -11,9 +11,11 @@ export default function FilterScreen({ navigation, route }) {
 
   const [locationValue, setLocationValue] = useState([]);
   const [locationItems, setLocationItems] = useState([]);
+  let locationLabel = [];
 
   const [dateTimeValue, setDateTimeValue] = useState([]);
   const [dateTimeItems, setDateTimeItems] = useState([]);
+  const [dateTimeLabel, setDateTimeLabel] = useState([]);
 
   // sets the date/time picker to close when the location picker is opened
   const [locationOpen, setLocationOpen] = useState(false);
@@ -52,8 +54,10 @@ export default function FilterScreen({ navigation, route }) {
 
   const assetFilterer = displayedAssets.map((photo) => { // maps the assets to an array of objects with the values of the selected filters
     return {
-      locationValue: (photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude) !== ("undefined, undefined") ? photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude : 'No location data',
-      DateTimeValue: photo.exif.DateTime !== undefined ? photo.exif.DateTime : 'No date/time data',
+      locationLabel: (photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude) !== ("undefined, undefined") ? photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude : 'No GPS data',
+      locationValue: photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude,
+      DateTimeLabel: photo.exif.DateTime !== undefined ? photo.exif.DateTime : 'No date/time data',
+      DateTimeValue: photo.exif.DateTime,
     };
   });
 
@@ -106,7 +110,7 @@ export default function FilterScreen({ navigation, route }) {
         onOpen={onlocationOpen}
         key={locationValue}
         schema={{
-          label: 'locationValue',
+          label: 'locationLabel',
           value: 'locationValue',
           containerStyle: { zIndex: 2 },
         }}
@@ -116,12 +120,12 @@ export default function FilterScreen({ navigation, route }) {
         setValue={setLocationValue}
         setItems={setLocationItems}
         multiple={true}
-        multipleText={`${locationValue}, `}
+        multipleText={`${locationLabel}, `}
         min={0}
         max={10}
         // zIndexInverse={}
         mode="BADGE"
-        placeholder="Location"
+        placeholder="GPS Location"
       />
       {/* DateTime Dropdown */}
       {/* <DropDownPicker

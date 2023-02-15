@@ -12,34 +12,18 @@ export default function FilterScreen({ navigation, route }) {
 
   const [assets, setAssets] = useState([]);
 
-  const [urlValues, setURLValues] = useState([]);
-
   const [gpsValues, setGPSValues] = useState([]);
   const [gpsItems, setGPSItems] = useState([]);
-
-  const [locationValues, setLocationValues] = useState([]);
-  const [locationItems, setLocationItems] = useState([]);
-
-  const [dateTimeValue, setDateTimeValue] = useState([]);
-  const [dateTimeItems, setDateTimeItems] = useState([]);
-  const [dateTimeLabel, setDateTimeLabel] = useState([]);
 
   // sets the date/time picker to close when the location picker is opened
   const [gpsPickerOPEN, setGPSPickerOPEN] = useState(false);
   const onGPSPickerOPEN = useCallback(() => {
-    setDateTimeOpen(false);
-  }, []);
-
-  // sets the location picker to close when the date/time picker is opened
-  const [dateTimeOpen, setDateTimeOpen] = useState(false);
-  const onDateTimeOpen = useCallback(() => {
-    setGPSPickerOPEN(false);
+    setGPSPickerOPEN(true);
   }, []);
 
   useEffect(() => { // sets the gpsItems and dateTimeItems to the values of the selected filters
     (async () => {
       setGPSItems(uniqueElByProps(assets, 'gpsValue'));
-      setDateTimeItems(uniqueElByProps(assets, 'DateTimeValue'));
       console.log('Assets distributed to filter dropdowns from Filters.js: ')
       // console.log(assets);
     })();
@@ -72,7 +56,6 @@ export default function FilterScreen({ navigation, route }) {
           assets[i].region = location[0].region; // sets the region value to the region value from the location data
           assets[i].street = location[0].street; // sets the street value to the street value from the location data
         }
-        setLocationItems(uniqueElByProps(assets, 'location')); // sets the locationItems to the unique location values
         console.log('Location data added to assets and distributed to locationItems');
       }
     })();
@@ -95,8 +78,6 @@ export default function FilterScreen({ navigation, route }) {
           gpsValue: photo.exif.GPSLatitude + photo.exif.GPSLongitude,
           latitude: photo.exif.GPSLatitude,
           longitude: photo.exif.GPSLongitude,
-          DateTimeLabel: photo.exif.DateTime !== undefined ? photo.exif.DateTime : 'No date/time data',
-          DateTimeValue: photo.exif.DateTime,
           timeValue: photo.exif.DateTime !== undefined ? photo.exif.DateTime.split(' ')[1] : 'No time data',
           dateValue: photo.exif.DateTime !== undefined ? photo.exif.DateTime.split(' ')[0] : 'No date data',
           customTags: photo.customTags,
@@ -182,13 +163,12 @@ export default function FilterScreen({ navigation, route }) {
   function onClear() { // clears the filters
     console.log('Clearing filters');
     setGPSValues([]);
-    setDateTimeValue([]);
   }
 
 
   // const assetsSelected = filterAssetFilterer.length; // number of assets that match the selected filters
 
-  const filtersSelected = gpsValues.length + dateTimeValue.length; // number of filters that have been selected
+  const filtersSelected = gpsValues.length // number of filters that have been selected
 
   return (
     <SafeAreaView style={styles.container}>
@@ -222,29 +202,6 @@ export default function FilterScreen({ navigation, route }) {
         mode="BADGE"
         placeholder="GPS Location"
       />
-      {/* DateTime Dropdown */}
-      {/* <DropDownPicker
-        open={dateTimeOpen}
-        onOpen={onDateTimeOpen}
-        key={dateTimeValue}
-        schema={{
-          label: 'DateTimeValue',
-          value: 'DateTimeValue',
-        }}
-        value={dateTimeValues}
-        items={dateTimeItems}
-        setOpen={setDateTimeOpen}
-        setValue={setDateTimeValues}
-        setItems={setDateTimeItems}
-        multiple={true}
-        multipleText={`${dateTimeValue}, `}
-        min={0}
-        max={10}
-        zIndex={1}
-        // zIndexInverse={}
-        mode="BADGE"
-        placeholder="Date/Time"
-      /> */}
 
       {filtersSelected === 1 ? (
         <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filter selected</Text>

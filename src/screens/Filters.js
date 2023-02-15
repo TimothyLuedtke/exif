@@ -52,8 +52,8 @@ export default function FilterScreen({ navigation, route }) {
 
   const assetFilterer = displayedAssets.map((photo) => { // maps the assets to an array of objects with the values of the selected filters
     return {
-      locationValue: photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude,
-      DateTimeValue: photo.exif.DateTime,
+      locationValue: (photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude) !== ("undefined, undefined") ? photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude : 'No location data',
+      DateTimeValue: photo.exif.DateTime !== undefined ? photo.exif.DateTime : 'No date/time data',
     };
   });
 

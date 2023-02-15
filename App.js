@@ -33,7 +33,7 @@ export default function App() {
             headerTransparent: true,
             headerTitle: '',
           }}
-          initialParams={{ displayedAssets: [] }}
+          initialParams={{ importedAssets: [] }}
         />
       </Stack.Navigator>
     </NavigationContainer>

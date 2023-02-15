@@ -30,7 +30,6 @@ export default function PhotosScreen({ navigation, route }) {
             const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
             if (storedPhotoAssets) {
                 setDisplayedAssets(storedPhotoAssets);
-                console.log('Stored Assets: ', storedPhotoAssets);
                 console.log('Displaying stored Assets...');
             } else {
                 setDisplayedAssets([]);
@@ -43,7 +42,7 @@ export default function PhotosScreen({ navigation, route }) {
         (async () => {
             if (route.params) {
                 setFilteredAssets(route.params.filteredAssets);
-                console.log('Filtered assets received...', filteredAssets);
+                console.log('Filtered assets received...');
             } else {
                 console.log('No filtered assets recieved to display.');
             }
@@ -93,6 +92,7 @@ export default function PhotosScreen({ navigation, route }) {
                 return {
                     exif: item.exif,
                     uri: item.uri,
+                    customTags: [],
                 };
             })];
     
@@ -107,7 +107,7 @@ export default function PhotosScreen({ navigation, route }) {
 
     const navigateToFilters = () => {
         navigation.navigate('Filters', {
-            displayedAssets: displayedAssets,
+            importedAssets: displayedAssets,
         });
     };
 

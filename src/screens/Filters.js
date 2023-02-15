@@ -12,18 +12,32 @@ export default function FilterScreen({ navigation, route }) {
 
   const [assets, setAssets] = useState([]);
 
+  const [selectedValues, setSelectedValues] = useState([]);
+
   const [gpsValues, setGPSValues] = useState([]);
   const [gpsItems, setGPSItems] = useState([]);
+
+  const [dateValues, setDateValues] = useState([]);
+  const [dateItems, setDateItems] = useState([]);
 
   // sets the date/time picker to close when the location picker is opened
   const [gpsPickerOPEN, setGPSPickerOPEN] = useState(false);
   const onGPSPickerOPEN = useCallback(() => {
     setGPSPickerOPEN(true);
+    setDatePickerOPEN(false);
+  }, []);
+
+  // sets the date picker to close when the location picker is opened
+  const [datePickerOPEN, setDatePickerOPEN] = useState(false);
+  const onDatePickerOPEN = useCallback(() => {
+    setDatePickerOPEN(true);
+    setGPSPickerOPEN(false);
   }, []);
 
   useEffect(() => { // sets the gpsItems and dateTimeItems to the values of the selected filters
     (async () => {
       setGPSItems(uniqueElByProps(assets, 'gpsValue'));
+      setDateItems(uniqueElByProps(assets, 'dateTimeValue'));
       console.log('Assets distributed to filter dropdowns from Filters.js: ')
       // console.log(assets);
     })();
@@ -33,33 +47,37 @@ export default function FilterScreen({ navigation, route }) {
     (async () => {
       if (importedAssets) {
         assetTransformer();
-        console.log('Assets received in Filters.js: ')
+        console.log('Assets received in Filters.js: ');
       } else {
         console.log('No assets received in Filters.js');
       }
     })();
+  }, [importedAssets]);
+  
+  useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         alert('Sorry, we need location permissions to make this work!');
-      } else { // if the user has granted location permissions
-        for (let i = 0; i < assets.length; i++) { // loops through the assets
-          let location = await Location.reverseGeocodeAsync({ // gets the location data from the GPS coordinates
+      } else {
+        for (let i = 0; i < assets.length; i++) {
+          let location = await Location.reverseGeocodeAsync({
             latitude: assets[i].latitude,
             longitude: assets[i].longitude,
           });
-          assets[i].city = location[0].city; // sets the city value to the city value from the location data
-          assets[i].country = location[0].country; // sets the country value to the country value from the location data
-          assets[i].district = location[0].district; // sets the district value to the district value from the location data
-          assets[i].name = location[0].name; // sets the name value to the name value from the location data
-          assets[i].postalCode = location[0].postalCode; // sets the postalCode value to the postalCode value from the location data
-          assets[i].region = location[0].region; // sets the region value to the region value from the location data
-          assets[i].street = location[0].street; // sets the street value to the street value from the location data
+          assets[i].city = location[0].city;
+          assets[i].country = location[0].country;
+          assets[i].district = location[0].district;
+          assets[i].name = location[0].name;
+          assets[i].postalCode = location[0].postalCode;
+          assets[i].region = location[0].region;
+          assets[i].street = location[0].street;
         }
         console.log('Location data added to assets and distributed to locationItems');
       }
     })();
-  }, [importedAssets]);
+  }, [importedAssets, assets]);
+  
 
 
   const assetTransformer = () => {

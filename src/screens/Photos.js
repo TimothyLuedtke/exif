@@ -36,27 +36,16 @@ export default function PhotosScreen({ navigation, route }) {
                 console.log('No stored Assets.');
             }
         })();
-    }, []);
+    }, [route.params.filteredAssets < 0 || route.params.filteredAssets > null]);
 
     useEffect(() => {
-        (async () => {
-            if (route.params) {
-                setFilteredAssets(route.params.filteredAssets);
-                console.log('Filtered assets received...');
-            } else {
-                console.log('No filtered assets recieved to display.');
-            }
-        })();
-    }, [route.params]);
-
-    useEffect(() => {
-        if (filteredAssets && filteredAssets.length > 0) {
-            setDisplayedAssets(filteredAssets);
-            console.log('Displaying filtered assets...');
+        if (route.params.filteredAssets && route.params.filteredAssets.length > 0) {
+            setDisplayedAssets(route.params.filteredAssets);
+            console.log('Displaying filtered Assets...');
         } else {
-            console.log('No filtered assets to display.');
+            console.log('No filtered Assets.');
         }
-    }, [filteredAssets]);
+    }, [route.params.filteredAssets && route.params.filteredAssets.length > 0]);
 
     const resetStorage = async () => {
         await clearStorage();

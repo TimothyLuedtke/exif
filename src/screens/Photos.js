@@ -40,7 +40,8 @@ export default function PhotosScreen({ navigation, route }) {
 
     useEffect(() => {
         if (route.params.filteredAssets && route.params.filteredAssets.length > 0) {
-            setDisplayedAssets(route.params.filteredAssets);
+            setFilteredAssets(route.params.filteredAssets);
+            setDisplayedAssets(filteredAssets);
             console.log('Displaying filtered Assets...');
         } else {
             console.log('No filtered Assets.');
@@ -50,10 +51,11 @@ export default function PhotosScreen({ navigation, route }) {
     const resetStorage = async () => {
         await clearStorage();
         setDisplayedAssets([]);
+        setFilteredAssets([]);
         console.log('Storage cleared.');
     };
 
-    const refresh = async () => {
+    const resetFilters = async () => {
         const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
         if (storedPhotoAssets) {
             setDisplayedAssets(storedPhotoAssets);
@@ -62,7 +64,7 @@ export default function PhotosScreen({ navigation, route }) {
         } else {
             setDisplayedAssets([]);
             setFilteredAssets([]);
-            console.log('No stored assets to refresh.');
+            console.log('No stored assets to display.');
         }
     };
 
@@ -95,6 +97,7 @@ export default function PhotosScreen({ navigation, route }) {
     };
 
     const navigateToFilters = () => {
+        console.log('Navigating to Filters...');
         navigation.navigate('Filters', {
             importedAssets: displayedAssets,
         });
@@ -125,7 +128,7 @@ export default function PhotosScreen({ navigation, route }) {
                 <IconTextButton
                     iconName={'refresh'}
                     // text={"Reset"}
-                    onPress={refresh}
+                    onPress={resetFilters}
                 />
                 <IconTextButton
                     iconName={'add'}

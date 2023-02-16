@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as Location from 'expo-location';
 import { uniqueElByProps } from '../utils/ArrayUtils';
+import { formatDateTime } from '../utils/FormatUtils';
 import IconTextButton from '../components/Button';
 
 export default function FilterScreen({ navigation, route }) {
@@ -12,78 +13,90 @@ export default function FilterScreen({ navigation, route }) {
 
   const [assets, setAssets] = useState([]);
 
-  const [gpsValues, setGPSValues] = useState([]);
-  const [gpsItems, setGPSItems] = useState([]);
+  // const [gpsValues, setGPSValues] = useState([]);
+  // const [gpsItems, setGPSItems] = useState([]);
 
   const [dateValues, setDateValues] = useState([]);
   const [dateItems, setDateItems] = useState([]);
 
-  const [gpsPickerOPEN, setGPSPickerOPEN] = useState(false);
-  const onGPSPickerOPEN = useCallback(() => {
-    setGPSPickerOPEN(true);
-    setDatePickerOPEN(false);
-  }, []);
+  // const [gpsPickerOPEN, setGPSPickerOPEN] = useState(false);
+  // const onGPSPickerOPEN = useCallback(() => {
+  //   setGPSPickerOPEN(true);
+  //   setDatePickerOPEN(false);
+  // }, []);
 
   const [datePickerOPEN, setDatePickerOPEN] = useState(false);
   const onDatePickerOPEN = useCallback(() => {
     setDatePickerOPEN(true);
-    setGPSPickerOPEN(false);
+    // setGPSPickerOPEN(false);
   }, []);
 
   useEffect(() => {
     (async () => {
-      setGPSItems(uniqueElByProps(assets, 'gpsValue'));
+      // setGPSItems(uniqueElByProps(assets, 'gpsValue'));
       setDateItems(uniqueElByProps(assets, 'dateTimeValue'));
       console.log('Assets distributed to filter dropdowns from Filters.js: ')
       // console.log(assets);
     })();
-  }, [assets]);
+  }, [assets.length > 0, assetsTransformed]);
 
-  const [locationEffectExecuted, setLocationEffectExecuted] = useState(false);
-
+  const [assetsTransformed, setAssetsTransformed] = useState(false);
   useEffect(() => {
     (async () => {
       if (importedAssets) {
         assetTransformer();
+        setAssetsTransformed(true);
         console.log('Assets received in Filters.js: ');
       } else {
         console.log('No assets received in Filters.js');
       }
     })();
   }, [importedAssets]);
-  
+
   useEffect(() => {
-    if (!locationEffectExecuted) {
+    if (assetsTransformed) {
+      let altAssets = assets;
       (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need location permissions to make this work!');
         } else {
-          for (let i = 0; i < assets.length; i++) {
-            let location = await Location.reverseGeocodeAsync({
-              latitude: assets[i].latitude,
-              longitude: assets[i].longitude,
-            });
-            assets[i].city = location[0].city;
-            assets[i].country = location[0].country;
-            assets[i].district = location[0].district;
-            assets[i].name = location[0].name;
-            assets[i].postalCode = location[0].postalCode;
-            assets[i].region = location[0].region;
-            assets[i].street = location[0].street;
+          for (let i = 0; i < altAssets.length; i++) {
+            if (altAssets[i].latitude === undefined || altAssets[i].longitude === undefined) {
+              console.log('No GPS data for asset: ' + altAssets[i].uri);
+              continue;
+            } else {
+              let location = await Location.reverseGeocodeAsync({
+                latitude: altAssets[i].latitude,
+                longitude: altAssets[i].longitude,
+              });
+              altAssets[i].city = location[0].city;
+              altAssets[i].country = location[0].country;
+              altAssets[i].district = location[0].district;
+              altAssets[i].name = location[0].name;
+              altAssets[i].postalCode = location[0].postalCode;
+              altAssets[i].region = location[0].region;
+              altAssets[i].street = location[0].street;
+            }
           }
           console.log('Location data added to assets and distributed to locationItems');
+          setAssets(altAssets);
+          console.log(assets);
         }
-        setLocationEffectExecuted(true);
       })();
     } else {
-      console.log('Location effect already executed');
+      console.log('Assets not transformed yet');
     }
-  }, [importedAssets, assets, locationEffectExecuted]);
+  }, [assetsTransformed === true, assets.length > 0]);
+
 
   const assetTransformer = () => {
     return setAssets(
       importedAssets.map((photo) => {
+        let dateTimeValue = formatDateTime(photo.exif.DateTime);
+        let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No date data';
+        let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No time data';
+
         return {
           uri: photo.uri,
           city: null,
@@ -93,35 +106,16 @@ export default function FilterScreen({ navigation, route }) {
           postalCode: null,
           region: null,
           street: null,
-          gpsLabel: (photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude) !== ("undefined, undefined") ? photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude : 'No GPS data',
-          gpsValue: photo.exif.GPSLatitude + photo.exif.GPSLongitude,
           latitude: photo.exif.GPSLatitude,
           longitude: photo.exif.GPSLongitude,
-          timeValue: photo.exif.DateTime !== undefined ? photo.exif.DateTime.split(' ')[1] : 'No time data',
-          dateValue: photo.exif.DateTime !== undefined ? photo.exif.DateTime.split(' ')[0] : 'No date data',
+          dateValue: dateValue,
+          timeValue: timeValue,
           customTags: photo.customTags,
         };
       })
     );
   }
 
-  const condensedAssets = () => {
-    let masterArray = [];
-    masterArray = gpsValues.concat(dateTimeValue);
-    masterArray.reduce((acc, curr) => {
-      if (acc[curr]) {
-        acc[curr]++;
-      } else {
-        acc[curr] = 1;
-      }
-      return acc;
-    }, {});
-    masterArray.filter((item) => {
-      return item.uri;
-    });
-    setURLValues(masterArray);
-    console.log('Master Array: ', masterArray);
-  }
 
 
   function navigateToPhotos() {
@@ -136,13 +130,14 @@ export default function FilterScreen({ navigation, route }) {
 
   function onClear() { // clears the filters
     console.log('Clearing filters');
-    setGPSValues([]);
+    console.log(assets);
+    // setGPSValues([]);
   }
 
 
   // const assetsSelected = filterAssetFilterer.length; // number of assets that match the selected filters
 
-  const filtersSelected = gpsValues.length
+  const filtersSelected = dateValues.length; // number of filters that are selected
 
   return (
     <SafeAreaView style={styles.container}>
@@ -154,7 +149,7 @@ export default function FilterScreen({ navigation, route }) {
         // )
       }
       {/* location Dropdown */}
-      <DropDownPicker
+      {/* <DropDownPicker
         open={gpsPickerOPEN}
         onOpen={onGPSPickerOPEN}
         key={gpsValues}
@@ -175,8 +170,8 @@ export default function FilterScreen({ navigation, route }) {
         // zIndexInverse={}
         mode="BADGE"
         placeholder="GPS Location"
-      />
-      
+      /> */}
+
 
       {filtersSelected === 1 ? (
         <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filter selected</Text>

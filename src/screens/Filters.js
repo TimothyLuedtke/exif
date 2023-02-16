@@ -55,32 +55,32 @@ export default function FilterScreen({ navigation, route }) {
 
   useEffect(() => {
     if (assetsTransformed) {
-      let altAssets = assets;
+      let locateAssets = assets;
       (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need location permissions to make this work!');
         } else {
-          for (let i = 0; i < altAssets.length; i++) {
-            if (altAssets[i].latitude === undefined || altAssets[i].longitude === undefined) {
-              console.log('No GPS data for asset: ' + altAssets[i].uri);
+          for (let i = 0; i < locateAssets.length; i++) {
+            if (locateAssets[i].latitude === undefined || locateAssets[i].longitude === undefined) {
+              console.log('No GPS data for asset: ' + locateAssets[i].uri);
               continue;
             } else {
               let location = await Location.reverseGeocodeAsync({
-                latitude: altAssets[i].latitude,
-                longitude: altAssets[i].longitude,
+                latitude: locateAssets[i].latitude,
+                longitude: locateAssets[i].longitude,
               });
-              altAssets[i].city = location[0].city;
-              altAssets[i].country = location[0].country;
-              altAssets[i].district = location[0].district;
-              altAssets[i].name = location[0].name;
-              altAssets[i].postalCode = location[0].postalCode;
-              altAssets[i].region = location[0].region;
-              altAssets[i].street = location[0].street;
+              locateAssets[i].city = location[0].city;
+              locateAssets[i].country = location[0].country;
+              locateAssets[i].district = location[0].district;
+              locateAssets[i].name = location[0].name;
+              locateAssets[i].postalCode = location[0].postalCode;
+              locateAssets[i].region = location[0].region;
+              locateAssets[i].street = location[0].street;
             }
           }
           console.log('Location data added to assets and distributed to locationItems');
-          setAssets(altAssets);
+          setAssets(locateAssets);
           console.log(assets);
         }
       })();

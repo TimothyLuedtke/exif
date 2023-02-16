@@ -73,19 +73,18 @@ export default function FilterScreen({ navigation, route }) {
               locateAssets[i].city = location[0].city;
               locateAssets[i].country = location[0].country;
               locateAssets[i].district = location[0].district;
-              locateAssets[i].name = location[0].name;
               locateAssets[i].postalCode = location[0].postalCode;
               locateAssets[i].region = location[0].region;
               locateAssets[i].street = location[0].street;
             }
           }
-          console.log('Location data added to assets and distributed to locationItems');
+          console.log('Location data added to assets and distributed to locationItems:');
           setAssets(locateAssets);
           console.log(assets);
         }
       })();
     } else {
-      console.log('Assets not transformed yet');
+      console.log('Assets not transformed yet...');
     }
   }, [assetsTransformed === true, assets.length > 0]);
 
@@ -102,7 +101,6 @@ export default function FilterScreen({ navigation, route }) {
           city: null,
           country: null,
           district: null,
-          name: null,
           postalCode: null,
           region: null,
           street: null,

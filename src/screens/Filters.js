@@ -12,29 +12,25 @@ export default function FilterScreen({ navigation, route }) {
 
   const [assets, setAssets] = useState([]);
 
-  const [selectedValues, setSelectedValues] = useState([]);
-
   const [gpsValues, setGPSValues] = useState([]);
   const [gpsItems, setGPSItems] = useState([]);
 
   const [dateValues, setDateValues] = useState([]);
   const [dateItems, setDateItems] = useState([]);
 
-  // sets the date/time picker to close when the location picker is opened
   const [gpsPickerOPEN, setGPSPickerOPEN] = useState(false);
   const onGPSPickerOPEN = useCallback(() => {
     setGPSPickerOPEN(true);
     setDatePickerOPEN(false);
   }, []);
 
-  // sets the date picker to close when the location picker is opened
   const [datePickerOPEN, setDatePickerOPEN] = useState(false);
   const onDatePickerOPEN = useCallback(() => {
     setDatePickerOPEN(true);
     setGPSPickerOPEN(false);
   }, []);
 
-  useEffect(() => { // sets the gpsItems and dateTimeItems to the values of the selected filters
+  useEffect(() => {
     (async () => {
       setGPSItems(uniqueElByProps(assets, 'gpsValue'));
       setDateItems(uniqueElByProps(assets, 'dateTimeValue'));
@@ -42,6 +38,8 @@ export default function FilterScreen({ navigation, route }) {
       // console.log(assets);
     })();
   }, [assets]);
+
+  const [locationEffectExecuted, setLocationEffectExecuted] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -55,34 +53,37 @@ export default function FilterScreen({ navigation, route }) {
   }, [importedAssets]);
   
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need location permissions to make this work!');
-      } else {
-        for (let i = 0; i < assets.length; i++) {
-          let location = await Location.reverseGeocodeAsync({
-            latitude: assets[i].latitude,
-            longitude: assets[i].longitude,
-          });
-          assets[i].city = location[0].city;
-          assets[i].country = location[0].country;
-          assets[i].district = location[0].district;
-          assets[i].name = location[0].name;
-          assets[i].postalCode = location[0].postalCode;
-          assets[i].region = location[0].region;
-          assets[i].street = location[0].street;
+    if (!locationEffectExecuted) {
+      (async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need location permissions to make this work!');
+        } else {
+          for (let i = 0; i < assets.length; i++) {
+            let location = await Location.reverseGeocodeAsync({
+              latitude: assets[i].latitude,
+              longitude: assets[i].longitude,
+            });
+            assets[i].city = location[0].city;
+            assets[i].country = location[0].country;
+            assets[i].district = location[0].district;
+            assets[i].name = location[0].name;
+            assets[i].postalCode = location[0].postalCode;
+            assets[i].region = location[0].region;
+            assets[i].street = location[0].street;
+          }
+          console.log('Location data added to assets and distributed to locationItems');
         }
-        console.log('Location data added to assets and distributed to locationItems');
-      }
-    })();
-  }, [importedAssets, assets]);
-  
-
+        setLocationEffectExecuted(true);
+      })();
+    } else {
+      console.log('Location effect already executed');
+    }
+  }, [importedAssets, assets, locationEffectExecuted]);
 
   const assetTransformer = () => {
     return setAssets(
-      importedAssets.map((photo) => { // maps the assets to an array of objects with the values of the selected filters
+      importedAssets.map((photo) => {
         return {
           uri: photo.uri,
           city: null,
@@ -123,52 +124,7 @@ export default function FilterScreen({ navigation, route }) {
   }
 
 
-  // const filterAssetFilterer = assetTransformer.filter((photo) => { // filters the assets based on the selected filters
-  //   for (let i = 0; i < gpsValues.length; i++) {
-  //     if (gpsValues[i] === photo.gpsValues) {
-  //       return photo.uri;
-  //     } else {
-  //       console.log('No matching assets based on gps location');
-  //     }
-  //   }
-  //   for (let i = 0; i < dateTimeValue.length; i++) {
-  //     if (dateTimeValue[i] === photo.DateTimeValue) {
-  //       return photo.uri;
-  //     } else {
-  //       console.log('No matching assets based on date/time');
-  //     }
-  //   }
-  // });
-
-  // const filteredAssets = assets.map((photo) => { // maps the assets to an array of objects with the values of the selected filters
-  //   for (let i = 0; i < filterAssetFilterer.length; i++) {
-  //     if (filterAssetFilterer[i].uri === photo.uri) {
-  //       return photo;
-  //     } else {
-  //       console.log('Returns no filtered assets');
-  //     }
-  //   }
-  //   console.log('Assets: ', assetTransformer);
-  //   console.log('Filtered Assets: ', filterAssetFilterer);
-  //   console.log('Assets Returned: ', filteredAssets);
-  // });
-
-
-
-  // const filteredAssets = assets.filter((photo) => { // filters the assets based on the selected filters
-  //   if (gpsValues.length > 0 && dateTimeValue.length > 0) {  // if both filters are selected
-  //     return gpsValues.includes(photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude)
-  //       && dateTimeValue.includes(photo.exif.DateTime);
-  //   } else if (gpsValues.length > 0) {  // if only the location filter is selected
-  //     return gpsValues.includes(photo.exif.GPSLatitude + ', ' + photo.exif.GPSLongitude);
-  //   } else if (dateTimeValue.length > 0) { // if only the date/time filter is selected
-  //     return dateTimeValue.includes(photo.exif.DateTime);
-  //   } else {
-  //     return photo; // if no filters are selected
-  //   }
-  // });
-
-  function navigateToPhotos() { // navigates to the Photos screen with the filtered assets
+  function navigateToPhotos() {
     if (filteredAssets.length > 0) {
       console.log('Sending filtered assets to Photos.js');
       navigation.navigate('Photos', { filteredAssets: filteredAssets });
@@ -186,7 +142,7 @@ export default function FilterScreen({ navigation, route }) {
 
   // const assetsSelected = filterAssetFilterer.length; // number of assets that match the selected filters
 
-  const filtersSelected = gpsValues.length // number of filters that have been selected
+  const filtersSelected = gpsValues.length
 
   return (
     <SafeAreaView style={styles.container}>
@@ -220,6 +176,7 @@ export default function FilterScreen({ navigation, route }) {
         mode="BADGE"
         placeholder="GPS Location"
       />
+      
 
       {filtersSelected === 1 ? (
         <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filter selected</Text>

@@ -1,7 +1,8 @@
-import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
+import { MaterialIcons } from '@expo/vector-icons';
 import { clearStorage, storeData, retrieveData, removeData } from '../storage/asyncStorage';
 import IconTextButton from '../components/Button';
 
@@ -13,6 +14,7 @@ export default function PhotosScreen({ navigation, route }) {
     const [key, setKey] = useState(0);
     const [displayedAssets, setDisplayedAssets] = useState([]);
     const [filteredAssets, setFilteredAssets] = useState([]);
+    const [selectedAssets, setSelectedAssets] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -48,24 +50,35 @@ export default function PhotosScreen({ navigation, route }) {
         }
     }, [route.params.filteredAssets && route.params.filteredAssets.length > 0]);
 
-    const resetStorage = async () => {
-        await clearStorage();
-        setDisplayedAssets([]);
-        setFilteredAssets([]);
-        console.log('Storage cleared.');
-    };
-
     const resetFilters = async () => {
         const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
         if (storedPhotoAssets) {
             setDisplayedAssets(storedPhotoAssets);
             setFilteredAssets([]);
             console.log('Reset filters and displaying stored assets.');
+            console.log('Stored assets: ', storedPhotoAssets);
         } else {
             setDisplayedAssets([]);
             setFilteredAssets([]);
             console.log('No stored assets to display.');
         }
+    };
+
+    const resetStorage = async () => {
+        await clearStorage();
+        setDisplayedAssets([]);
+        setFilteredAssets([]);
+        setSelectedAssets([]);
+        setKey(key + 1);
+        console.log('Reset storage.');
+    };
+
+    const deleteSelected = async () => {
+        const newPhotoAssets = displayedAssets.filter(photo => !selectedAssets.includes(photo));
+        setDisplayedAssets(newPhotoAssets);
+        setSelectedAssets([]);
+        storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
+        console.log('Deleted selected photos.');
     };
 
     const pickImage = async () => {
@@ -86,7 +99,7 @@ export default function PhotosScreen({ navigation, route }) {
                     customTags: [],
                 };
             })];
-    
+
             setDisplayedAssets(newPhotoAssets);
             await storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
             console.log('Updated Asset Storage.');
@@ -113,31 +126,54 @@ export default function PhotosScreen({ navigation, route }) {
                 style={styles.gridView}
                 spacing={0}
                 renderItem={({ item }) => (
-                    <Image
-                        source={{ uri: item.uri }}
-                        style={styles.image}
-                    />
+                    <View>
+                        <Image
+                            source={{ uri: item.uri }}
+                            style={styles.image}
+                        />
+                        {selectedAssets.includes(item.uri) && (
+                            <View style={styles.checkboxContainer}>
+                                <MaterialIcons name="check-box" size={24} color="white" />
+                            </View>
+                        )}
+                        <TouchableOpacity
+                            style={styles.overlay}
+                            onPress={() => {
+                                if (selectedAssets.includes(item.uri)) {
+                                    setSelectedAssets(selectedAssets.filter((uri) => uri !== item.uri));
+                                } else {
+                                    setSelectedAssets([...selectedAssets, item.uri]);
+                                }
+                            }}
+                        />
+                    </View>
                 )}
             />
             <View style={styles.inline}>
                 <IconTextButton
                     iconName={'delete'}
-                    // text={"Storage"}
+                    text={"Storage"}
                     onPress={resetStorage}
-                />
+                /> 
                 <IconTextButton
                     iconName={'refresh'}
-                    // text={"Reset"}
+                    text={"Filters"}
                     onPress={resetFilters}
                 />
                 <IconTextButton
+                    iconName={'delete'}
+                    text={'Selected'}
+                    onPress={deleteSelected}
+                    disabled={selectedAssets.length === 0}
+                />
+                <IconTextButton
                     iconName={'add'}
-                    // text={"Photos"}
+                    text={"Photos"}
                     onPress={pickImage}
                 />
                 <IconTextButton
                     iconName={'filter-alt'}
-                    // text={"Filters"}
+                    text={"Filters"}
                     onPress={navigateToFilters}
                 />
             </View>
@@ -147,6 +183,17 @@ export default function PhotosScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+    checkbox: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        borderRadius: 12,
+        width: 24,
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     container: {
         flex: 1,
         marginTop: 30,
@@ -165,5 +212,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
     },
 })

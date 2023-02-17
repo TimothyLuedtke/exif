@@ -55,11 +55,13 @@ export default function PhotosScreen({ navigation, route }) {
         if (storedPhotoAssets) {
             setDisplayedAssets(storedPhotoAssets);
             setFilteredAssets([]);
+            setSelectedAssets([]);
             console.log('Reset filters and displaying stored assets.');
             console.log('Stored assets: ', storedPhotoAssets);
         } else {
             setDisplayedAssets([]);
             setFilteredAssets([]);
+            setSelectedAssets([]);
             console.log('No stored assets to display.');
         }
     };
@@ -74,11 +76,19 @@ export default function PhotosScreen({ navigation, route }) {
     };
 
     const deleteSelected = async () => {
-        const newPhotoAssets = displayedAssets.filter(photo => !selectedAssets.includes(photo));
+        const newPhotoAssets = displayedAssets.filter(item => !selectedAssets.includes(item.uri));
         setDisplayedAssets(newPhotoAssets);
         setSelectedAssets([]);
         storeData(PHOTOS_ASSETS_STORAGE_KEY, newPhotoAssets);
         console.log('Deleted selected photos.');
+    };
+
+    const selectPhoto = async (uri) => {
+        if (selectedAssets.includes(uri)) {
+            setSelectedAssets(selectedAssets.filter(item => item !== uri));
+        } else {
+            setSelectedAssets([...selectedAssets, uri]);
+        }
     };
 
     const pickImage = async () => {
@@ -138,13 +148,7 @@ export default function PhotosScreen({ navigation, route }) {
                         )}
                         <TouchableOpacity
                             style={styles.overlay}
-                            onPress={() => {
-                                if (selectedAssets.includes(item.uri)) {
-                                    setSelectedAssets(selectedAssets.filter((uri) => uri !== item.uri));
-                                } else {
-                                    setSelectedAssets([...selectedAssets, item.uri]);
-                                }
-                            }}
+                            onPress={() => selectPhoto(item.uri)}
                         />
                     </View>
                 )}
@@ -164,7 +168,6 @@ export default function PhotosScreen({ navigation, route }) {
                     iconName={'delete'}
                     text={'Selected'}
                     onPress={deleteSelected}
-                    disabled={selectedAssets.length === 0}
                 />
                 <IconTextButton
                     iconName={'add'}
@@ -183,11 +186,10 @@ export default function PhotosScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-    checkbox: {
+    checkboxContainer: {
         position: 'absolute',
         top: 10,
         left: 10,
-        backgroundColor: 'rgba(0,0,0,0.5)',
         borderRadius: 12,
         width: 24,
         height: 24,
@@ -197,13 +199,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     gridView: {
         flex: 1,
     },
     image: {
+        position: 'relative',
         resizeMode: 'cover',
         width: width / 2,
         height: width / 2,
@@ -217,7 +218,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
+        zIndex: 1,
+        width: width / 2,
+        height: width / 2,
     },
 })

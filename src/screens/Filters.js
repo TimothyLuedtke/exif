@@ -5,7 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import * as Location from 'expo-location';
 import { uniqueElByProps } from '../utils/ArrayUtils';
 import { formatDateTime } from '../utils/FormatUtils';
-import IconTextButton from '../components/Button';
+import { IconTxtBtn } from '../components/Buttons';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -177,12 +177,12 @@ export default function FilterScreen({ navigation, route }) {
         <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filters selected</Text>
       )}
       <View style={styles.inline}>
-        <IconTextButton
+        <IconTxtBtn
           iconName={'refresh'}
           text={'Clear'}
           onPress={onClear}
         />
-        <IconTextButton
+        <IconTxtBtn
           iconName={'filter-alt'}
           text={'Apply'}
           onPress={navigateToPhotos}

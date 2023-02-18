@@ -1,10 +1,10 @@
-import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Pressable, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { MaterialIcons } from '@expo/vector-icons';
 import { clearStorage, storeData, retrieveData, removeData } from '../storage/asyncStorage';
-import IconTextButton from '../components/Button';
+import { IconTxtBtn, IconBtn } from '../components/Buttons';
 
 const { width } = Dimensions.get('window');
 
@@ -146,7 +146,7 @@ export default function PhotosScreen({ navigation, route }) {
                                 <MaterialIcons name="check-box" size={24} color="white" />
                             </View>
                         )}
-                        <TouchableOpacity
+                        <Pressable
                             style={styles.overlay}
                             onPress={() => selectPhoto(item.uri)}
                         />
@@ -154,30 +154,29 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
             />
             <View style={styles.inline}>
-                <IconTextButton
+                <IconTxtBtn
                     iconName={'delete'}
                     text={"Storage"}
                     onPress={resetStorage}
-                /> 
-                <IconTextButton
+                />
+                <IconTxtBtn
                     iconName={'refresh'}
                     text={"Filters"}
                     onPress={resetFilters}
                 />
-                <IconTextButton
+                <IconTxtBtn
                     iconName={'delete'}
                     text={'Selected'}
                     onPress={deleteSelected}
                 />
-                <IconTextButton
-                    iconName={'add'}
-                    text={"Photos"}
-                    onPress={pickImage}
-                />
-                <IconTextButton
+                <IconTxtBtn
                     iconName={'filter-alt'}
                     text={"Filters"}
                     onPress={navigateToFilters}
+                />
+                <IconBtn
+                    iconName={'add'}
+                    onPress={pickImage}
                 />
             </View>
 
@@ -213,6 +212,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        margin: 10,
     },
     overlay: {
         position: 'absolute',

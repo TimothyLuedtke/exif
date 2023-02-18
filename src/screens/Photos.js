@@ -2,9 +2,10 @@ import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Pressable, View 
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
-import { MaterialIcons } from '@expo/vector-icons';
 import { clearStorage, storeData, retrieveData, removeData } from '../storage/asyncStorage';
-import { IconTxtBtn, IconBtn } from '../components/Buttons';
+import { TxtIconBtn } from '../components/TxtIconBtn';
+import { IconBtn } from '../components/IconBtn';
+import Checkbox from '../components/Checkbox';
 
 const { width } = Dimensions.get('window');
 
@@ -142,9 +143,7 @@ export default function PhotosScreen({ navigation, route }) {
                             style={styles.image}
                         />
                         {selectedAssets.includes(item.uri) && (
-                            <View style={styles.checkboxContainer}>
-                                <MaterialIcons name="check-box" size={24} color="white" />
-                            </View>
+                        <Checkbox />
                         )}
                         <Pressable
                             style={styles.overlay}
@@ -154,22 +153,22 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
             />
             <View style={styles.inline}>
-                <IconTxtBtn
+                <TxtIconBtn
                     iconName={'delete'}
                     text={"Storage"}
                     onPress={resetStorage}
                 />
-                <IconTxtBtn
+                <TxtIconBtn
                     iconName={'refresh'}
                     text={"Filters"}
                     onPress={resetFilters}
                 />
-                <IconTxtBtn
+                <TxtIconBtn
                     iconName={'delete'}
                     text={'Selected'}
                     onPress={deleteSelected}
                 />
-                <IconTxtBtn
+                <TxtIconBtn
                     iconName={'filter-alt'}
                     text={"Filters"}
                     onPress={navigateToFilters}
@@ -185,16 +184,6 @@ export default function PhotosScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-    checkboxContainer: {
-        position: 'absolute',
-        top: 10,
-        left: 10,
-        borderRadius: 12,
-        width: 24,
-        height: 24,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     container: {
         flex: 1,
         marginTop: 30,

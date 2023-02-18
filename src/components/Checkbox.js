@@ -7,7 +7,7 @@ export default function Checkbox() {
     return (
 
 <View style={styles.checkboxContainer}>
-<MaterialIcons name="check-box" size={25} color="black" />
+<MaterialIcons name="check-box" size={25} color="white" />
 </View>
 
     );

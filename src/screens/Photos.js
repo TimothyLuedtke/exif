@@ -152,7 +152,8 @@ export default function PhotosScreen({ navigation, route }) {
                     </View>
                 )}
             />
-            <View style={styles.row}>
+            <View style={styles.optionsContainer}>
+            <View style={styles.optionsRow}>
                 {/* <TxtIconBtn
                     iconName={'delete'}
                     text={"Storage"}
@@ -183,6 +184,7 @@ export default function PhotosScreen({ navigation, route }) {
                     onPress={navigateToFilters}
                 />
             </View>
+            </View>
 
         </SafeAreaView>
     );
@@ -202,11 +204,17 @@ const styles = StyleSheet.create({
         width: width / 2,
         height: width / 2,
     },
-    row: {
+    optionsContainer: {
+        position: 'absolute',
+        bottom: 0,
+        width: width,
+        backgroundColor: 'rgba(255,255,255,.7)',
+    },
+    optionsRow: {
+        marginVertical: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin: 10,
+        justifyContent: 'space-evenly',
+        alignContent: 'flex-end',
     },
     overlay: {
         position: 'absolute',

@@ -3,7 +3,7 @@ import { Text, Pressable, StyleSheet } from 'react-native';
 
 export const TxtIconBtn = ({ iconName, text, onPress }) => (
         <Pressable style={styles.btn} onPress={onPress}>
-            <MaterialIcons name={iconName} size={30} color="black" />
+            <MaterialIcons name={iconName} size={32} color="black" />
             <Text style={styles.txt}>
                 {text}
             </Text>

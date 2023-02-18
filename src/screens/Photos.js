@@ -152,8 +152,8 @@ export default function PhotosScreen({ navigation, route }) {
                     </View>
                 )}
             />
-            <View style={styles.inline}>
-                <TxtIconBtn
+            <View style={styles.row}>
+                {/* <TxtIconBtn
                     iconName={'delete'}
                     text={"Storage"}
                     onPress={resetStorage}
@@ -167,15 +167,20 @@ export default function PhotosScreen({ navigation, route }) {
                     iconName={'delete'}
                     text={'Selected'}
                     onPress={deleteSelected}
-                />
+                /> */}
                 <TxtIconBtn
-                    iconName={'filter-alt'}
-                    text={"Filters"}
-                    onPress={navigateToFilters}
+                    iconName={'settings'}
+                    text={"Settings"}
+                    // onPress={() => navigation.openDrawer()}
                 />
                 <IconBtn
-                    iconName={'add'}
+                    iconName={'add-a-photo'}
                     onPress={pickImage}
+                />
+                <TxtIconBtn
+                    iconName={'filter'}
+                    text={"Filters"}
+                    onPress={navigateToFilters}
                 />
             </View>
 
@@ -197,9 +202,9 @@ const styles = StyleSheet.create({
         width: width / 2,
         height: width / 2,
     },
-    inline: {
+    row: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         alignItems: 'center',
         margin: 10,
     },

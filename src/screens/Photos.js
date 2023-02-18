@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: width,
-        backgroundColor: 'rgba(255,255,255,.7)',
+        backgroundColor: 'rgba(255,255,255,.8)',
     },
     optionsRow: {
         marginVertical: 10,

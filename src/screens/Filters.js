@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, Platform, SafeAreaView, View } from 'react-native';
+import { Text, SafeAreaView, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as Location from 'expo-location';
@@ -176,7 +176,7 @@ export default function FilterScreen({ navigation, route }) {
       ) : (
         <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filters selected</Text>
       )}
-      <View style={styles.inline}>
+      <View style={styles.optionsRow}>
         <TxtIconBtn
           iconName={'refresh'}
           text={'Clear'}
@@ -199,9 +199,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inline: {
+  optionsRow: {
+    marginVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
+    alignContent: 'flex-end',
+},
 })

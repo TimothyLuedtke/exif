@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Modal, Pressable, Text } from 'react-native';
 import { TxtIconBtn } from './TxtIconBtn';
+import { CloseBtn } from './CloseBtn';
 
 export default function MenuModal(props) {
     const {
@@ -8,6 +9,7 @@ export default function MenuModal(props) {
         closeModal,
         resetFilters,
         resetStorage,
+        setStorage,
         deleteSelected } = props;
 
 
@@ -27,28 +29,40 @@ export default function MenuModal(props) {
                 />
                 <View style={styles.modal}>
                     <View style={styles.closeBtnContainer}>
-                        <TxtIconBtn
-                            style={styles.closeBtn}
-                            iconName="close"
-                            onPress={() => { closeModal() }}
+                        <CloseBtn
+                            onPress={() => closeModal()}
                         />
                     </View>
                     <View style={styles.titleContainer}>
-                        <Text style={styles.title}>Menu</Text>
+                        <Text style={styles.title}>Storage</Text>
                     </View>
                     <View style={styles.contentContainer}>
                         <TxtIconBtn
+                            text="Delete Storage"
+                            iconName="delete"
+                            onPress={resetStorage}
+                        />
+                        <TxtIconBtn
+                            text="Set Storage"
+                            iconName="storage"
+                            onPress={setStorage}
+                        />
+                    </View>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}>Filters</Text>
+                    </View>
+                    <View style={styles.contentContainer}>
+                    <TxtIconBtn
                             text="Reset"
                             text2= "Filters"
                             iconName="filter"
                             onPress={resetFilters}
                         />
-                        <TxtIconBtn
-                            text="Delete"
-                            text2= "Storage"
-                            iconName="delete"
-                            onPress={resetStorage}
-                        />
+                    </View>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}>Selected</Text>
+                    </View>
+                    <View style={styles.contentContainer}>
                         <TxtIconBtn
                             text="Delete"
                             text2= "Selected"
@@ -70,23 +84,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
     },
-    closeBtn: {
-        position: 'absolute',
+    closeBtnContainer: {
         top: 0,
         right: 0,
-    },
-    closeBtnContainer: {
-        width: '100%',
-        alignItems: 'flex-end',
+        position: 'absolute',
     },
     titleContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         width: '100%',
+        margin: 20,
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',        
+        fontSize: 20,
+        fontWeight: 'semi-bold',        
     },
     modal: {
         position: 'absolute',
@@ -105,7 +116,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0,0,0,.5)',
+        backgroundColor: 'rgba(255,255,255,.3)',
     },
 
 });

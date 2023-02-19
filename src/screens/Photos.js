@@ -78,6 +78,11 @@ export default function PhotosScreen({ navigation, route }) {
         console.log('Reset storage.');
     };
 
+    const setStorage = async () => {
+        await storeData(PHOTOS_ASSETS_STORAGE_KEY, displayedAssets);
+        console.log('Stored assets: ', displayedAssets);
+    };
+
     const deleteSelected = async () => {
         const newPhotoAssets = displayedAssets.filter(item => !selectedAssets.includes(item.uri));
         setDisplayedAssets(newPhotoAssets);
@@ -157,14 +162,14 @@ export default function PhotosScreen({ navigation, route }) {
             <View style={styles.btnContainer}>
                        
                 <IconBtn
-                    icon={'menu'}
+                    icon={'filter'}
                     onPress={() => setModalVisible(true)}
                 />
                 <AddPhotoBtn
                     onPress={pickImage}
                 />
                 <IconBtn
-                    icon={'filter'}
+                    icon={'filter-alt'}
                     onPress={navigateToFilters}
                 />
             </View>
@@ -173,6 +178,7 @@ export default function PhotosScreen({ navigation, route }) {
                 closeModal={() => setModalVisible(false)}
                 resetFilters={resetFilters}
                 resetStorage={resetStorage}
+                setStorage={setStorage}
                 deleteSelected={deleteSelected}
             />
         </SafeAreaView>
@@ -202,7 +208,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        padding: 10,
+        padding: 5,
         backgroundColor: 'rgba(255,255,255,0.7)',
     },
     overlay: {

@@ -3,15 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-export default function Checkbox() {
-    return (
+export const Checkbox = () => (
 
-<View style={styles.checkboxContainer}>
-<MaterialIcons name="check-box" size={25} color="white" />
-</View>
-
-    );
-}
+        <View style={styles.checkboxContainer}>
+            <MaterialIcons name="check-box" size={25} color="white" />
+        </View>
+    
+);
 
 const styles = StyleSheet.create({
     checkboxContainer: {

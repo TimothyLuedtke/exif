@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../storage/asyncStorage';
-import { TxtIconBtn } from '../components/TxtIconBtn';
+import { AddPhotoBtn } from '../components/AddPhotoBtn';
+import { Checkbox } from '../components/Checkbox';
+import MenuModal from '../components/MenuModal';
 import { IconBtn } from '../components/IconBtn';
-import Checkbox from '../components/Checkbox';
 
 const { width } = Dimensions.get('window');
 
@@ -16,6 +17,7 @@ export default function PhotosScreen({ navigation, route }) {
     const [displayedAssets, setDisplayedAssets] = useState([]);
     const [filteredAssets, setFilteredAssets] = useState([]);
     const [selectedAssets, setSelectedAssets] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -143,7 +145,7 @@ export default function PhotosScreen({ navigation, route }) {
                             style={styles.image}
                         />
                         {selectedAssets.includes(item.uri) && (
-                        <Checkbox />
+                            <Checkbox />
                         )}
                         <Pressable
                             style={styles.overlay}
@@ -152,40 +154,27 @@ export default function PhotosScreen({ navigation, route }) {
                     </View>
                 )}
             />
-            <View style={styles.optionsContainer}>
-            <View style={styles.optionsRow}>
-                {/* <TxtIconBtn
-                    iconName={'delete'}
-                    text={"Storage"}
-                    onPress={resetStorage}
-                />
-                <TxtIconBtn
-                    iconName={'refresh'}
-                    text={"Filters"}
-                    onPress={resetFilters}
-                />
-                <TxtIconBtn
-                    iconName={'delete'}
-                    text={'Selected'}
-                    onPress={deleteSelected}
-                /> */}
-                <TxtIconBtn
-                    iconName={'settings'}
-                    text={"Settings"}
-                    // onPress={() => navigation.openDrawer()}
-                />
+            <View style={styles.btnContainer}>
+                       
                 <IconBtn
-                    iconName={'add-a-photo'}
+                    icon={'menu'}
+                    onPress={() => setModalVisible(true)}
+                />
+                <AddPhotoBtn
                     onPress={pickImage}
                 />
-                <TxtIconBtn
-                    iconName={'filter'}
-                    text={"Filters"}
+                <IconBtn
+                    icon={'filter'}
                     onPress={navigateToFilters}
                 />
             </View>
-            </View>
-
+            <MenuModal
+                modalVisible={modalVisible}
+                closeModal={() => setModalVisible(false)}
+                resetFilters={resetFilters}
+                resetStorage={resetStorage}
+                deleteSelected={deleteSelected}
+            />
         </SafeAreaView>
     );
 }
@@ -204,17 +193,17 @@ const styles = StyleSheet.create({
         width: width / 2,
         height: width / 2,
     },
-    optionsContainer: {
+    btnContainer: {
         position: 'absolute',
         bottom: 0,
-        width: width,
-        backgroundColor: 'rgba(255,255,255,.8)',
-    },
-    optionsRow: {
-        marginVertical: 10,
+        left: 0,
+        right: 0,
+        zIndex: 2,
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignContent: 'flex-end',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: 'rgba(255,255,255,0.7)',
     },
     overlay: {
         position: 'absolute',

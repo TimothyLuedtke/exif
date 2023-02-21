@@ -183,27 +183,27 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
             />
             <View style={styles.bottomBtnContainer}>
-                {!selectMode && (<MenuButton
-                    menuOpen={menuOpen}
-                    setMenuOpen={setMenuOpen}
-                    selectMode={selectMode}
-                    setSelectMode={setSelectMode}
-                    navigateToFilters={navigateToFilters}
-                    pickImage={pickImage}
-                />
-                )}
-                {selectMode && (
-                    <SelectButton
+                    {!selectMode && (<MenuButton
                         menuOpen={menuOpen}
                         setMenuOpen={setMenuOpen}
                         selectMode={selectMode}
                         setSelectMode={setSelectMode}
-                        selectedAssets={selectedAssets}
-                        deleteSelected={deleteSelected}
-                        selectAll={selectAll}
-                        resetStorage={resetStorage}
+                        navigateToFilters={navigateToFilters}
+                        pickImage={pickImage}
                     />
-                )}
+                    )}
+                    {selectMode && (
+                        <SelectButton
+                            menuOpen={menuOpen}
+                            setMenuOpen={setMenuOpen}
+                            selectMode={selectMode}
+                            setSelectMode={setSelectMode}
+                            selectedAssets={selectedAssets}
+                            deleteSelected={deleteSelected}
+                            selectAll={selectAll}
+                            resetStorage={resetStorage}
+                        />
+                    )}
             </View>
 
         </SafeAreaView>

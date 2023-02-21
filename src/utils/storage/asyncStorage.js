@@ -32,3 +32,29 @@ export const storeData = async (key, value) => {
     console.error(error);
   }
 };
+
+export const getAllKeys = async () => {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    return keys;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getMultiDatas = async keys => {
+  try {
+    const values = await AsyncStorage.multiGet(keys);
+    return values;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const multiRemove = async keys => {
+  try {
+    await AsyncStorage.multiRemove(keys);
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -190,8 +190,6 @@ export default function PhotosScreen({ navigation, route }) {
                     setSelectMode={setSelectMode}
                     navigateToFilters={navigateToFilters}
                     pickImage={pickImage}
-                    rerender={rerender}
-                    resetFilters={resetFilters}
                 />
                 )}
                 {selectMode && (

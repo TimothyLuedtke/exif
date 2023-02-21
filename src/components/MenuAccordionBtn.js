@@ -13,8 +13,6 @@ export default function MenuButton(props) {
         setSelectMode,
         navigateToFilters,
         pickImage,
-        rerender,
-        resetFilters,
     } = props;
 
     const toggleMenu = () => {
@@ -43,11 +41,6 @@ export default function MenuButton(props) {
                     <View style={styles.iconBtnContainer}>
                         <Pressable style={styles.iconBtn} onPress={navigateToFilters}>
                             <MaterialIcons name='filter-alt' size={30} color="black" />
-                        </Pressable>
-                    </View>
-                    <View style={styles.iconBtnContainer}>
-                        <Pressable style={styles.iconBtn} onPress={rerender}>
-                            <MaterialIcons name='refresh' size={30} color="black" />
                         </Pressable>
                     </View>
                     <View style={styles.iconBtnContainer}>

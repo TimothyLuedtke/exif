@@ -28,11 +28,6 @@ export default function MenuButton(props) {
         <View style={styles.btnView}>
             {menuOpen && (
                 <View>
-                    {/* <View style={styles.iconBtnContainer}>
-                        <Pressable style={styles.iconBtn} onPress={resetFilters}>
-                            <MaterialIcons name='clear' size={30} color="black" />
-                        </Pressable>
-                    </View> */}
                     <View style={styles.iconBtnContainer}>
                         <Pressable style={styles.iconBtn} onPress={pickImage}>
                             <MaterialIcons name='add-a-photo' size={30} color="black" />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Pressable, FlatList, Text, StyleSheet, Picker } from 'react-native';
-import { IconBtnSmall } from './IconBtnSmall';
+import { IconBtnSmall } from './buttons/IconBtnSmall';
 
 export default function DropdownSelector(props) {
 

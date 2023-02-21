@@ -1,12 +1,12 @@
-import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Pressable, View } from 'react-native';
+import { Dimensions, Text, Image, Pressable, Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
-import { clearStorage, storeData, retrieveData, removeData } from '../storage/asyncStorage';
-import { AddPhotoBtn } from '../components/AddPhotoBtn';
-import { Checkbox } from '../components/Checkbox';
-import MenuModal from '../components/MenuModal';
-import { IconBtn } from '../components/IconBtn';
+import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
+import Checkbox from '../components/buttons/Checkbox';
+import MenuButton from '../components/MenuAccordionBtn';
+import SelectButton from '../components/SelectAccordionBtn';
+import { TxtIconBtn } from '../components/buttons/TxtIconBtn';
 
 const { width } = Dimensions.get('window');
 
@@ -17,7 +17,9 @@ export default function PhotosScreen({ navigation, route }) {
     const [displayedAssets, setDisplayedAssets] = useState([]);
     const [filteredAssets, setFilteredAssets] = useState([]);
     const [selectedAssets, setSelectedAssets] = useState([]);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [selectMode, setSelectMode] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+
 
     useEffect(() => {
         (async () => {
@@ -94,6 +96,11 @@ export default function PhotosScreen({ navigation, route }) {
         }
     };
 
+    const rerender = () => {
+        setKey(key + 1);
+        console.log('Rerendering...', key);
+    };
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -129,8 +136,21 @@ export default function PhotosScreen({ navigation, route }) {
         });
     };
 
-    return (
+    const selectAll = () => {
+        if (selectedAssets.length === displayedAssets.length) {
+            setSelectedAssets([]);
+        } else {
+            setSelectedAssets(displayedAssets.map(item => item.uri));
+        }
+    };
 
+    const deselectAll = () => {
+        setSelectedAssets([]);
+    };
+
+
+
+    return (
         <SafeAreaView style={styles.container}>
             <FlatGrid
                 key={key}
@@ -144,37 +164,50 @@ export default function PhotosScreen({ navigation, route }) {
                             source={{ uri: item.uri }}
                             style={styles.image}
                         />
-                        {selectedAssets.includes(item.uri) && (
-                            <Checkbox />
+                        {selectMode && selectedAssets.includes(item.uri) && (
+                            <Checkbox
+                                check={true} />
                         )}
-                        <Pressable
-                            style={styles.overlay}
-                            onPress={() => selectPhoto(item.uri)}
-                        />
+                        {selectMode && (
+                            <Checkbox
+                                check={false} />
+                        )}
+
+                        {selectMode && (
+                            <Pressable
+                                style={styles.overlay}
+                                onPress={() => selectPhoto(item.uri)}
+                            />
+                        )}
                     </View>
                 )}
             />
-            <View style={styles.btnContainer}>
-                       
-                <IconBtn
-                    icon={'menu'}
-                    onPress={() => setModalVisible(true)}
+            <View style={styles.bottomBtnContainer}>
+                {!selectMode && (<MenuButton
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    selectMode={selectMode}
+                    setSelectMode={setSelectMode}
+                    navigateToFilters={navigateToFilters}
+                    pickImage={pickImage}
+                    rerender={rerender}
+                    resetFilters={resetFilters}
                 />
-                <AddPhotoBtn
-                    onPress={pickImage}
-                />
-                <IconBtn
-                    icon={'filter'}
-                    onPress={navigateToFilters}
-                />
+                )}
+                {selectMode && (
+                    <SelectButton
+                        menuOpen={menuOpen}
+                        setMenuOpen={setMenuOpen}
+                        selectMode={selectMode}
+                        setSelectMode={setSelectMode}
+                        selectedAssets={selectedAssets}
+                        deleteSelected={deleteSelected}
+                        selectAll={selectAll}
+                        resetStorage={resetStorage}
+                    />
+                )}
             </View>
-            <MenuModal
-                modalVisible={modalVisible}
-                closeModal={() => setModalVisible(false)}
-                resetFilters={resetFilters}
-                resetStorage={resetStorage}
-                deleteSelected={deleteSelected}
-            />
+
         </SafeAreaView>
     );
 }
@@ -193,17 +226,42 @@ const styles = StyleSheet.create({
         width: width / 2,
         height: width / 2,
     },
-    btnContainer: {
+    bottomContainer: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
         zIndex: 2,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        padding: 10,
-        backgroundColor: 'rgba(255,255,255,0.7)',
+        padding: 7,
+        backgroundColor: 'grey',
+    },
+    bottomBtnContainer: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        zIndex: 2,
+        borderRadius: 50,
+        padding: 5,
+    },
+    bottomBtnText: {
+        color: 'black',
+        fontSize: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: 22,
+    },
+    bottomText: {
+        color: 'black',
+        fontSize: 15,
+        fontWeight: 'semibold',
+    },
+    topBtnContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 2,
+        padding: 5,
+        backgroundColor: 'grey',
     },
     overlay: {
         position: 'absolute',

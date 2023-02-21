@@ -5,8 +5,8 @@ import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, getAllKeys, getMultiDatas, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
 import { MenuButton } from '../components/MenuAccordionBtn';
 import FoldersModal from '../components/FoldersModal';
-import { Images } from '../components/Images/Images';
-import { SelectableImages } from '../components/Images/SelectableImages';
+import { Images } from '../components/images/Images';
+import { SelectableImages } from '../components/images/SelectableImages';
 import DropdownSelector from '../components/DropdownSelector';
 
 const { width } = Dimensions.get('window');

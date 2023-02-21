@@ -5,7 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import * as Location from 'expo-location';
 import { uniqueElByProps } from '../utils/ArrayUtils';
 import { formatDateTime } from '../utils/FormatUtils';
-import { TxtIconBtn } from '../components/TxtIconBtn';
+import { TxtIconBtn } from '../components/buttons/TxtIconBtn';
 
 export default function FilterScreen({ navigation, route }) {
 

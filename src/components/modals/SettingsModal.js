@@ -9,17 +9,14 @@ import { TxtIconBtn } from './TxtIconBtn';
 export default function SettingsModal(props) {
 
     const {
-        closeModal,
-        clearCache,
-        set2x2View,
-        set3x3View,
-        hydrate } = props;
+        
+ } = props;
     const [key, setKey] = useState(0);
 
     useEffect(() => {
         setKey(key + 1);
         console.log('SettingsModal key: ', key);
-    }, [clearCache, set2x2View, set3x3View, hydrate]);
+    }, [key]);
 
     return (
         <Modal
@@ -41,7 +38,7 @@ export default function SettingsModal(props) {
                 <View style={styles.modal}>
                     <CloseBtn closeModal={closeModal} />
                     <Text>Settings</Text>
-                    
+
                 </View>
             </Pressable>
         </Modal>

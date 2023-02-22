@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Modal, Pressable, Text, TextInput } from 'react-native';
 import { CloseBtn } from './CloseBtn';
-import DropdownSelector from './DropdownSelector';
+import DropdownSelector from '../DropdownSelector';
 import { IconBtnSmall } from './IconBtnSmall';
 import { TxtIconBtn } from './TxtIconBtn';
 

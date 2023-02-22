@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
-import Checkbox from '../components/buttons/Checkbox';
-import MenuButton from '../components/MenuAccordionBtn';
-import SelectButton from '../components/SelectAccordionBtn';
-import { TxtIconBtn } from '../components/buttons/TxtIconBtn';
+import Checkbox from '../components/buttons/flatButtons/Checkbox';
+import MenuButton from '../components/buttons/floatingButtons/MenuAccordionBtn';
+import SelectButton from '../components/buttons/floatingButtons/SelectAccordionBtn';
+import { TxtIconBtn } from '../components/buttons/flatButtons/TxtIconBtn';
 
 const { width } = Dimensions.get('window');
 
@@ -213,7 +213,7 @@ export default function PhotosScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 30,
+        // marginTop: 30,
     },
     gridView: {
         flex: 1,

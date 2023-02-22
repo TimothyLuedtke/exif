@@ -2,22 +2,22 @@ import React from 'react';
 import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { View, Pressable, StyleSheet } from 'react-native';
-import DropdownSelector from './DropdownSelector';
+import DropdownSelector from '../../DropdownSelector';
 
-export default function SelectButton(props) {
+export default function MenuButton(props) {
 
     const {
         menuOpen,
         setMenuOpen,
         selectMode,
         setSelectMode,
-        selectedAssets,
-        deleteSelected,
-        selectAll,
-        deselectAll,
-        resetStorage,
+        navigateToFilters,
+        pickImage,
     } = props;
 
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    }
 
     const toggleSelectMode = () => {
         setSelectMode(!selectMode);
@@ -29,25 +29,28 @@ export default function SelectButton(props) {
             {menuOpen && (
                 <View>
                     <View style={styles.iconBtnContainer}>
-                        <Pressable style={styles.iconBtn} onPress={resetStorage}>
-                            <MaterialIcons name='delete' size={30} color="black" />
+                        <Pressable style={styles.iconBtn} onPress={pickImage}>
+                            <MaterialIcons name='add-a-photo' size={30} color="black" />
                         </Pressable>
                     </View>
                     <View style={styles.iconBtnContainer}>
-                        <Pressable style={styles.iconBtn} onPress={selectAll}>
-                            <MaterialIcons name='check-circle' size={30} color="black" />
+                        <Pressable style={styles.iconBtn} onPress={navigateToFilters}>
+                            <MaterialIcons name='filter-alt' size={30} color="black" />
                         </Pressable>
                     </View>
                     <View style={styles.iconBtnContainer}>
-                        <Pressable style={styles.iconBtn} onPress={deleteSelected}>
-                            <MaterialIcons name='delete' size={30} color="black" />
+                        <Pressable style={styles.iconBtn} onPress={toggleSelectMode}>
+                            <MaterialIcons name='edit' size={30} color="black" />
                         </Pressable>
                     </View>
                 </View>
             )}
-            <View style={styles.closeBtnContainer}>
-                <Pressable style={styles.closeIconBtn} onPress={toggleSelectMode}>
-                    <MaterialIcons name='close' size={35} color="white" />
+            <View style={styles.iconBtnContainer}>
+                <Pressable style={menuOpen ? styles.iconBtn : styles.closedIconBtn} onPress={toggleMenu}>
+                    <MaterialIcons
+                        name={menuOpen ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
+                        size={50}
+                        color="black" />
                 </Pressable>
             </View>
         </View>
@@ -69,39 +72,27 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 50,
+        borderRadius: 32,
         backgroundColor: 'rgb(255,255,255)',
         shadowColor: 'black',
         shadowOffset: {
             width: 0,
             height: 2,
         },
-        shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 10,
     },
-    closeBtnContainer: {
-        width: 58,
-        height: 58,
-        margin: 10,
-        // borderWidth: 2.3,
-        // borderColor: 'rgb(255,255,255)',
-        borderRadius: 32,
-        backgroundColor: 'transparent',
-        padding: 3,
-    },
-    closeIconBtn: {
+    closedIconBtn: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 50,
-        backgroundColor: 'red',
+        borderRadius: 32,
+        backgroundColor: 'rgb(255,255,255)',
         shadowColor: 'black',
         shadowOffset: {
             width: 0,
             height: 2,
         },
-        shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
     },

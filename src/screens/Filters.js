@@ -5,7 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import * as Location from 'expo-location';
 import { uniqueElByProps } from '../utils/ArrayUtils';
 import { formatDateTime } from '../utils/FormatUtils';
-import { TxtIconBtn } from '../components/buttons/TxtIconBtn';
+import { TxtIconBtn } from '../components/buttons/flatButtons/TxtIconBtn';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -125,6 +125,10 @@ export default function FilterScreen({ navigation, route }) {
       alert('No photos match the selected filters');
     }
   }
+  function backToPhotos() {
+    console.log('Going back to Photos.js without filtering');
+    navigation.navigate('Photos');
+  }
 
   function onClear() { // clears the filters
     console.log('Clearing filters');
@@ -139,37 +143,6 @@ export default function FilterScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {
-        // assetsSelected === 1 ? (
-        //   <Text style={{ fontSize: 18, margin: 20 }}>{assetsSelected} result</Text>
-        // ) : (
-        //   <Text style={{ fontSize: 18, margin: 20 }}>{assetsSelected} results</Text>
-        // )
-      }
-      {/* location Dropdown */}
-      {/* <DropDownPicker
-        open={gpsPickerOPEN}
-        onOpen={onGPSPickerOPEN}
-        key={gpsValues}
-        schema={{
-          label: 'gpsLabel',
-          value: 'gpsValue',
-          containerStyle: { zIndex: 2 },
-        }}
-        value={gpsValues}
-        items={gpsItems}
-        setOpen={setGPSPickerOPEN}
-        setValue={setGPSValues}
-        setItems={setGPSItems}
-        multiple={true}
-        // multipleText={`${gpsValues}, `}
-        min={0}
-        max={10}
-        // zIndexInverse={}
-        mode="BADGE"
-        placeholder="GPS Location"
-      /> */}
-
 
       {filtersSelected === 1 ? (
         <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filter selected</Text>
@@ -178,12 +151,17 @@ export default function FilterScreen({ navigation, route }) {
       )}
       <View style={styles.optionsRow}>
         <TxtIconBtn
-          iconName={'refresh'}
+          icon={'arrow-back'}
+          text={'Back'}
+          onPress={backToPhotos}
+        />
+        <TxtIconBtn
+          icon={'refresh'}
           text={'Clear'}
           onPress={onClear}
         />
         <TxtIconBtn
-          iconName={'filter-alt'}
+          icon={'filter-alt'}
           text={'Apply'}
           onPress={navigateToPhotos}
         />

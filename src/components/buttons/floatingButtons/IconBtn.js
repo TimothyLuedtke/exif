@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 export const IconBtn = ( {icon, onPress} ) => (
     <View style={styles.iconBtnContainer}>
         <Pressable style={styles.btn} onPress={onPress}>
-        <MaterialIcons name={ icon } size={29} color="black" />
+        <MaterialIcons name={ icon } size={30} color="black" />
         </Pressable>
     </View>
 );

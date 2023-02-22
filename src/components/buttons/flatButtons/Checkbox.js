@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useToggle } from '../../../utils/ViewUtils';
 
 
 export default function Checkbox(props) {
     const { check } = props;
-    const [checked, setChecked] = useState(false);
+    const [isToggled, toggle] = useToggle(check);
 
-    useEffect(() => {
-        setChecked(check);
-        console.log('Checkbox checked: ', checked);
-    }, [check]);
 
     return (
 
         <View style={styles.checkboxContainer}>
-            <MaterialIcons name={checked ? 'check-box' : 'check-box-outline-blank'} size={24} color="white" />
+            <MaterialIcons name={isToggled ? 'check-box' : 'check-box-outline-blank'} size={24} color="white" />
         </View>
     );
 }

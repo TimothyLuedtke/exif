@@ -3,10 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, getAllKeys, getMultiDatas, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
-import { MenuButton } from '../components/MenuAccordionBtn';
-import FoldersModal from '../components/FoldersModal';
-import { Images } from '../components/images/Images';
-import { SelectableImages } from '../components/images/SelectableImages';
+import { MenuButton } from '../components/buttons/floatingButtons/MenuAccordionBtn';
+import FoldersModal from '../components/modals/FoldersModal';
 import DropdownSelector from '../components/DropdownSelector';
 
 const { width } = Dimensions.get('window');
@@ -166,24 +164,6 @@ export default function FoldersScreen({ navigation, route }) {
             importedAssets: openedFolder,
         });
     };
-
-    function RenderedOpenedFolder() {
-        const assets = openedFolder !== null ? openedFolder.assets : [];
-        const folderName = openedFolder !== null ? openedFolder.name : 'uncategorized';
-        return (
-            <View>
-                <FlatGrid
-                    key={key}
-                    itemDimension={width / 2}
-                    data={assets}
-                    style={styles.gridView}
-                    spacing={10}
-                    renderItem={selectMode ? SelectableImages(images = { assets }) : Images(images = { assets })}
-                />
-            </View>
-        );
-    }
-
 
 
     return (

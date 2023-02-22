@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Pressable, FlatList, Text, StyleSheet, Picker } from 'react-native';
 import { IconBtnSmall } from './buttons/flatButtons/IconBtnSmall';
+import { useToggleCallback } from '../utils/ToggleUtils';
 
 export default function DropdownSelector(props) {
 
     const { placeholder, options, onPressFunction } = props;
 
-    const [showDropdown, setShowDropdown] = useState(false);
-
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-        console.log('dropdown options: ' + options);
-    };
+    const [dropdown, toggleDropdown] = useToggleCallback(false);
 
     const selectItem = item => {
         console.log(onPressFunction);
@@ -26,7 +22,7 @@ export default function DropdownSelector(props) {
                 <Text style={styles.btnText}>{placeholder}</Text>
                 <IconBtnSmall icon="keyboard-arrow-down" onPress={toggleDropdown} />
             </Pressable>
-            {showDropdown && (
+            {dropdown && (
                 <View style={styles.dropdown}>
                     <FlatList
                         data={options}  // options is an array of strings   

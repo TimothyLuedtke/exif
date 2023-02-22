@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useToggle } from '../../../utils/ViewUtils';
+import { useToggle } from '../../../utils/ToggleUtils';
 
 
 export default function Checkbox(props) {

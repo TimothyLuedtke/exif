@@ -30,24 +30,24 @@ export default function SelectButton(props) {
                 <View>
                     <View style={styles.iconBtnContainer}>
                         <Pressable style={styles.iconBtn} onPress={resetStorage}>
-                            <MaterialIcons name='warning' size={30} color="black" />
+                            <MaterialIcons name='warning' size={30} color="darkred" />
                         </Pressable>
                     </View>
                     <View style={styles.iconBtnContainer}>
                         <Pressable style={styles.iconBtn} onPress={selectAll}>
-                            <MaterialIcons name='check-circle' size={30} color="black" />
+                            <MaterialIcons name='check' size={30} color="darkred" />
                         </Pressable>
                     </View>
                     <View style={styles.iconBtnContainer}>
                         <Pressable style={styles.iconBtn} onPress={deleteSelected}>
-                            <MaterialIcons name='delete' size={30} color="black" />
+                            <MaterialIcons name='delete' size={30} color="darkred" />
                         </Pressable>
                     </View>
                 </View>
             )}
             <View style={styles.closeBtnContainer}>
                 <Pressable style={styles.closeIconBtn} onPress={toggleSelectMode}>
-                    <MaterialIcons name='close' size={35} color="white" />
+                    <MaterialIcons name='close' size={35} color="black" />
                 </Pressable>
             </View>
         </View>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-        backgroundColor: 'red',
+        backgroundColor: 'rgb(255,255,255)',
         shadowColor: 'black',
         shadowOffset: {
             width: 0,

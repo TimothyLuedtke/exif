@@ -4,7 +4,7 @@ import { View, Pressable } from 'react-native';
 import { FloatBtn } from '../../../styles/GlobalStyles';
 import DropdownSelector from '../../DropdownSelector';
 
-export default function SelectButton(props) {
+export default function Selectbutton(props) {
 
     const {
         menuOpen,
@@ -28,25 +28,25 @@ export default function SelectButton(props) {
         <View style={FloatBtn.borderRadius50}>
             {menuOpen && (
                 <View>
-                    <View style={FloatBtn.floatingIconButtonContainer}>
-                        <Pressable style={FloatBtn.floatingIconButton} onPress={resetStorage}>
+                    {/* <View style={FloatBtn.container}>
+                        <Pressable style={FloatBtn.button} onPress={resetStorage}>
                             <MaterialIcons name='warning' size={32} color="darkred" />
                         </Pressable>
-                    </View>
-                    {/* <View style={FloatBtn.floatingIconButtonContainer}>
-                        <Pressable style={FloatBtn.floatingIconButton} onPress={selectAll}>
+                    </View> */}
+                    {/* <View style={FloatBtn.container}>
+                        <Pressable style={FloatBtn.button} onPress={selectAll}>
                             <MaterialIcons name='check'  color="darkred" />
                         </Pressable>
                     </View> */}
-                    <View style={FloatBtn.floatingIconButtonContainer}>
-                        <Pressable style={FloatBtn.floatingIconButton} onPress={deleteSelected}>
+                    <View style={FloatBtn.container}>
+                        <Pressable style={FloatBtn.button} onPress={deleteSelected}>
                             <MaterialIcons name='delete' size={35} color="darkred" />
                         </Pressable>
                     </View>
                 </View>
             )}
-            <View style={FloatBtn.floatingIconButtonContainer}>
-                <Pressable style={FloatBtn.floatingIconButton} onPress={toggleSelectMode}>
+            <View style={FloatBtn.container}>
+                <Pressable style={FloatBtn.button} onPress={toggleSelectMode}>
                     <MaterialIcons name='close' size={35} color="black" />
                 </Pressable>
             </View>

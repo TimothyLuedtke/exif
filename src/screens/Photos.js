@@ -6,7 +6,8 @@ import { clearStorage, storeData, retrieveData, removeData } from '../utils/stor
 import Checkbox from '../components/buttons/flatButtons/Checkbox';
 import MenuButton from '../components/buttons/floatingButtons/MenuAccordionBtn';
 import SelectButton from '../components/buttons/floatingButtons/SelectAccordionBtn';
-import { TxtIconBtn } from '../components/buttons/flatButtons/TxtIconBtn';
+import { Containers, Row, FloatBtn, ImageStyle } from '../styles/GlobalStyles';
+import { IconTextRowBtn } from '../components/buttons/floatingButtons/IconTextRowBtn';
 
 const { width } = Dimensions.get('window');
 
@@ -151,10 +152,11 @@ export default function PhotosScreen({ navigation, route }) {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={Containers.container}>
+
             <FlatGrid
                 key={key}
-                itemDimension={width / 2}
+                itemDimension={(width / 2)}
                 data={displayedAssets}
                 style={styles.gridView}
                 spacing={0}
@@ -162,7 +164,7 @@ export default function PhotosScreen({ navigation, route }) {
                     <View>
                         <Image
                             source={{ uri: item.uri }}
-                            style={styles.image}
+                            style={ImageStyle.halfCoverImage}
                         />
                         {selectMode && selectedAssets.includes(item.uri) && (
                             <Checkbox
@@ -183,28 +185,42 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
             />
             <View style={styles.bottomBtnContainer}>
-                    {!selectMode && (<MenuButton
+                {!selectMode && (<MenuButton
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    selectMode={selectMode}
+                    setSelectMode={setSelectMode}
+                    navigateToFilters={navigateToFilters}
+                    pickImage={pickImage}
+                />
+                )}
+                {selectMode && (
+                    <SelectButton
                         menuOpen={menuOpen}
                         setMenuOpen={setMenuOpen}
                         selectMode={selectMode}
                         setSelectMode={setSelectMode}
-                        navigateToFilters={navigateToFilters}
-                        pickImage={pickImage}
+                        selectedAssets={selectedAssets}
+                        deleteSelected={deleteSelected}
+                        selectAll={selectAll}
+                        resetStorage={resetStorage}
                     />
-                    )}
-                    {selectMode && (
-                        <SelectButton
-                            menuOpen={menuOpen}
-                            setMenuOpen={setMenuOpen}
-                            selectMode={selectMode}
-                            setSelectMode={setSelectMode}
-                            selectedAssets={selectedAssets}
-                            deleteSelected={deleteSelected}
-                            selectAll={selectAll}
-                            resetStorage={resetStorage}
-                        />
-                    )}
+                )}
             </View>
+            {selectMode && (
+            <View style={Containers.containerTranslucency}>
+                <IconTextRowBtn
+                    icon='check-box'
+                    text='select all'
+                    onPress={selectAll}
+                />
+                <IconTextRowBtn
+                    icon='check-box-outline-blank'
+                    text='deselect all'
+                    onPress={deselectAll}
+                />
+            </View>
+            )}
 
         </SafeAreaView>
     );
@@ -218,21 +234,7 @@ const styles = StyleSheet.create({
     gridView: {
         flex: 1,
     },
-    image: {
-        position: 'relative',
-        resizeMode: 'cover',
-        width: width / 2,
-        height: width / 2,
-    },
-    bottomContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 2,
-        padding: 7,
-        backgroundColor: 'grey',
-    },
+
     bottomBtnContainer: {
         position: 'absolute',
         bottom: 0,

@@ -29,25 +29,25 @@ export default function MenuButton(props) {
         <View style={FloatBtn.borderRadius50}>
             {menuOpen && (
                 <View>
-                    <View style={FloatBtn.floatingIconButtonContainer}>
-                        <Pressable style={FloatBtn.floatingIconButton} onPress={pickImage}>
+                    <View style={FloatBtn.container}>
+                        <Pressable style={FloatBtn.button} onPress={pickImage}>
                             <MaterialIcons name='add-a-photo' size={30} color="black" />
                         </Pressable>
                     </View>
-                    <View style={FloatBtn.floatingIconButtonContainer}>
-                        <Pressable style={FloatBtn.floatingIconButton} onPress={navigateToFilters}>
+                    <View style={FloatBtn.container}>
+                        <Pressable style={FloatBtn.button} onPress={navigateToFilters}>
                             <MaterialIcons name='filter-alt' size={30} color="black" />
                         </Pressable>
                     </View>
-                    <View style={FloatBtn.floatingIconButtonContainer}>
-                        <Pressable style={FloatBtn.floatingIconButton} onPress={toggleSelectMode}>
+                    <View style={FloatBtn.container}>
+                        <Pressable style={FloatBtn.button} onPress={toggleSelectMode}>
                             <MaterialIcons name='edit' size={30} color="darkred" />
                         </Pressable>
                     </View>
                 </View>
             )}
-            <View style={FloatBtn.floatingIconButtonContainer}>
-                <Pressable style={FloatBtn.floatingIconButton} onPress={toggleMenu}>
+            <View style={FloatBtn.container}>
+                <Pressable style={FloatBtn.button} onPress={toggleMenu}>
                     <MaterialIcons
                         name={menuOpen ? 'close' : 'keyboard-arrow-up'}
                         size={menuOpen ? 35 : 30}

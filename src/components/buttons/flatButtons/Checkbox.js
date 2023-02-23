@@ -11,7 +11,7 @@ export default function Checkbox(props) {
 
     return (
         <View style={ImageStyle.overlayCheckBox}>
-            <MaterialIcons name={check ? 'check-box' : 'check-box-outline-blank'} size={IconSize.medium} color={Colors.light} />
+            <MaterialIcons name={check ? 'check-circle-outline' : 'radio-button-unchecked'} size={IconSize.medium} color={Colors.light} />
         </View>
     );
 }

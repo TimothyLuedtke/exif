@@ -7,7 +7,6 @@ import { IconBtn } from './FloatingButtons';
 export default function SelectMenuButton(props) {
 
     const {
-        menuOpen,
         setSelectMode,
         deleteSelected,
         deselectAll,

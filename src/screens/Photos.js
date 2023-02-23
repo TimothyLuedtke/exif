@@ -197,7 +197,7 @@ export default function PhotosScreen({ navigation, route }) {
                     <View>
                         <View style={Containers.row}>
                             <IconTextRowBtn
-                                icon={'check-box'}
+                                icon={selectedAssets.length === displayedAssets.length ? 'radio-button-unchecked' : 'check-circle'}
                                 text={selectedAssets.length === displayedAssets.length ? 'Deselect All' : 'Select All'}
                                 onPress={selectedAssets.length === displayedAssets.length ? () => deselectAll() : () => selectAll()}
                             />

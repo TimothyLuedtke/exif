@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Text, SafeAreaView, View } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import * as Location from 'expo-location';
 import { Containers, Row } from '../styles/GlobalStyles';
-import { uniqueElByProps } from '../utils/ArrayUtils';
-import { formatDateTime } from '../utils/FormatUtils';
-import { TxtIconBtn } from '../components/buttons/flatButtons/TxtIconBtn';
-import { IconTextRowBtn } from '../components/buttons/floatingButtons/IconTextRowBtn';
-import { IconBtn } from '../components/buttons/floatingButtons/IconBtn';
+import { uniqueElByProps } from '../utils/arrayUtils';
+import { formatDateTime } from '../utils/formatUtils';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -92,6 +88,7 @@ export default function FilterScreen({ navigation, route }) {
 
 
   const assetTransformer = () => {
+
     return setAssets(
       importedAssets.map((photo) => {
         let dateTimeValue = formatDateTime(photo.exif.DateTime);
@@ -146,41 +143,6 @@ export default function FilterScreen({ navigation, route }) {
   return (
     <SafeAreaView style={Containers.container}>
 
-      {filtersSelected === 1 ? (
-        <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filter selected</Text>
-      ) : (
-        <Text style={{ fontSize: 18, margin: 20 }}>{filtersSelected} filters selected</Text>
-      )}
-      <View style={Row.absoluteBottomRow}>
-        <IconBtn
-          icon={'chevron-left'}
-          onPress={backToPhotos}
-        />
-        <IconBtn
-          icon={'refresh'}
-          onPress={onClear}
-        />
-        <IconBtn
-          icon={'filter-alt'}
-          onPress={navigateToPhotos}
-        />
-        {/* <TxtIconBtn
-          icon={'arRow-back'}
-          text={'Back'}
-          onPress={backToPhotos}
-        />
-        <TxtIconBtn
-          icon={'refresh'}
-          text={'Clear'}
-          onPress={onClear}
-        />
-        <TxtIconBtn
-          icon={'filter-alt'}
-          text={'Apply'}
-          onPress={navigateToPhotos}
-        /> */}
-
-      </View>
     </SafeAreaView>
   );
 };

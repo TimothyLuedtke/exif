@@ -4,9 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
 import Checkbox from '../components/buttons/flatButtons/Checkbox';
-import MenuButton from '../components/buttons/floatingButtons/MenuBtn';
-import SelectButton from '../components/buttons/floatingButtons/SelectBtn';
+import MenuButton from '../components/buttons/MenuButton';
+import SelectMenuButton from '../components/buttons/SelectMenuButton';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';
+import { TextBtn, IconTextRowBtn } from '../components/buttons/FloatingButtons';
 
 const { width } = Dimensions.get('window');
 
@@ -148,8 +149,6 @@ export default function PhotosScreen({ navigation, route }) {
         setSelectedAssets([]);
     };
 
-
-
     return (
         <SafeAreaView style={Containers.container}>
 
@@ -196,19 +195,25 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
                 {selectMode && (
                     <View>
-                    <View style={Containers.row}>
-                    </View>
-                    <SelectButton
-                        menuOpen={menuOpen}
-                        setMenuOpen={setMenuOpen}
-                        selectMode={selectMode}
-                        setSelectMode={setSelectMode}
-                        selectedAssets={selectedAssets}
-                        deleteSelected={deleteSelected}
-                        selectAll={selectAll}
-                        deselectAll={deselectAll}
-                        resetStorage={resetStorage}
-                    />
+                        <View style={Containers.row}>
+                            <IconTextRowBtn
+                                icon={'check-box'}
+                                text={selectedAssets.length === displayedAssets.length ? 'Deselect All' : 'Select All'}
+                                onPress={selectedAssets.length === displayedAssets.length ? () => deselectAll() : () => selectAll()}
+                            />
+                            <IconTextRowBtn
+                                icon={'close'}
+                                text={`${selectedAssets.length} Selected`}
+                                onPress={() => deselectAll()}
+                            />
+                        </View>
+
+                        <SelectMenuButton
+                            menuOpen={menuOpen}
+                            setSelectMode={setSelectMode}
+                            deleteSelected={deleteSelected}
+                            deselectAll={deselectAll}
+                        />
                     </View>
                 )}
             </View>

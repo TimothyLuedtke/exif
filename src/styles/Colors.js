@@ -22,5 +22,7 @@ const Colors = {
     gray700: '#495057',
     gray800: '#343a40',
     gray900: '#212529',
+    darkred: '#8b0000',
+
 };
 export default Colors;

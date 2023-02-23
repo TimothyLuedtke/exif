@@ -10,19 +10,20 @@ export const Containers = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.background,
     },
+
+    // 1
     row: {
-        height: 80,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
         width: '100%',
-        backgroundColor: Colors.background,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-
     },
 
-    rowMargin: {
-        margin: 10,
-    },
+    // rowMargin: {
+    //     margin: 10,
+    // },
 
     contain: {
         flex: 1,
@@ -95,8 +96,6 @@ export const ImageStyle = StyleSheet.create({
         top: 6,
         right: 6,
         borderRadius: 12,
-        width: 24,
-        height: 24,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -235,13 +234,13 @@ export const FloatBtn = StyleSheet.create({
         bottom: 0,
         right: 0,
         zIndex: 2,
-        padding: 5,
-        backgroundColor: 'grey',
+        // backgroundColor: 'grey',
     },
 
-    // paddingH: {
-    //     paddingHorizontal: 5,
-    // },
+    // 1
+    paddingH: {
+        paddingHorizontal: 5,
+    },
 
     // 1
     btnContainer: {
@@ -251,22 +250,13 @@ export const FloatBtn = StyleSheet.create({
         padding: 3,
     },
 
-    rowContainer: {
-        width: width / 2.5,
-
-        borderRadius: 32,
-        backgroundColor: 'transparent',
-        padding: 3,
-    },
-
     // 1
     button: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 32,
         padding: 10,
-        backgroundColor: Colors.background,
+        backgroundColor: Colors.white,
         shadowColor: Colors.black,
         shadowOffset: {
             width: 0,
@@ -275,15 +265,15 @@ export const FloatBtn = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-
+    
+// 1
     rowButton: {
-        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 32,
         padding: 10,
-        backgroundColor: Colors.background,
+        backgroundColor: Colors.white,
         shadowColor: Colors.black,
         shadowOffset: {
             width: 0,

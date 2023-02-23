@@ -3,3 +3,9 @@ export const IconSize = ({
     medium: 30,
     large: 60,
 });
+
+export const TextSize = ({
+    small: 12,
+    medium: 16,
+    large: 20,
+});

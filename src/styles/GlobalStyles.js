@@ -38,14 +38,14 @@ export const Containers = StyleSheet.create({
         right: 0,
     },
 
-    expandingBtnContainer: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        zIndex: 2,
-        padding: 5,
-        backgroundColor: 'grey',
-    },
+    // expandingBtnContainer: {
+    //     position: 'absolute',
+    //     bottom: 0,
+    //     right: 0,
+    //     zIndex: 2,
+    //     padding: 5,
+    //     backgroundColor: 'grey',
+    // },
 
     overlayBottomRow: {
         flex: 1,
@@ -91,6 +91,18 @@ export const ImageStyle = StyleSheet.create({
         height: width / 2,
     },
 
+    // 1
+    overlayCheckBox: {
+        position: 'absolute',
+        top: 6,
+        right: 6,
+        borderRadius: 12,
+        width: 24,
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     fullCoverImage: {
         position: 'relative',
         width: width,
@@ -119,6 +131,7 @@ export const ImageStyle = StyleSheet.create({
         resizeMode: 'cover',
     },
 
+    // 1
     halfCoverImage: {
         position: 'relative',
         width: width / 2,
@@ -221,20 +234,30 @@ export const Row = StyleSheet.create({
     },
 });
 
-
-
 export const FloatBtn = StyleSheet.create({
+    
 
-    borderRadius50: {
-        borderRadius: 50,
-    },
+    // borderRadius50: {
+    //     borderRadius: 50,
+    // },
 
-    paddingH: {
-        paddingHorizontal: 5,
-    },
-
+    // 1
     container: {
-        margin: 10,
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        zIndex: 2,
+        padding: 5,
+        backgroundColor: 'grey',
+    },
+
+    // paddingH: {
+    //     paddingHorizontal: 5,
+    // },
+
+    // 1
+    btnContainer: {
+        margin: 5,
         borderRadius: 32,
         backgroundColor: 'transparent',
         padding: 3,
@@ -248,6 +271,7 @@ export const FloatBtn = StyleSheet.create({
         padding: 3,
     },
 
+    // 1
     button: {
         flex: 1,
         alignItems: 'center',

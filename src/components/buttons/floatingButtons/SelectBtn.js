@@ -2,7 +2,8 @@ import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { View, Pressable } from 'react-native';
 import { FloatBtn } from '../../../styles/GlobalStyles';
-import DropdownSelector from '../../DropdownSelector';
+import Colors from '../../../styles/Colors';
+import { IconSize } from '../../../styles/Sizing';
 
 export default function Selectbutton(props) {
 
@@ -18,31 +19,31 @@ export default function Selectbutton(props) {
         resetStorage,
     } = props;
 
-
-    const toggleSelectMode = () => {
-        setSelectMode(!selectMode);
-        console.log('Select mode: ', selectMode);
+    const close = () => {
+        setSelectMode(false);
+        // setMenuOpen(false);
+        deselectAll();
     }
 
     return (
-        <View style={FloatBtn.borderRadius50}>
+        <View style={FloatBtn.container}>
             {menuOpen && (
                 <View>
-                    <View style={FloatBtn.container}>
+                    {/* <View style={FloatBtn.btnContainer}>
                         <Pressable style={FloatBtn.button} onPress={resetStorage}>
-                            <MaterialIcons name='warning' size={32} color="darkred" />
+                            <MaterialIcons name='warning' size={IconSize.medium} color="darkred" />
                         </Pressable>
-                    </View>
-                    <View style={FloatBtn.container}>
+                    </View> */}
+                    <View style={FloatBtn.btnContainer}>
                         <Pressable style={FloatBtn.button} onPress={deleteSelected}>
-                            <MaterialIcons name='delete' size={35} color="darkred" />
+                            <MaterialIcons name='delete' size={IconSize.medium} color={Colors.dark} />
                         </Pressable>
                     </View>
                 </View>
             )}
-            <View style={FloatBtn.container}>
-                <Pressable style={FloatBtn.button} onPress={toggleSelectMode}>
-                    <MaterialIcons name='close' size={35} color="black" />
+            <View style={FloatBtn.btnContainer}>
+                <Pressable style={FloatBtn.button} onPress={close}>
+                    <MaterialIcons name='close' size={IconSize.medium} color={Colors.dark} />
                 </Pressable>
             </View>
         </View>

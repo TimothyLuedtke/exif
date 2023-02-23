@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { View, Pressable, StyleSheet } from 'react-native';
-import DropdownSelector from '../../DropdownSelector';
+import { View, Pressable } from 'react-native';
 import { FloatBtn } from '../../../styles/GlobalStyles';
+import Colors from '../../../styles/Colors';
+import { IconSize } from '../../../styles/Sizing';
 
 export default function MenuButton(props) {
 
@@ -26,32 +27,33 @@ export default function MenuButton(props) {
     }
 
     return (
-        <View style={FloatBtn.borderRadius50}>
+        <View style={FloatBtn.container}>
             {menuOpen && (
                 <View>
-                    <View style={FloatBtn.container}>
+                    <View style={FloatBtn.btnContainer}>
                         <Pressable style={FloatBtn.button} onPress={pickImage}>
-                            <MaterialIcons name='add-a-photo' size={30} color="black" />
+                            <MaterialIcons name='add-a-photo' size={IconSize.medium} color={Colors.dark} />
                         </Pressable>
                     </View>
-                    <View style={FloatBtn.container}>
+                    <View style={FloatBtn.btnContainer}>
                         <Pressable style={FloatBtn.button} onPress={navigateToFilters}>
-                            <MaterialIcons name='filter-alt' size={30} color="black" />
+                            <MaterialIcons name='filter-alt' size={IconSize.medium} color={Colors.dark} />
                         </Pressable>
                     </View>
-                    <View style={FloatBtn.container}>
+                    <View style={FloatBtn.btnContainer}>
                         <Pressable style={FloatBtn.button} onPress={toggleSelectMode}>
-                            <MaterialIcons name='edit' size={30} color="darkred" />
+                            <MaterialIcons name='edit' size={IconSize.medium} color={Colors.dark} />
                         </Pressable>
                     </View>
                 </View>
             )}
-            <View style={FloatBtn.container}>
+            <View style={FloatBtn.btnContainer}>
                 <Pressable style={FloatBtn.button} onPress={toggleMenu}>
                     <MaterialIcons
                         name={menuOpen ? 'close' : 'keyboard-arrow-up'}
-                        size={menuOpen ? 35 : 30}
-                        color="black" />
+                        size={IconSize.medium}
+                        color={Colors.dark}
+                    />
                 </Pressable>
             </View>
         </View>

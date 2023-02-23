@@ -4,8 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
 import Checkbox from '../components/buttons/flatButtons/Checkbox';
-import MenuButton from '../components/buttons/floatingButtons/MenuAccordionBtn';
-import SelectButton from '../components/buttons/floatingButtons/SelectAccordionBtn';
+import MenuButton from '../components/buttons/floatingButtons/MenuBtn';
+import SelectButton from '../components/buttons/floatingButtons/SelectBtn';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';
 
 const { width } = Dimensions.get('window');
@@ -165,10 +165,6 @@ export default function PhotosScreen({ navigation, route }) {
                             source={{ uri: item.uri }}
                             style={ImageStyle.halfCoverImage}
                         />
-                        {selectMode && selectedAssets.includes(item.uri) && (
-                            <Checkbox
-                                check={true} />
-                        )}
                         {selectMode && (
                             <Checkbox
                                 check={false} />
@@ -180,10 +176,15 @@ export default function PhotosScreen({ navigation, route }) {
                                 onPress={() => selectPhoto(item.uri)}
                             />
                         )}
+                        {selectMode && selectedAssets.includes(item.uri) && (
+                            <Checkbox
+                                check={true} />
+                        )}
                     </View>
+
                 )}
             />
-            <View style={Containers.expandingBtnContainer}>
+            <View>
                 {!selectMode && (<MenuButton
                     menuOpen={menuOpen}
                     setMenuOpen={setMenuOpen}
@@ -202,6 +203,7 @@ export default function PhotosScreen({ navigation, route }) {
                         selectedAssets={selectedAssets}
                         deleteSelected={deleteSelected}
                         selectAll={selectAll}
+                        deselectAll={deselectAll}
                         resetStorage={resetStorage}
                     />
                 )}

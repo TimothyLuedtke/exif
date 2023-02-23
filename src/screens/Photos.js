@@ -1,4 +1,4 @@
-import { Dimensions, Text, Image, Pressable, Platform, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, Pressable, Platform, SafeAreaView, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
@@ -6,8 +6,7 @@ import { clearStorage, storeData, retrieveData, removeData } from '../utils/stor
 import Checkbox from '../components/buttons/flatButtons/Checkbox';
 import MenuButton from '../components/buttons/floatingButtons/MenuAccordionBtn';
 import SelectButton from '../components/buttons/floatingButtons/SelectAccordionBtn';
-import { Containers, Row, FloatBtn, ImageStyle } from '../styles/GlobalStyles';
-import { IconTextRowFlatBtn } from '../components/buttons/flatButtons/IconTextRowFlatBtn';
+import { Containers, ImageStyle } from '../styles/GlobalStyles';
 
 const { width } = Dimensions.get('window');
 
@@ -158,7 +157,7 @@ export default function PhotosScreen({ navigation, route }) {
                 key={key}
                 itemDimension={(width / 2)}
                 data={displayedAssets}
-                style={styles.gridView}
+                style={Containers.container}
                 spacing={0}
                 renderItem={({ item }) => (
                     <View>
@@ -177,14 +176,14 @@ export default function PhotosScreen({ navigation, route }) {
 
                         {selectMode && (
                             <Pressable
-                                style={styles.overlay}
+                                style={ImageStyle.overlay}
                                 onPress={() => selectPhoto(item.uri)}
                             />
                         )}
                     </View>
                 )}
             />
-            <View style={styles.bottomBtnContainer}>
+            <View style={Containers.expandingBtnContainer}>
                 {!selectMode && (<MenuButton
                     menuOpen={menuOpen}
                     setMenuOpen={setMenuOpen}
@@ -207,68 +206,6 @@ export default function PhotosScreen({ navigation, route }) {
                     />
                 )}
             </View>
-            {selectMode && (
-            <View style={Containers.containerTranslucency}>
-                <IconTextRowFlatBtn
-                    icon='check-box'
-                    text='select all'
-                    onPress={selectAll}
-                />
-                <IconTextRowFlatBtn
-                    icon='check-box-outline-blank'
-                    text='deselect all'
-                    onPress={deselectAll}
-                />
-            </View>
-            )}
-
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // marginTop: 30,
-    },
-    gridView: {
-        flex: 1,
-    },
-
-    bottomBtnContainer: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        zIndex: 2,
-        borderRadius: 50,
-        padding: 5,
-    },
-    bottomBtnText: {
-        color: 'black',
-        fontSize: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: 22,
-    },
-    bottomText: {
-        color: 'black',
-        fontSize: 15,
-        fontWeight: 'semibold',
-    },
-    topBtnContainer: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 2,
-        padding: 5,
-        backgroundColor: 'grey',
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        zIndex: 1,
-        width: width / 2,
-        height: width / 2,
-    },
-})

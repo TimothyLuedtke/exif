@@ -5,6 +5,7 @@ const { width, height } = Dimensions.get("window");
 
 
 export const Containers = StyleSheet.create({
+    // 1
     container: {
         flex: 1,
         backgroundColor: Colors.background,
@@ -37,28 +38,59 @@ export const Containers = StyleSheet.create({
         right: 0,
     },
 
-    containerAbsolute: {
+    expandingBtnContainer: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
         bottom: 0,
-        backgroundColor: Colors.background,
+        right: 0,
+        zIndex: 2,
+        padding: 5,
+        backgroundColor: 'grey',
     },
 
-    overlayContainer: {
+    overlayBottomRow: {
+        flex: 1,
+        flexDirection: 'row',
         position: 'absolute',
-        top: 0,
+        bottom: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-        zIndex: 1,
-        backgroundColor: Colors.transparent,
+        zIndex: 2,
+        backgroundColor: 'grey',
     },
-    
+
+    // containerAbsolute: {
+    //     position: 'absolute',
+    //     top: 0,
+    //     left: 0,
+    //     right: 0,
+    //     bottom: 0,
+    //     backgroundColor: Colors.background,
+    // },
+
+    // overlayContainer: {
+    //     position: 'absolute',
+    //     top: 0,
+    //     left: 0,
+    //     right: 0,
+    //     bottom: 0,
+    //     zIndex: 1,
+    //     backgroundColor: Colors.transparent,
+    // },
+
 });
 
 export const ImageStyle = StyleSheet.create({
+
+    // 1
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 1,
+        width: width / 2,
+        height: width / 2,
+    },
+
     fullCoverImage: {
         position: 'relative',
         width: width,
@@ -177,7 +209,7 @@ export const Row = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    
+
     row: {
         height: 80,
         width: '100%',

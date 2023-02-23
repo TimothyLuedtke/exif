@@ -7,7 +7,7 @@ import Checkbox from '../components/buttons/flatButtons/Checkbox';
 import MenuButton from '../components/buttons/floatingButtons/MenuAccordionBtn';
 import SelectButton from '../components/buttons/floatingButtons/SelectAccordionBtn';
 import { Containers, Row, FloatBtn, ImageStyle } from '../styles/GlobalStyles';
-import { IconTextRowBtn } from '../components/buttons/floatingButtons/IconTextRowBtn';
+import { IconTextRowFlatBtn } from '../components/buttons/flatButtons/IconTextRowFlatBtn';
 
 const { width } = Dimensions.get('window');
 
@@ -209,12 +209,12 @@ export default function PhotosScreen({ navigation, route }) {
             </View>
             {selectMode && (
             <View style={Containers.containerTranslucency}>
-                <IconTextRowBtn
+                <IconTextRowFlatBtn
                     icon='check-box'
                     text='select all'
                     onPress={selectAll}
                 />
-                <IconTextRowBtn
+                <IconTextRowFlatBtn
                     icon='check-box-outline-blank'
                     text='deselect all'
                     onPress={deselectAll}

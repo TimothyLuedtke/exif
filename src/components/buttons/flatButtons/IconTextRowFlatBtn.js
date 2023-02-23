@@ -1,10 +1,10 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, Text, View } from 'react-native';
-import { FloatBtn } from '../../../styles/GlobalStyles';
+import { FlatBtn } from '../../../styles/GlobalStyles';
 
-export const IconTextRowBtn = ({ icon, text, onPress }) => (
+export const IconTextRowFlatBtn = ({ icon, text, onPress }) => (
 
-        <View >
+        <View style={FlatBtn.rowContainer}>
             <Pressable style={FlatBtn.rowButton} onPress={onPress}>
                 <MaterialIcons name={icon} size={30} color="black" />
                 <Text style={FlatBtn.paddingH}>

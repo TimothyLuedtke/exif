@@ -28,16 +28,11 @@ export default function Selectbutton(props) {
         <View style={FloatBtn.borderRadius50}>
             {menuOpen && (
                 <View>
-                    {/* <View style={FloatBtn.container}>
+                    <View style={FloatBtn.container}>
                         <Pressable style={FloatBtn.button} onPress={resetStorage}>
                             <MaterialIcons name='warning' size={32} color="darkred" />
                         </Pressable>
-                    </View> */}
-                    {/* <View style={FloatBtn.container}>
-                        <Pressable style={FloatBtn.button} onPress={selectAll}>
-                            <MaterialIcons name='check'  color="darkred" />
-                        </Pressable>
-                    </View> */}
+                    </View>
                     <View style={FloatBtn.container}>
                         <Pressable style={FloatBtn.button} onPress={deleteSelected}>
                             <MaterialIcons name='delete' size={35} color="darkred" />

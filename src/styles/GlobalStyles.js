@@ -202,8 +202,6 @@ export const FloatBtn = StyleSheet.create({
     },
 
     container: {
-        width: 58,
-        height: 58,
         margin: 10,
         borderRadius: 32,
         backgroundColor: 'transparent',
@@ -212,8 +210,7 @@ export const FloatBtn = StyleSheet.create({
 
     rowContainer: {
         width: width / 2.5,
-        height: 58,
-        margin: 10,
+
         borderRadius: 32,
         backgroundColor: 'transparent',
         padding: 3,
@@ -224,6 +221,7 @@ export const FloatBtn = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 32,
+        padding: 10,
         backgroundColor: Colors.background,
         shadowColor: Colors.black,
         shadowOffset: {
@@ -249,6 +247,33 @@ export const FloatBtn = StyleSheet.create({
         },
         shadowRadius: 3.84,
         elevation: 5,
+    },
+
+});
+
+export const FlatBtn = StyleSheet.create({
+
+    paddingH: {
+        paddingHorizontal: 5,
+    },
+
+    rowContainer: {
+        width: width / 2.5,
+        margin: 10,
+    },
+
+    button: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    rowButton: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        // backgroundColor: Colors.red,
     },
 
 });

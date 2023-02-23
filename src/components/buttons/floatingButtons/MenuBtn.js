@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { View, Pressable } from 'react-native';
 import { FloatBtn } from '../../../styles/GlobalStyles';

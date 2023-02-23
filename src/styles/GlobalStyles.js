@@ -10,6 +10,15 @@ export const Containers = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.background,
     },
+    row: {
+        height: 80,
+        width: '100%',
+        backgroundColor: Colors.background,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
 
     rowMargin: {
         margin: 10,
@@ -46,17 +55,6 @@ export const Containers = StyleSheet.create({
     //     padding: 5,
     //     backgroundColor: 'grey',
     // },
-
-    overlayBottomRow: {
-        flex: 1,
-        flexDirection: 'row',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 2,
-        backgroundColor: 'grey',
-    },
 
     // containerAbsolute: {
     //     position: 'absolute',
@@ -221,16 +219,6 @@ export const Row = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-
-    row: {
-        height: 80,
-        width: '100%',
-        backgroundColor: Colors.background,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-
     },
 });
 

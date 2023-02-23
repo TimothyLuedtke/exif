@@ -195,6 +195,9 @@ export default function PhotosScreen({ navigation, route }) {
                 />
                 )}
                 {selectMode && (
+                    <View>
+                    <View style={Containers.row}>
+                    </View>
                     <SelectButton
                         menuOpen={menuOpen}
                         setMenuOpen={setMenuOpen}
@@ -206,6 +209,7 @@ export default function PhotosScreen({ navigation, route }) {
                         deselectAll={deselectAll}
                         resetStorage={resetStorage}
                     />
+                    </View>
                 )}
             </View>
         </SafeAreaView>

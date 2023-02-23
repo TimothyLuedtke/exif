@@ -93,9 +93,8 @@ export const ImageStyle = StyleSheet.create({
     // 1
     overlayCheckBox: {
         position: 'absolute',
-        top: 6,
-        right: 6,
-        borderRadius: 12,
+        bottom: 1,
+        right: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },

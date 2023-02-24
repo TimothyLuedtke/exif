@@ -31,7 +31,7 @@ export const IconBtn = ({ icon, color, onPress, hide }) => (
             <MaterialIcons
                 name={icon}
                 size={IconSize.medium}
-                color={color ? color : Colors.dark}
+                color={Colors.light}
             />
         </Pressable>
     </View>

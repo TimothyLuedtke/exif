@@ -10,12 +10,13 @@ export default function FilterMenu(props) {
         assetKeys,
         menuOpen,
         setMenuOpen,
-        setSelecterKeys,
+        setSelectorKeys,
         selectorKeys,
     } = props;
 
-    const [key, setKey] = React.useState(''); // key for modal
+    const [key, setKey] = React.useState(0);
     const [selectedKeys, setSelectedKeys] = useState([]);
+
 
     // copy of assetKeys to be used for filtering options
     const loadedKeys = assetKeys;
@@ -78,6 +79,8 @@ export default function FilterMenu(props) {
                                 text={`Clear (${selectedKeys.length})`}
                                 onPress={() => {
                                     resetSelected();
+                                    console.log('Selected keys reset');
+                                    // console.log('Loaded keys: ', loadedKeys);   
                                 }}
                                 pressed={false}
                             />
@@ -85,6 +88,7 @@ export default function FilterMenu(props) {
                                 text={'Select All'}
                                 onPress={() => {
                                     setSelectedKeys(loadedKeys);
+                                    console.log('All keys selected');
                                 }}
                                 pressed={false}
                             />
@@ -98,7 +102,7 @@ export default function FilterMenu(props) {
                                             text={item}
                                             onPress={() => {
                                                 toggleSelected(item);
-                                                console.log(selectedKeys);
+                                                console.log(([...selectedKeys] + ', ' + item));
                                             }}
                                             pressed={selectedKeys.includes(item)}
                                         />
@@ -116,7 +120,8 @@ export default function FilterMenu(props) {
                             <SubmitBtn
                                 text={'Finished'}
                                 onPress={() => {
-                                    setSelecterKeys(selectedKeys);
+                                    setSelectorKeys(selectedKeys);
+                                    console.log('Selected keys: ', selectedKeys);
                                     resetMenu();
                                 }}
 

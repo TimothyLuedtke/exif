@@ -91,7 +91,7 @@ export const FloatBtn = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 30,
         padding: 12,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.dark,
         shadowColor: Colors.black,
         shadowOffset: {
             width: 0,

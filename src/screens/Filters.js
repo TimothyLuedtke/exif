@@ -3,7 +3,7 @@ import { SafeAreaView, View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import { Containers } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
-import { getUniqueKeys, getUniqueValues, getKeyValues, getuniqueKeyswithValues } from '../utils/arrayUtils';
+import { getUniqueKeys, getUniqueValues, getKeyValues } from '../utils/arrayUtils';
 import { DropDownPicker } from '../components/DropDownPicker';
 import FilterMenu from '../components/buttons/FilterMenu';
 
@@ -75,7 +75,6 @@ export default function FilterScreen({ navigation, route }) {
     }
   }, [assetsTransformed === true, assets.length > 0]);
 
-
   const assetTransformer = () => {
 
     return setAssets(
@@ -102,8 +101,6 @@ export default function FilterScreen({ navigation, route }) {
     );
   }
 
-
-
   function navigateToPhotos() {
     if (filteredAssets.length > 0) {
       console.log('Sending filtered assets to Photos.js');
@@ -122,7 +119,6 @@ export default function FilterScreen({ navigation, route }) {
   function onClear() { // clears the filters
     console.log('Clearing filters');
     console.log(assets);
-    // setGPSValues([]);
   }
   const handleSelectorChange = (key, value) => {
     setSelectedValues(prevValues => ({

@@ -1,17 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import { Containers, ModalStyle } from '../../styles/GlobalStyles';
+import { TextSize } from '../../styles/Sizing';
 import { IconBtn } from './FloatingButtons';
-import { Closebtn } from './FlatButtons';
+import { Closebtn, HighlightSelectBtn } from './FlatButtons';
 
-export default function FilterMenuButton(props) {
-    const [key, setKey] = React.useState(0);
+export default function FilterMenuBtn(props) {
 
     const {
+        assetKeys,
         menuOpen,
         setMenuOpen,
+        setSelecterKeys,
+        selectorKeys,
     } = props;
 
+    const [key, setKey] = React.useState(''); // key for modal
+    const [selectedKeys, setSelectedKeys] = useState([]);
+    
+    // copy of assetKeys to be used for filtering options
+    const loadedKeys = assetKeys;
+
+    const toggleSelected = (key) => {
+        if (selectedKeys.includes(key)) {
+            setSelectedKeys(selectedKeys.filter((item) => item !== key));
+        } else {
+            setSelectedKeys([...selectedKeys, key]);
+        }
+    }
+
+
+    
+    // state for pressed buttons
+    const [pressed, setPressed] = useState(false);
+    const togglePressed = () => {
+        setPressed(!pressed);
+    }
+
+    // state for modal visibility
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     }
@@ -29,10 +55,10 @@ export default function FilterMenuButton(props) {
                     }
                     }
                 >
-                        <Pressable
-                            style={ModalStyle.modalOverlay}
-                            onPress={toggleMenu}
-                        />
+                    <Pressable
+                        style={ModalStyle.modalOverlay}
+                        onPress={toggleMenu}
+                    />
                     <View style={ModalStyle.modal}>
                         <View style={ModalStyle.modalClose}>
                             <Closebtn
@@ -40,10 +66,23 @@ export default function FilterMenuButton(props) {
                             />
                         </View>
                         <Text style={ModalStyle.modalTitle}>
-                            Filter Options
+                            Filters
                         </Text>
                         <ScrollView style={ModalStyle.modalContent}>
-                            <Text>Filter Menu Content</Text>
+                            <Text style={{fontSize: TextSize.medium}}>
+                                Select filter options:
+                            </Text>
+                            <Text style={ModalStyle.modalDivider} />
+                            <HighlightSelectBtn
+                                text={'Test Button'}
+                                onPress={() => {
+                                    togglePressed();
+                                 console.log('Test');
+                                }}
+                                pressed={pressed}
+                            />
+                            <Text style={ModalStyle.modalDivider} />
+
                         </ScrollView>
                     </View>
                 </Modal>

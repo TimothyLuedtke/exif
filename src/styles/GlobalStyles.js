@@ -140,14 +140,25 @@ export const FlatBtn = StyleSheet.create({
         backgroundColor: Colors.white,
     },
 
-    rowButton: {
+    //
+    rowBtn: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,
-        padding: 12,
-        width: 150,
-        backgroundColor: Colors.white,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: Colors.light,
+    },
+//
+    highlightedRowBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: Colors.dark,
     },
 
 });
@@ -185,6 +196,7 @@ export const ModalStyle = StyleSheet.create({
         elevation: 5,
     },
 
+// 
     modalClose: {
         position: 'absolute',
         top: 5,
@@ -208,20 +220,9 @@ export const ModalStyle = StyleSheet.create({
     },
 
     // 1
-    modalBtn: {
-        width: 100,
-        height: 40,
-        backgroundColor: Colors.gray,
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
+    modalDivider: {
+        height: 1,
+        backgroundColor: Colors.black,
+        marginVertical: 10,
     },
-
-    // 1
-    modalBtnText: {
-        fontSize: 16,
-        color: Colors.white,
-    },
-
 });

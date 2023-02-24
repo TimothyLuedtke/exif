@@ -6,7 +6,7 @@ import { formatDateTime } from '../utils/formatUtils';
 import { getUniqueKeys, getUniqueValues, getKeyValues, getuniqueKeyswithValues } from '../utils/arrayUtils';
 import { FlatIconTextRowBtn } from '../components/buttons/FlatButtons';
 import { DropDownPicker } from '../components/DropDownPicker';
-import FilterMenuButton from '../components/buttons/FilterMenuBtn';
+import FilterMenuBtn from '../components/buttons/FilterMenuBtn';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -66,7 +66,8 @@ export default function FilterScreen({ navigation, route }) {
             }
           }
           console.log('Location data added to assets and distributed to locationItems:');
-          setAssets(locateAssets);       
+          setAssets(locateAssets); 
+          setAssetKeys(getUniqueKeys(assets));
           console.log(assets);
         }
       })();
@@ -124,7 +125,12 @@ export default function FilterScreen({ navigation, route }) {
     console.log(assets);
     // setGPSValues([]);
   }
-
+  const handleSelectorChange = (key, value) => {
+    setSelectedValues(prevValues => ({
+      ...prevValues,
+      [key]: value
+    }));
+  };
 
   const handleValueChange = (key, value) => {
     setSelectedValues(prevValues => ({
@@ -153,9 +159,12 @@ export default function FilterScreen({ navigation, route }) {
         onPress={() => getuniqueKeyswithValues(assets)}
       />
       </View>
-      <FilterMenuButton
+      <FilterMenuBtn
+      assetKeys={assetKeys}
       menuOpen={menuOpen}
       setMenuOpen={setMenuOpen}
+      setSelectorKeys={setSelectorKeys}
+      selectorKeys={selectorKeys}
       />
 
     </SafeAreaView>

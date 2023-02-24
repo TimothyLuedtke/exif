@@ -141,7 +141,19 @@ export const FlatBtn = StyleSheet.create({
     },
 
     //
-    rowBtn: {
+    editBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        borderRadius: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+
+    //
+    selectBtn: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -150,7 +162,7 @@ export const FlatBtn = StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: Colors.light,
     },
-//
+    //
     highlightedRowBtn: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -175,13 +187,34 @@ export const ModalStyle = StyleSheet.create({
         backgroundColor: Colors.transparent50,
     },
 
+    bottomModal: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        backgroundColor: Colors.white,
+        borderRadiusTopLeft: 10,
+        borderRadiusTopRight: 10,
+        padding: 5,
+        zIndex: 2,
+        shadowColor: Colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+
     // 1
     modal: {
         position: 'absolute',
-        top: height / 4,
         left: 10,
         right: 10,
-        bottom: height / 8,
+        bottom: 50,
+        justifyContent: 'flex-end',
         backgroundColor: Colors.white,
         borderRadius: 10,
         padding: 10,
@@ -196,12 +229,20 @@ export const ModalStyle = StyleSheet.create({
         elevation: 5,
     },
 
-// 
+    // 
     modalClose: {
         position: 'absolute',
-        top: 5,
-        right: 5,
+        top: 0,
+        right: 0,
         zIndex: 2,
+    },
+
+    // 
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 20,
     },
 
     // 1
@@ -209,14 +250,27 @@ export const ModalStyle = StyleSheet.create({
         fontSize: TextSize.large,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 10,
+        // marginVertical: 15,
     },
 
     // 1
-    modalContent: {
-        fontSize: 16,
+    modalBody: {
+        fontSize: TextSize.medium,
         textAlign: 'center',
-        marginBottom: 10,
+    },
+
+    // 1
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+
+    // 1
+    modalFooter: {
+        flexDirection: 'row',
+        // align items to bottom
+        justifyContent: 'flex-end',
+        marginTop: 10,
     },
 
     // 1

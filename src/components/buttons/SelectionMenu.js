@@ -1,8 +1,7 @@
-import React from 'react';
-import { View } from 'react-native';
-import { Containers } from '../../styles/GlobalStyles';
-import Colors from '../../styles/Colors';
-import { IconBtn, IconTextRowBtn } from './FloatingButtons';
+import React, { useState } from 'react';
+import { Modal, Text, View } from 'react-native';
+import { ModalStyle } from '../../styles/GlobalStyles';
+import { Closebtn, SubmitIcon, EditBtn } from './FlatButtons';
 
 export default function SelectionMenu(props) {
 
@@ -26,32 +25,30 @@ export default function SelectionMenu(props) {
     }
 
     return (
-
-        <View>
-            <View style={Containers.selectContainer}>
-                <IconTextRowBtn
-                    icon={selectedAssets.length === displayedAssets.length ? 'radio-button-unchecked' : 'check-circle-outline'}
-                    text={selectedAssets.length === displayedAssets.length ? 'Deselect All' : 'Select All'}
-                    onPress={selectedAssets.length === displayedAssets.length ? () => deselectAll() : () => selectAll()}
-                />
-                <IconTextRowBtn
-                    icon={'close'}
-                    text={`${selectedAssets.length} Selected`}
-                    onPress={() => deselectAll()}
-                />
-            </View>
-            <View style={Containers.menuContainer}>
-                <IconBtn
-                    icon='delete'
-                    color={Colors.darkred}
-                    onPress={deleter}
-                />
-                <IconBtn
-                    icon='close'
+        <View style={ModalStyle.bottomModal}>
+            <View style={ModalStyle.modalClose}>
+                <Closebtn
                     onPress={close}
                 />
             </View>
+            <View style={ModalStyle.modalHeader}>
+            </View>
+            <View style={ModalStyle.modalFooter}>
 
+                <EditBtn
+                    text={`Clear (${selectedAssets.length})`}
+                    onPress={deselectAll}
+                />
+                <EditBtn
+                    text={'Select All'}
+                    onPress={selectAll}
+                />
+
+                <SubmitIcon
+                    icon={'delete'}
+                    onPress={deleter}
+                />
+            </View>
         </View>
     );
 }

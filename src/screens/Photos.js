@@ -194,7 +194,6 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
                 {selectMode && (
                     <View>
-
                         <SelectionMenu
                             deleteSelected={deleteSelected}
                             deselectAll={deselectAll}

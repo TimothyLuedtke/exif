@@ -4,9 +4,8 @@ import * as Location from 'expo-location';
 import { Containers } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
 import { getUniqueKeys, getUniqueValues, getKeyValues, getuniqueKeyswithValues } from '../utils/arrayUtils';
-import { FlatIconTextRowBtn } from '../components/buttons/FlatButtons';
 import { DropDownPicker } from '../components/DropDownPicker';
-import FilterMenuBtn from '../components/buttons/FilterMenuBtn';
+import FilterMenu from '../components/buttons/FilterMenu';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -143,30 +142,14 @@ export default function FilterScreen({ navigation, route }) {
   return (
     <SafeAreaView style={Containers.container}>
       <View style={Containers.container}>
-      <FlatIconTextRowBtn
-        icon='check'
-        text='get unique values'
-        onPress={() => getUniqueValues(assets)}
-      />
-      <FlatIconTextRowBtn
-        icon='check'
-        text='get unique keys'
-        onPress={() => getUniqueKeys(assets)}
-      />
-      <FlatIconTextRowBtn
-        icon='check'
-        text='get key values'
-        onPress={() => getuniqueKeyswithValues(assets)}
-      />
       </View>
-      <FilterMenuBtn
+      <FilterMenu
       assetKeys={assetKeys}
       menuOpen={menuOpen}
       setMenuOpen={setMenuOpen}
       setSelectorKeys={setSelectorKeys}
       selectorKeys={selectorKeys}
       />
-
     </SafeAreaView>
   );
 };

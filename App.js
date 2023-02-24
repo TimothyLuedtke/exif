@@ -20,8 +20,8 @@ export default function App() {
           name="Photos"
           component={PhotosScreen}
           options={{
-            // headerTransparent: true,
-            headerTitle: 'Photos',
+            headerTransparent: true,
+            headerTitle: '',
             headerTitleAlign: 'center',
           }}
           initialParams={{ filteredAssets: [] }}

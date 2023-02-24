@@ -1,3 +1,4 @@
+
 const Colors = {
     background: '#fff',
     text: '#000',

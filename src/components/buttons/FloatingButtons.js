@@ -6,7 +6,7 @@ import Colors from '../../styles/Colors';
 
 export const IconTextRowBtn = ({ icon, text, onPress }) => (
 
-    <View style={FloatBtn.btnContainer} >
+    <View style={FloatBtn.rowBtnContainer} >
         <Pressable style={FloatBtn.rowButton} onPress={onPress}>
             <MaterialIcons name={icon} size={IconSize.medium} color={Colors.dark} />
             <Text color={Colors.dark}>
@@ -19,7 +19,7 @@ export const IconTextRowBtn = ({ icon, text, onPress }) => (
 
 export const TextBtn = ({ text, onPress }) => (
 
-    <View >
+    <View style={FloatBtn.btnContainer} >
         <Pressable style={FloatBtn.rowButton} onPress={onPress}>
             <Text style={FloatBtn.paddingH} color={Colors.dark}>
                 {text}

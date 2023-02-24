@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { FloatBtn } from '../../styles/GlobalStyles';
+import { Containers } from '../../styles/GlobalStyles';
 import { IconBtn } from './FloatingButtons';
 
 export default function MenuButton(props) {
@@ -24,7 +24,7 @@ export default function MenuButton(props) {
     }
 
     return (
-        <View style={FloatBtn.container}>
+        <View style={Containers.menuContainer}>
             {menuOpen && (
                 <View>
                     <IconBtn
@@ -42,7 +42,7 @@ export default function MenuButton(props) {
                 </View>
             )}
             <IconBtn
-                icon={menuOpen ? 'close' : 'menu'}
+                icon={menuOpen ? 'keyboard-arrow-down' : 'menu'}
                 onPress={toggleMenu}
             />
         </View>

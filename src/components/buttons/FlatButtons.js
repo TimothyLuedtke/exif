@@ -1,12 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ImageStyle } from '../../../styles/GlobalStyles';
-import { IconSize } from '../../../styles/Sizing';
-import Colors from '../../../styles/Colors';
+import { ImageStyle } from '../../styles/GlobalStyles';
+import { IconSize } from '../../styles/Sizing';
+import Colors from '../../styles/Colors';
 
 
-export default function Checkbox(props) {
+export function Checkbox(props) {
     const { check } = props;
 
     return (

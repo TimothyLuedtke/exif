@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
-import Checkbox from '../components/buttons/flatButtons/Checkbox';
+import { Checkbox } from '../components/buttons/FlatButtons';
 import MenuButton from '../components/buttons/MenuButton';
-import SelectMenuButton from '../components/buttons/SelectMenuButton';
+import SelectionMenu from '../components/buttons/SelectionMenu';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';
 import { TextBtn, IconTextRowBtn } from '../components/buttons/FloatingButtons';
 
@@ -195,24 +195,14 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
                 {selectMode && (
                     <View>
-                        <View style={Containers.row}>
-                            <IconTextRowBtn
-                                icon={selectedAssets.length === displayedAssets.length ? 'radio-button-unchecked' : 'check-circle'}
-                                text={selectedAssets.length === displayedAssets.length ? 'Deselect All' : 'Select All'}
-                                onPress={selectedAssets.length === displayedAssets.length ? () => deselectAll() : () => selectAll()}
-                            />
-                            <IconTextRowBtn
-                                icon={'close'}
-                                text={`${selectedAssets.length} Selected`}
-                                onPress={() => deselectAll()}
-                            />
-                        </View>
 
-                        <SelectMenuButton
-                            menuOpen={menuOpen}
-                            setSelectMode={setSelectMode}
+                        <SelectionMenu
                             deleteSelected={deleteSelected}
                             deselectAll={deselectAll}
+                            displayedAssets={displayedAssets}
+                            selectAll={selectAll}
+                            setSelectMode={setSelectMode}
+                            selectedAssets={selectedAssets}
                         />
                     </View>
                 )}

@@ -79,7 +79,7 @@ export const FloatBtn = StyleSheet.create({
 
     // 1
     btnContainer: {
-        margin: 5,
+        margin: 10,
         alignItems: 'center',
         justifyContent: 'center',
         // backgroundColor: Colors.gray,
@@ -196,7 +196,7 @@ export const ModalStyle = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadiusTopLeft: 10,
         borderRadiusTopRight: 10,
-        padding: 5,
+        paddingVertical: 10,
         zIndex: 2,
         shadowColor: Colors.black,
         shadowOffset: {

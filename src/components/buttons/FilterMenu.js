@@ -127,7 +127,7 @@ export default function FilterMenu(props) {
             )}
             <View style={Containers.menuContainer}>
                 <IconBtn
-                    icon={'menu'}
+                    icon={'add'}
                     onPress={toggleMenu}
                 />
             </View>

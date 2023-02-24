@@ -1,5 +1,6 @@
 import { Dimensions, StyleSheet } from "react-native";
 import Colors from "./Colors";
+import { IconSize, TextSize } from "./Sizing";
 
 const { width, height } = Dimensions.get("window");
 
@@ -147,6 +148,80 @@ export const FlatBtn = StyleSheet.create({
         padding: 12,
         width: 150,
         backgroundColor: Colors.white,
+    },
+
+});
+
+export const ModalStyle = StyleSheet.create({
+
+    // 1
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: Colors.transparent50,
+    },
+
+    // 1
+    modal: {
+        position: 'absolute',
+        top: height / 4,
+        left: 10,
+        right: 10,
+        bottom: height / 8,
+        backgroundColor: Colors.white,
+        borderRadius: 10,
+        padding: 10,
+        zIndex: 2,
+        shadowColor: Colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+
+    modalClose: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        zIndex: 2,
+    },
+
+    // 1
+    modalTitle: {
+        fontSize: TextSize.large,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 10,
+    },
+
+    // 1
+    modalContent: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+
+    // 1
+    modalBtn: {
+        width: 100,
+        height: 40,
+        backgroundColor: Colors.gray,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+
+    // 1
+    modalBtnText: {
+        fontSize: 16,
+        color: Colors.white,
     },
 
 });

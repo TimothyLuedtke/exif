@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import { Containers } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
-import { getUniqueKeys } from '../utils/arrayUtils';
-import { FlatIconBtn } from '../components/buttons/FlatButtons';
+import { getUniqueKeys, getUniqueValues, getKeyValues, getuniqueKeyswithValues } from '../utils/arrayUtils';
+import { FlatIconTextRowBtn } from '../components/buttons/FlatButtons';
+import { DropDownPicker } from '../components/DropDownPicker';
+import FilterMenuButton from '../components/buttons/FilterMenuBtn';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -12,6 +14,9 @@ export default function FilterScreen({ navigation, route }) {
 
   const [assets, setAssets] = useState([]);
   const [assetKeys, setAssetKeys] = useState([]);
+  const [selectorKeys, setSelectorKeys] = useState([]);
+  const [selectedValues, setSelectedValues] = useState({});
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -121,16 +126,38 @@ export default function FilterScreen({ navigation, route }) {
   }
 
 
+  const handleValueChange = (key, value) => {
+    setSelectedValues(prevValues => ({
+      ...prevValues,
+      [key]: prevValues[key] ? [...prevValues[key], value] : [value]
+    }));
+  };
+
+
   return (
     <SafeAreaView style={Containers.container}>
-      <FlatIconBtn
-        icon='close'
-        onPress={backToPhotos}
-      />
-      <FlatIconBtn
+      <View style={Containers.container}>
+      <FlatIconTextRowBtn
         icon='check'
+        text='get unique values'
+        onPress={() => getUniqueValues(assets)}
+      />
+      <FlatIconTextRowBtn
+        icon='check'
+        text='get unique keys'
         onPress={() => getUniqueKeys(assets)}
       />
+      <FlatIconTextRowBtn
+        icon='check'
+        text='get key values'
+        onPress={() => getuniqueKeyswithValues(assets)}
+      />
+      </View>
+      <FilterMenuButton
+      menuOpen={menuOpen}
+      setMenuOpen={setMenuOpen}
+      />
+
     </SafeAreaView>
   );
 };

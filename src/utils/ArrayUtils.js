@@ -23,22 +23,50 @@ export const combineObjsInArr = (arr) => {
 export function getUniqueKeys(arr) {
     const keys = [];
     arr.forEach(obj => {
-      Object.keys(obj).forEach(key => {
-        if (!keys.includes(key)) {
-          keys.push(key);
-        }
-      });
+        Object.keys(obj).forEach(key => {
+            if (!keys.includes(key)) {
+                keys.push(key);
+            }
+        });
     });
     console.log(keys);
     return keys;
-  }
+}
 
 export function getUniqueValues(arr) {
-    const unique = {};
-    arr.forEach(function (i) {
-        if (!unique[i]) {
-            unique[i] = true;
+    const values = [];
+    arr.forEach(obj => {
+        Object.values(obj).forEach(value => {
+            if (!values.includes(value)) {
+                values.push(value);
+            }
+        });
+    });
+    console.log(values);
+    return values;
+}
+
+export const getKeyValues = (arr, key) => {
+    const values = [];
+    arr.forEach(obj => {
+        const value = obj[key];
+        if (value !== undefined && !values.includes(value)) {
+            values.push(value);
         }
     });
-    return Object.values(unique);
+    return values;
+};
+
+export const getuniqueKeyswithValues = (arr) => {
+    const keys = getUniqueKeys(arr);
+    const values = [];
+    keys.forEach(key => {
+        values.push(getKeyValues(arr, key));
+    });
+    const uniqueKeysWithValues = [];
+    for (let i = 0; i < keys.length; i++) {
+        uniqueKeysWithValues.push({ [keys[i]]: values[i] });
+    }
+    console.log(uniqueKeysWithValues);
+    return uniqueKeysWithValues;
 }

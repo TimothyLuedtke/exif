@@ -13,6 +13,7 @@ const Colors = {
     white: '#fff',
     black: '#000',
     transparent: 'transparent',
+    transparent50: 'rgba(0, 0, 0, 0.5)',
     gray: '#6c757d',
     gray100: '#f8f9fa',
     gray200: '#e9ecef',

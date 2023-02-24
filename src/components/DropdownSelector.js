@@ -1,77 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { View, Pressable, FlatList, Text, StyleSheet, Picker } from 'react-native';
-import { IconBtnSmall } from './buttons/flatButtons/IconBtnSmall';
+import { View, Pressable, FlatList, Text, StyleSheet } from 'react-native';
+import { IconBtn } from './FlatButtons';
 import { useToggleCallback } from '../utils/hooks/ToggleUtils';
 
-export default function DropdownSelector(props) {
+export default function DropdownMultiPicker(props) {
+    const { options, selected, setSelected, placeholder } = props;
 
-    const { placeholder, options, onPressFunction } = props;
+    const [open, setOpen] = useState(false);
+    const [selectedOptions, setSelectedOptions] = useState([]);
 
-    const [dropdown, toggleDropdown] = useToggleCallback(false);
+    const toggleOpen = useToggleCallback(open, setOpen);
 
-    const selectItem = item => {
-        console.log(onPressFunction);
-        onPressFunction(item);
-        console.log('selected item: ' + item);
-        toggleDropdown();
-    };
+    const toggleOption = (option) => {
+        const newSelected = [...selectedOptions];
+        const index = newSelected.indexOf(option);
+        if (index > -1) {
+            newSelected.splice(index, 1);
+        } else {
+            newSelected.push(option);
+        }
+        setSelectedOptions(newSelected);
+    }
+
+    const close = () => {
+        setOpen(false);
+        setSelected(selectedOptions);
+    }
+
+    useEffect(() => {
+        setSelectedOptions(selected);
+    }, [selected]);
 
     return (
-        <View>
-            <Pressable style={styles.container} onPress={toggleDropdown}>
-                <Text style={styles.btnText}>{placeholder}</Text>
-                <IconBtnSmall icon="keyboard-arrow-down" onPress={toggleDropdown} />
+        <View style={styles.container}>
+            <Pressable style={styles.button} onPress={toggleOpen}>
+                <Text style={styles.text}>
+                    {selectedOptions.length > 0 ? selectedOptions.join(', ') : placeholder}
+                </Text>
+                <IconBtn icon={open ? 'arrow-drop-up' : 'arrow-drop-down'} />
             </Pressable>
-            {dropdown && (
-                <View style={styles.dropdown}>
+            {open &&
+                <View style={styles.optionsContainer}>
                     <FlatList
-                        data={options}  // options is an array of strings   
+                        data={options}
+                        keyExtractor={item => item}
                         renderItem={({ item }) => (
-                            <Pressable style={styles.dropdownItem} onPress={() => selectItem(item)}>
-                                <Text style={styles.dropdownItemText}>{item}</Text>
+                            <Pressable style={styles.option} onPress={() => toggleOption(item)}>
+                                <Text style={styles.text}>
+                                    {item}
+                                </Text>
+                                {selectedOptions.includes(item) &&
+                                    <IconBtn icon='check' />
+                                }
                             </Pressable>
                         )}
                     />
+                    <Pressable style={styles.option} onPress={close}>
+                        <Text style={styles.text}>
+                            Done
+                        </Text>
+                    </Pressable>
                 </View>
-            )}
+            }
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-        container: {
+    container: {
+        width: '100%',
+        height: 50,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        marginBottom: 10,
+    },
+    button: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 16,
+    },
+    optionsContainer: {
+        position: 'absolute',
+        top: 50,
+        left: 0,
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        zIndex: 2,
+    },
+    option: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderStyle: 'solid',
-        borderBottomWidth: 1,
-        borderBottomColor: 'black',
-        marginBottom: 20,
-        marginHorizontal: 20,
-
-    },
-    btnText: {
-        fontSize: 18,
-        marginLeft: 6,
-        height: 40,
-        width: 200,
-        backgroundColor: 'white',
-        marginLeft: 10,
-        paddingLeft: 6,
-        textAlignVertical: 'center',
-    },
-    dropdown: {
-        marginHorizontal: 20,   
-        backgroundColor: 'rgb(255,255,255)',
-    },
-    dropdownItem: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'yellow',
-    },
-    dropdownItemText: {
-        fontSize: 18,
-        color: 'black',
-
+        padding: 10,
     },
 });

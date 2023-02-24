@@ -1,5 +1,9 @@
 // format dateTime exif data
 export function formatDateTime(dateTimeStr) {
+
+  if(dateTimeStr === undefined || dateTimeStr === null) {
+    return "No date data|No time data";
+  } else {
   let [dateString, timeString] = dateTimeStr.split(" ");
   let [year, month, day] = dateString.split(":").map(Number);
   let [hours, minutes, seconds] = timeString.split(":").map(Number);
@@ -16,4 +20,5 @@ export function formatDateTime(dateTimeStr) {
   let formattedTime = timeString12;
 
   return (formattedDate + "|" + formattedTime);
+  }
 }

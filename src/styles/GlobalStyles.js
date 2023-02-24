@@ -20,9 +20,9 @@ export const Containers = StyleSheet.create({
     menuContainer: {
         position: 'absolute',
         bottom: 0,
-        right: 10,
+        right: 0,
         zIndex: 2,
-        // backgroundColor: 'grey',
+        // backgroundColor: Colors.gray800,
     },
 
     // 1
@@ -30,8 +30,9 @@ export const Containers = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         left: 10,
+        width: '70%',
         zIndex: 2,
-        // backgroundColor: 'grey',
+        // backgroundColor: Colors.gray800,
     },
 
 
@@ -84,15 +85,6 @@ export const FloatBtn = StyleSheet.create({
     },
 
     // 1
-    rowBtnContainer: {
-        margin: 5,
-        alignItems: 'center',
-        justifyContent: 'center', 
-        // backgroundColor: Colors.gray200,
-    },
-
-
-    // 1
     button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -124,6 +116,37 @@ export const FloatBtn = StyleSheet.create({
         },
         shadowRadius: 3.84,
         elevation: 5,
+    },
+
+});
+
+export const FlatBtn = StyleSheet.create({
+
+    // 1
+    btnContainer: {
+        margin: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // backgroundColor: Colors.gray,
+    },
+
+    // 1
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30,
+        padding: 12,
+        backgroundColor: Colors.white,
+    },
+
+    rowButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30,
+        padding: 12,
+        width: 150,
+        backgroundColor: Colors.white,
     },
 
 });

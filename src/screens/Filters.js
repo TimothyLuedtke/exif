@@ -1,38 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Text, SafeAreaView, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
-import { Containers, Row } from '../styles/GlobalStyles';
-import { uniqueElByProps } from '../utils/arrayUtils';
+import { Containers } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
+import { getUniqueKeys } from '../utils/arrayUtils';
+import { FlatIconBtn } from '../components/buttons/FlatButtons';
 
 export default function FilterScreen({ navigation, route }) {
 
   const importedAssets = route.params.importedAssets;
 
   const [assets, setAssets] = useState([]);
-
-  // const [gpsValues, setGPSValues] = useState([]);
-  // const [gpsItems, setGPSItems] = useState([]);
-
-  const [dateValues, setDateValues] = useState([]);
-  const [dateItems, setDateItems] = useState([]);
-
-  // const [gpsPickerOPEN, setGPSPickerOPEN] = useState(false);
-  // const onGPSPickerOPEN = useCallback(() => {
-  //   setGPSPickerOPEN(true);
-  //   setDatePickerOPEN(false);
-  // }, []);
-
-  const [datePickerOPEN, setDatePickerOPEN] = useState(false);
-  const onDatePickerOPEN = useCallback(() => {
-    setDatePickerOPEN(true);
-    // setGPSPickerOPEN(false);
-  }, []);
+  const [assetKeys, setAssetKeys] = useState([]);
 
   useEffect(() => {
     (async () => {
-      // setGPSItems(uniqueElByProps(assets, 'gpsValue'));
-      setDateItems(uniqueElByProps(assets, 'dateTimeValue'));
+
       console.log('Assets distributed to filter dropdowns from Filters.js: ')
       // console.log(assets);
     })();
@@ -51,6 +34,7 @@ export default function FilterScreen({ navigation, route }) {
     })();
   }, [importedAssets]);
 
+  // parses importedAssets and adds location data to each asset
   useEffect(() => {
     if (assetsTransformed) {
       let locateAssets = assets;
@@ -77,7 +61,7 @@ export default function FilterScreen({ navigation, route }) {
             }
           }
           console.log('Location data added to assets and distributed to locationItems:');
-          setAssets(locateAssets);
+          setAssets(locateAssets);       
           console.log(assets);
         }
       })();
@@ -124,6 +108,7 @@ export default function FilterScreen({ navigation, route }) {
       alert('No photos match the selected filters');
     }
   }
+
   function backToPhotos() {
     console.log('Going back to Photos.js without filtering');
     navigation.navigate('Photos');
@@ -136,13 +121,16 @@ export default function FilterScreen({ navigation, route }) {
   }
 
 
-  // const assetsSelected = filterAssetFilterer.length; // number of assets that match the selected filters
-
-  const filtersSelected = dateValues.length; // number of filters that are selected
-
   return (
     <SafeAreaView style={Containers.container}>
-
+      <FlatIconBtn
+        icon='close'
+        onPress={backToPhotos}
+      />
+      <FlatIconBtn
+        icon='check'
+        onPress={() => getUniqueKeys(assets)}
+      />
     </SafeAreaView>
   );
 };

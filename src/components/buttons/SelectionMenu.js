@@ -15,6 +15,11 @@ export default function SelectionMenu(props) {
         displayedAssets,
     } = props;
 
+    const deleter = () => {
+        deleteSelected();
+        setSelectMode(false);
+    }
+
     const close = () => {
         deselectAll();
         setSelectMode(false);
@@ -35,12 +40,11 @@ export default function SelectionMenu(props) {
                     onPress={() => deselectAll()}
                 />
             </View>
-
             <View style={Containers.menuContainer}>
                 <IconBtn
                     icon='delete'
                     color={Colors.darkred}
-                    onPress={deleteSelected}
+                    onPress={deleter}
                 />
                 <IconBtn
                     icon='close'

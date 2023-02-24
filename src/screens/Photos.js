@@ -7,7 +7,6 @@ import { Checkbox } from '../components/buttons/FlatButtons';
 import MenuButton from '../components/buttons/MenuButton';
 import SelectionMenu from '../components/buttons/SelectionMenu';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';
-import { TextBtn, IconTextRowBtn } from '../components/buttons/FloatingButtons';
 
 const { width } = Dimensions.get('window');
 

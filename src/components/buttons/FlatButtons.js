@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ImageStyle } from '../../styles/GlobalStyles';
+import { ImageStyle, FlatBtn } from '../../styles/GlobalStyles';
 import { IconSize } from '../../styles/Sizing';
 import Colors from '../../styles/Colors';
 
@@ -15,4 +15,17 @@ export function Checkbox(props) {
         </View>
     );
 }
+
+export const FlatIconBtn = ({ icon, color, onPress }) => (
+    <View style={FlatBtn.btnContainer}>
+        <Pressable style={FlatBtn.button} onPress={onPress}>
+            <MaterialIcons
+                name={icon}
+                size={IconSize.medium}
+                color={color ? color : Colors.dark}
+            />
+        </Pressable>
+    </View>
+);
+
     

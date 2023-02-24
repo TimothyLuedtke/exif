@@ -19,3 +19,26 @@ export const combineObjsInArr = (arr) => {
     for (const key in obj) newArr.push(obj[key]); // loop through the object and push the values to the array (this removes the duplicates)
     return newArr; // return the array
 };
+
+export function getUniqueKeys(arr) {
+    const keys = [];
+    arr.forEach(obj => {
+      Object.keys(obj).forEach(key => {
+        if (!keys.includes(key)) {
+          keys.push(key);
+        }
+      });
+    });
+    console.log(keys);
+    return keys;
+  }
+
+export function getUniqueValues(arr) {
+    const unique = {};
+    arr.forEach(function (i) {
+        if (!unique[i]) {
+            unique[i] = true;
+        }
+    });
+    return Object.values(unique);
+}

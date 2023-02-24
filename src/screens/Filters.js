@@ -10,9 +10,13 @@ import FilterMenu from '../components/buttons/FilterMenu';
 export default function FilterScreen({ navigation, route }) {
 
   const importedAssets = route.params.importedAssets;
+  const rawExif = importedAssets.map((asset) => {
+    return asset.exif;
+  });
 
   const [assets, setAssets] = useState([]);
   const [assetKeys, setAssetKeys] = useState([]);
+  const [rawAssetKeys, setRawAssetKeys] = useState([]);
   const [selectorKeys, setSelectorKeys] = useState([]);
   const [selectedValues, setSelectedValues] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,6 +36,7 @@ export default function FilterScreen({ navigation, route }) {
         assetTransformer();
         setAssetsTransformed(true);
         console.log('Assets received in Filters.js: ');
+        console.log(rawExif);
       } else {
         console.log('No assets received in Filters.js');
       }
@@ -65,9 +70,10 @@ export default function FilterScreen({ navigation, route }) {
             }
           }
           console.log('Location data added to assets and distributed to locationItems:');
-          setAssets(locateAssets); 
-          setAssetKeys(getUniqueKeys(assets));
-          console.log(assets);
+          setAssets(locateAssets);
+          setAssetKeys(getUniqueKeys(locateAssets));
+          setRawAssetKeys(getUniqueKeys(rawExif));
+          console.log(locateAssets);
         }
       })();
     } else {
@@ -140,11 +146,12 @@ export default function FilterScreen({ navigation, route }) {
       <View style={Containers.container}>
       </View>
       <FilterMenu
-      assetKeys={assetKeys}
-      menuOpen={menuOpen}
-      setMenuOpen={setMenuOpen}
-      setSelectorKeys={setSelectorKeys}
-      selectorKeys={selectorKeys}
+        assetKeys={assetKeys}
+        rawAssetKeys={rawAssetKeys}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        setSelectorKeys={setSelectorKeys}
+        selectorKeys={selectorKeys}
       />
     </SafeAreaView>
   );

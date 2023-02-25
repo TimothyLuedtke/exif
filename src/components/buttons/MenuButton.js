@@ -32,12 +32,12 @@ export default function MenuButton(props) {
                         onPress={pickImage}
                     />
                     <IconBtn
-                        icon='filter-alt'
-                        onPress={navigateToFilters}
-                    />
-                    <IconBtn
                         icon='edit'
                         onPress={toggleSelectMode}
+                    />
+                    <IconBtn
+                        icon='filter-alt'
+                        onPress={navigateToFilters}
                     />
                 </View>
             )}

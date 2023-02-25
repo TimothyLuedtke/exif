@@ -6,6 +6,13 @@ import { formatDateTime } from '../utils/formatUtils';
 import { getUniqueKeys, getUniqueValues, getKeyValues } from '../utils/arrayUtils';
 import { DropDownPicker } from '../components/DropDownPicker';
 import FilterMenu from '../components/buttons/FilterMenu';
+import { EditBtn, TestDropBtn } from '../components/buttons/FlatButtons';
+
+const items = [
+  {"city": "Saint Paul", "country": "United States", "customTags": [], "dateValue": "Tue Oct 11 2022", "district": null, "latitude": 44.97531111111111, "longitude": -93.11201388888888, "postalCode": "55117", "region": "Minnesota", "street": "Matilda Street", "timeValue": "12:28 PM", "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540timothyluedtke%252Fexif/ImagePicker/8c2a98c5-798f-428f-8777-0b70bffa8ddd.jpeg"},
+  {"city": "Saint Paul", "country": "United States", "customTags": [], "dateValue": "Mon Sep 05 2022", "district": null, "latitude": 44.974525, "longitude": -93.11227222222222, "postalCode": "55117", "region": "Minnesota", "street": "Matilda Street", "timeValue": "9:46 AM", "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540timothyluedtke%252Fexif/ImagePicker/0cf99daf-1def-46e9-b22d-92dcbb867258.jpeg"},
+  {"city": "Saint Paul", "country": "United States", "customTags": [], "dateValue": "Tue Oct 11 2022", "district": null, "latitude": 44.97531111111111, "longitude": -93.11201666666666, "postalCode": "55117", "region": "Minnesota", "street": "Matilda Street", "timeValue": "10:47 PM", "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540timothyluedtke%252Fexif/ImagePicker/819574db-b871-49b5-bec9-b30c3f7e5e9b.jpeg"}
+];
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -122,28 +129,13 @@ export default function FilterScreen({ navigation, route }) {
     navigation.navigate('Photos');
   }
 
-  function onClear() { // clears the filters
-    console.log('Clearing filters');
-    console.log(assets);
-  }
-  const handleSelectorChange = (key, value) => {
-    setSelectedValues(prevValues => ({
-      ...prevValues,
-      [key]: value
-    }));
-  };
-
-  const handleValueChange = (key, value) => {
-    setSelectedValues(prevValues => ({
-      ...prevValues,
-      [key]: prevValues[key] ? [...prevValues[key], value] : [value]
-    }));
-  };
-
-
   return (
     <SafeAreaView style={Containers.container}>
       <View style={Containers.container}>
+        <TestDropBtn
+        // set these next and wrap it in a maping function for each key
+        />
+
       </View>
       <FilterMenu
         assetKeys={assetKeys}

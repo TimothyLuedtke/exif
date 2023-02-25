@@ -280,3 +280,51 @@ export const ModalStyle = StyleSheet.create({
         marginVertical: 10,
     },
 });
+
+export const DropDownPickerStyle = StyleSheet.create({
+
+    // 1
+    container: {
+        // backgroundColor: Colors.gray,
+        // borderRadius: 50,
+        marginVertical: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    // 1
+    label: {
+        color: Colors.dark,
+        fontSize: TextSize.medium,
+        fontWeight: '500',
+    },
+    //
+    labelBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    // 1
+    dropdown: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        borderRadius: 30,
+        // paddingVertical: 10,
+        // paddingHorizontal: 20,
+        padding: 10,
+        marginVertical: 2,
+    },
+    // 1
+    value: {
+        color: Colors.dark,
+        fontSize: TextSize.medium,
+        marginHorizontal: 5,
+        marginRight: 10,
+    },
+
+});

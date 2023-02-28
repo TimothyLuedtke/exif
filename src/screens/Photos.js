@@ -113,10 +113,12 @@ export default function PhotosScreen({ navigation, route }) {
             console.log('Picked image(s).');
             // console.log('Result: ', result);
             const newPhotoAssets = [...displayedAssets, ...result.assets.map((item) => {
+                
                 return {
                     exif: item.exif,
                     uri: item.uri,
-                    customTags: [],
+                    tags: [],
+                    data: "no data",
                 };
             })];
 

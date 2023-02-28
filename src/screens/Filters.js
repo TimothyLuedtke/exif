@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
 import { Containers } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
 import { getUniqueKeys, getUniqueValues, getKeyValues } from '../utils/arrayUtils';
-import { DropDownPicker } from '../components/DropDownPicker';
+import { DropDownPicker } from '../components/buttons/FlatButtons';
 import FilterMenu from '../components/buttons/FilterMenu';
-import { EditBtn, TestDropBtn } from '../components/buttons/FlatButtons';
-
-const items = [
-  {"city": "Saint Paul", "country": "United States", "customTags": [], "dateValue": "Tue Oct 11 2022", "district": null, "latitude": 44.97531111111111, "longitude": -93.11201388888888, "postalCode": "55117", "region": "Minnesota", "street": "Matilda Street", "timeValue": "12:28 PM", "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540timothyluedtke%252Fexif/ImagePicker/8c2a98c5-798f-428f-8777-0b70bffa8ddd.jpeg"},
-  {"city": "Saint Paul", "country": "United States", "customTags": [], "dateValue": "Mon Sep 05 2022", "district": null, "latitude": 44.974525, "longitude": -93.11227222222222, "postalCode": "55117", "region": "Minnesota", "street": "Matilda Street", "timeValue": "9:46 AM", "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540timothyluedtke%252Fexif/ImagePicker/0cf99daf-1def-46e9-b22d-92dcbb867258.jpeg"},
-  {"city": "Saint Paul", "country": "United States", "customTags": [], "dateValue": "Tue Oct 11 2022", "district": null, "latitude": 44.97531111111111, "longitude": -93.11201666666666, "postalCode": "55117", "region": "Minnesota", "street": "Matilda Street", "timeValue": "10:47 PM", "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540timothyluedtke%252Fexif/ImagePicker/819574db-b871-49b5-bec9-b30c3f7e5e9b.jpeg"}
-];
-
 export default function FilterScreen({ navigation, route }) {
 
   const importedAssets = route.params.importedAssets;
@@ -22,8 +14,9 @@ export default function FilterScreen({ navigation, route }) {
   });
 
   const [assets, setAssets] = useState([]);
-  const [assetKeys, setAssetKeys] = useState([]);
-  const [rawAssetKeys, setRawAssetKeys] = useState([]);
+  const [parsedKeys, setAssetKeys] = useState([]);
+  const [exifKeys, setExifKeys] = useState([]);
+  const [tags, setTags] = useState([]);
   const [selectorKeys, setSelectorKeys] = useState([]);
   const [selectedValues, setSelectedValues] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,7 +36,9 @@ export default function FilterScreen({ navigation, route }) {
         assetTransformer();
         setAssetsTransformed(true);
         console.log('Assets received in Filters.js: ');
-        console.log(rawExif);
+        console.log(importedAssets);
+        // console.log('Raw EXIF data received in Filters.js: ');
+        // console.log(rawExif);
       } else {
         console.log('No assets received in Filters.js');
       }
@@ -73,13 +68,20 @@ export default function FilterScreen({ navigation, route }) {
               locateAssets[i].district = location[0].district;
               locateAssets[i].postalCode = location[0].postalCode;
               locateAssets[i].region = location[0].region;
+              locateAssets[i].subregion = location[0].subregion;
               locateAssets[i].street = location[0].street;
+              locateAssets[i].cityState = location[0].city + ', ' + location[0].region;
+              locateAssets[i].address = location[0].name + ' ' + location[0].street;
+              locateAssets[i].fullAddress = location[0].name + ' ' + location[0].street + ', ' + location[0].city + ', ' + location[0].region + ' ' + location[0].postalCode;
             }
+            importedAssets[i].data = locateAssets[i];
           }
+
           console.log('Location data added to assets and distributed to locationItems:');
           setAssets(locateAssets);
+
           setAssetKeys(getUniqueKeys(locateAssets));
-          setRawAssetKeys(getUniqueKeys(rawExif));
+          setExifKeys(getUniqueKeys(rawExif));
           console.log(locateAssets);
         }
       })();
@@ -89,30 +91,40 @@ export default function FilterScreen({ navigation, route }) {
   }, [assetsTransformed === true, assets.length > 0]);
 
   const assetTransformer = () => {
-
     return setAssets(
       importedAssets.map((photo) => {
         let dateTimeValue = formatDateTime(photo.exif.DateTime);
-        let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No date data';
-        let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No time data';
-
+        let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No data';
+        let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No data';
         return {
-          uri: photo.uri,
-          city: null,
-          country: null,
-          district: null,
-          postalCode: null,
-          region: null,
-          street: null,
           latitude: photo.exif.GPSLatitude,
           longitude: photo.exif.GPSLongitude,
-          dateValue: dateValue,
-          timeValue: timeValue,
-          customTags: photo.customTags,
+          date: dateValue,
+          time: timeValue,
+          city: 'No data',
+          country: 'No data',
+          district: 'No data',
+          postalCode: 'No data',
+          region: 'No data',
+          subregion: 'No data',
+          street: 'No data',
+          cityState: 'No data',
+          address: 'No data',
+          fullAddress: 'No data',
         };
       })
-    );
+    );  
   }
+
+  useEffect(() => {
+    let uniqueTags = [];
+    for(let i = 0; i < importedAssets.length; i++) {
+      if (importedAssets[i].tags !== undefined) {
+        uniqueTags = uniqueTags.concat(importedAssets[i].tags);
+      }
+    }
+    setTags(uniqueTags.filter((item, index) => { return uniqueTags.indexOf(item) === index; }));
+  }, [importedAssets.length > 0]);
 
   function navigateToPhotos() {
     if (filteredAssets.length > 0) {
@@ -132,14 +144,17 @@ export default function FilterScreen({ navigation, route }) {
   return (
     <SafeAreaView style={Containers.container}>
       <View style={Containers.container}>
-        <TestDropBtn
+        {/* {keyValues.map((key) => {
+        <DropDownPicker
         // set these next and wrap it in a maping function for each key
         />
+        })} */}
 
       </View>
       <FilterMenu
-        assetKeys={assetKeys}
-        rawAssetKeys={rawAssetKeys}
+        parsedKeys={parsedKeys}
+        exifKeys={exifKeys}
+        tags={tags}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
         setSelectorKeys={setSelectorKeys}

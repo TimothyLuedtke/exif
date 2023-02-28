@@ -2,30 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { Containers, ModalStyle } from '../../styles/GlobalStyles';
 import { IconBtn } from './FloatingButtons';
-import { Closebtn, SelectBtn, SubmitBtn, EditBtn } from './FlatButtons';
+import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
 
 export default function FilterMenu(props) {
 
     const {
-        assetKeys,
-        rawAssetKeys,
+        tags,
+        parsedKeys,
+        exifKeys,
         menuOpen,
         setMenuOpen,
         setSelectorKeys,
-        selectorKeys,
     } = props;
 
     const [isLoaded, setIsLoaded] = useState(false);
-
     const [selectedKeys, setSelectedKeys] = useState([]);
-    const [keys, setKeys] = useState(assetKeys);
-    const [toggleKeys, setToggleKeys] = useState(false);
-    const [keyChain, setKeyChain] = useState('Set Filtered');
+    const [keys, setKeys] = useState(parsedKeys);
 
     useEffect(() => {
-        setKeys(assetKeys);
+        setKeys(exifKeys);
         setIsLoaded(true);
-    }, [assetKeys]);
+    }, [exifKeys]);
 
     const toggleSelected = (key) => {
         if (selectedKeys.includes(key)) {
@@ -33,17 +30,6 @@ export default function FilterMenu(props) {
         } else {
             setSelectedKeys([...selectedKeys, key]);
         }
-    }
-
-    const toggleKeyChain = (toggle) => {
-        if (toggle) {
-            setKeys(assetKeys);
-            setKeyChain('Filtered Data');
-        } else {
-            setKeys(rawAssetKeys);
-            setKeyChain('Raw Data');
-        }
-        setToggleKeys(!toggle);
     }
 
     const toggleMenu = () => {
@@ -99,7 +85,7 @@ export default function FilterMenu(props) {
                                 <EditBtn
                                     text={'Select All'}
                                     onPress={() => {
-                                        setSelectedKeys(assetKeys);
+                                        setSelectedKeys(parsedKeys);
                                         console.log('All keys selected');
                                     }}
                                     pressed={false}
@@ -129,14 +115,22 @@ export default function FilterMenu(props) {
                             </View>
                         </View>
                         <View style={ModalStyle.modalFooter}>
-                            <EditBtn
-                                text={keyChain}
-                                onPress={() => {
-                                    toggleKeyChain(toggleKeys);
+                            <PiecedBtn
+                                text1={1}
+                                onPress1={() => {
+                                    setKeys(exifKeys);
+                                }}
+                                text2={2}
+                                onPress2={() => {
+                                    setKeys(parsedKeys);
+                                }}
+                                text3={3}
+                                onPress3={() => {
+                                    setKeys(tags);
                                 }}
                             />
                             <SubmitBtn
-                                text={'Finished'}
+                                text={'Apply'}
                                 onPress={() => {
                                     setSelectorKeys(selectedKeys);
                                     console.log('Selected keys: ', selectedKeys);

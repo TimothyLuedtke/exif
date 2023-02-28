@@ -152,6 +152,70 @@ export const FlatBtn = StyleSheet.create({
         paddingHorizontal: 20,
     },
 
+    // 
+    piecedBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        borderRadius: 30,
+        // paddingVertical: 10,
+        // paddingHorizontal: 20,
+    },
+
+    btnTxt: {
+        fontSize: TextSize.medium,
+        color: Colors.dark,
+        
+    },
+
+    btn: {
+        borderColor: Colors.dark,
+        borderRightWidth: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+
+    btnEnd: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+
+    btnTxtH: {
+        fontSize: TextSize.medium,
+        color: Colors.light,
+        
+    },
+
+    btnStartH: {
+        borderColor: Colors.dark,
+        borderRightWidth: 1,
+        backgroundColor: Colors.dark,
+        borderTopLeftRadius: 30,
+        borderBottomLeftRadius: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+
+    btnH: {
+        borderColor: Colors.dark,
+        borderRightWidth: 1,
+        backgroundColor: Colors.dark,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+
+    btnEndH: {
+        borderColor: Colors.dark,
+        borderRightWidth: 1,
+        backgroundColor: Colors.dark,
+        borderTopRightRadius: 30,
+        borderBottomRightRadius: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+
     //
     selectBtn: {
         flexDirection: 'row',

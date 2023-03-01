@@ -14,20 +14,15 @@ export default function FilterScreen({ navigation, route }) {
   });
 
   const [assets, setAssets] = useState([]);
-  const [parsedKeys, setAssetKeys] = useState([]);
+  const [parsedKeys, setParsedKeys] = useState([]);
   const [exifKeys, setExifKeys] = useState([]);
   const [tags, setTags] = useState([]);
   const [selectorKeys, setSelectorKeys] = useState([]);
+  const [selectorKeyValues, setSelectorKeyValues] = useState([]);
   const [selectedValues, setSelectedValues] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    (async () => {
 
-      console.log('Assets distributed to filter dropdowns from Filters.js: ')
-      // console.log(assets);
-    })();
-  }, [assets.length > 0, assetsTransformed]);
 
   const [assetsTransformed, setAssetsTransformed] = useState(false);
   useEffect(() => {
@@ -80,7 +75,7 @@ export default function FilterScreen({ navigation, route }) {
           console.log('Location data added to assets and distributed to locationItems:');
           setAssets(locateAssets);
 
-          setAssetKeys(getUniqueKeys(locateAssets));
+          setParsedKeys(getUniqueKeys(locateAssets));
           setExifKeys(getUniqueKeys(rawExif));
           console.log(locateAssets);
         }
@@ -125,6 +120,14 @@ export default function FilterScreen({ navigation, route }) {
     }
     setTags(uniqueTags.filter((item, index) => { return uniqueTags.indexOf(item) === index; }));
   }, [importedAssets.length > 0]);
+    
+  // useEffect(() => {
+  //   if (selectorKeys.length > 0) {
+  //     let keyValues = [];
+  //     for (let i = 0; i < selectorKeys.length; i++) {
+
+
+
 
   function navigateToPhotos() {
     if (filteredAssets.length > 0) {

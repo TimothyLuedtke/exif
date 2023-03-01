@@ -70,3 +70,17 @@ export const getuniqueKeyswithValues = (arr) => {
     console.log(uniqueKeysWithValues);
     return uniqueKeysWithValues;
 }
+
+function getKeyValuesByKeys(arrs, keys) {
+    const values = [];
+    arrs.forEach(arr => {
+        arr.forEach(obj => {
+            keys.forEach(key => {
+                if (obj[key] !== undefined) {
+                    values.push(obj[key]);
+                }
+            });
+        });
+    });
+    return values;
+}

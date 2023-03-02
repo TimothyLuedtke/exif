@@ -123,6 +123,7 @@ export const SelectBtn = ({ text, onPress, pressed }) => (
 export function DropDownPicker(props) {
 
     const {
+        key,
         values,
         selectedValues,
         setSelectedValues,
@@ -135,12 +136,12 @@ export function DropDownPicker(props) {
     };
 
     const toggleValue = (value) => {
-        if (selectedValues.includes(value)) {
-            const newValues = selectedValues.filter((v) => v !== value);
-            setSelectedValues(newValues);
-        } else {
+        // if (selectedValues.includes(value)) {
+        //     const newValues = selectedValues.filter((v) => v !== value);
+        //     setSelectedValues(newValues);
+        // } else {
             setSelectedValues([...selectedValues, value]);
-        }
+        // }
     }
 
     return (
@@ -150,9 +151,7 @@ export function DropDownPicker(props) {
                 onPress={toggleDropdown}
             >
                 <Text style={DropDownPickerStyle.label}>
-
-                    {'   selector key    '}
-
+                    {key}
                 </Text>
                 <MaterialIcons
                     name={
@@ -173,8 +172,8 @@ export function DropDownPicker(props) {
                             <Text style={DropDownPickerStyle.value}>
                                 {value}
                             </Text>
-                            {selectedValues.includes(value) &&
-                                <MaterialIcons name={'close'} size={IconSize.small} color={Colors.dark} />}
+                            {/* {selectedValues.includes(value) &&
+                                <MaterialIcons name={'close'} size={IconSize.small} color={Colors.dark} />} */}
                         </Pressable>
                     ))}
                 </View>

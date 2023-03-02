@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { Containers, ModalStyle } from '../../styles/GlobalStyles';
+import { extractValues } from '../../utils/arrayUtils';
 import { IconBtn } from './FloatingButtons';
 import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
 
 export default function FilterMenu(props) {
 
     const {
+        assets,
         tags,
         parsedKeys,
         exifKeys,
         menuOpen,
         setMenuOpen,
         setSelectorKeys,
+        setSelectorKeyValues,
     } = props;
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -85,7 +88,7 @@ export default function FilterMenu(props) {
                                 <EditBtn
                                     text={'Select All'}
                                     onPress={() => {
-                                        setSelectedKeys(parsedKeys);
+                                        setSelectedKeys(keys);
                                         console.log('All keys selected');
                                     }}
                                     pressed={false}
@@ -134,6 +137,8 @@ export default function FilterMenu(props) {
                                 onPress={() => {
                                     setSelectorKeys(selectedKeys);
                                     console.log('Selected keys: ', selectedKeys);
+                                    setSelectorKeyValues(extractValues(assets, selectedKeys));
+                                    console.log('Selected key values: ', extractValues(assets, selectedKeys));
                                     resetMenu();
                                 }}
                             />

@@ -29,7 +29,7 @@ export function getUniqueKeys(arr) {
             }
         });
     });
-    console.log(keys);
+    console.log("getUniqueKeys returns: ", keys);
     return keys;
 }
 
@@ -71,16 +71,17 @@ export const getuniqueKeyswithValues = (arr) => {
     return uniqueKeysWithValues;
 }
 
-function getKeyValuesByKeys(arrs, keys) {
-    const values = [];
-    arrs.forEach(arr => {
-        arr.forEach(obj => {
-            keys.forEach(key => {
-                if (obj[key] !== undefined) {
-                    values.push(obj[key]);
-                }
-            });
-        });
-    });
-    return values;
-}
+export function extractValues(arr, keys) {
+    let result = {};
+    for (let obj of arr) {
+      for (let key of keys) {
+        if (obj.hasOwnProperty(key)) {
+          if (!result.hasOwnProperty(key)) {
+            result[key] = [];
+          }
+          result[key].push(obj[key]);
+        }
+      }
+    }
+    return Object.entries(result).map(([key, value]) => ({ [key]: value }));
+  }

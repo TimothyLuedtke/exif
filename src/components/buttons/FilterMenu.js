@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { Containers, ModalStyle } from '../../styles/GlobalStyles';
-import { extractValues } from '../../utils/arrayUtils';
+import { extractUniqueValues } from '../../utils/arrayUtils';
 import { IconBtn } from './FloatingButtons';
 import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
 
@@ -46,6 +46,14 @@ export default function FilterMenu(props) {
     const resetMenu = () => {
         setMenuOpen(false);
         resetSelected();
+    }
+
+    const submitMenu = () => {
+        setMenuOpen(false);
+        setSelectorKeys(selectedKeys);
+        setSelectorKeyValues(extractUniqueValues(assets, selectedKeys));
+        console.log('Selected key values: ', extractUniqueValues(assets, selectedKeys));
+        // resetMenu();
     }
 
     return (
@@ -134,13 +142,7 @@ export default function FilterMenu(props) {
                             />
                             <SubmitBtn
                                 text={'Apply'}
-                                onPress={() => {
-                                    setSelectorKeys(selectedKeys);
-                                    console.log('Selected keys: ', selectedKeys);
-                                    setSelectorKeyValues(extractValues(assets, selectedKeys));
-                                    console.log('Selected key values: ', extractValues(assets, selectedKeys));
-                                    resetMenu();
-                                }}
+                                onPress={submitMenu}
                             />
                         </View>
                     </View>

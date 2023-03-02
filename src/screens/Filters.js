@@ -20,7 +20,7 @@ export default function FilterScreen({ navigation, route }) {
   const [tags, setTags] = useState([]);
   const [selectorKeys, setSelectorKeys] = useState([]);
   const [selectorKeyValues, setSelectorKeyValues] = useState([]);
-  const [selectedValues, setSelectedValues] = useState({});
+  const [selectedValues, setSelectedValues] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
 
 
@@ -141,6 +141,12 @@ export default function FilterScreen({ navigation, route }) {
       {/* <View style={Containers.container}>
 
       </View> */}
+      <DropDownPicker
+        btnLabel = {'KeyVal'}
+        values = {['value1', 'value2', 'value3']}
+        selectedValues = {selectedValues}
+        setSelectedValues = {setSelectedValues}
+        />
 
 <View style={Containers.menuContainer}>
       <FilterMenu

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, Text, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { ModalStyle } from '../../styles/GlobalStyles';
 import { Closebtn, SubmitIcon, EditBtn } from './FlatButtons';
 
@@ -11,7 +11,6 @@ export default function SelectionMenu(props) {
         selectAll,
         deselectAll,
         selectedAssets,
-        displayedAssets,
     } = props;
 
     const deleter = () => {

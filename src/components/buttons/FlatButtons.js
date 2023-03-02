@@ -86,44 +86,51 @@ export function PiecedBtn({ text1, text2, text3, onPress1, onPress2, onPress3 })
         onPress3();
     }
 
-     return(
-    <View style={FlatBtn.btnContainer}>
-        <View style={FlatBtn.piecedBtn}>
-                <Pressable style={pressed1 === true ? FlatBtn.btnStartH : FlatBtn.btn} onPress={ () => handlePressed1()}>
-                    <Text style={pressed1 === true? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
+    return (
+        <View style={FlatBtn.btnContainer}>
+            <View style={FlatBtn.piecedBtn}>
+                <Pressable style={pressed1 === true ? FlatBtn.btnStartH : FlatBtn.btn} onPress={() => handlePressed1()}>
+                    <Text style={pressed1 === true ? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
                         {text1}
                     </Text>
                 </Pressable>
                 <Pressable style={pressed2 === true ? FlatBtn.btnH : FlatBtn.btn} onPress={() => handlePressed2()}>
-                    <Text style={pressed2 === true? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
+                    <Text style={pressed2 === true ? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
                         {text2}
                     </Text>
                 </Pressable>
-            <Pressable style={pressed3 === true ? FlatBtn.btnEndH : FlatBtn.btnEnd} onPress={() => handlePressed3()}>
-                <Text style={pressed3 === true? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
-                    {text3}
-                </Text>
-            </Pressable>
+                <Pressable style={pressed3 === true ? FlatBtn.btnEndH : FlatBtn.btnEnd} onPress={() => handlePressed3()}>
+                    <Text style={pressed3 === true ? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
+                        {text3}
+                    </Text>
+                </Pressable>
+            </View>
         </View>
-    </View>
-)}
+    )
+}
 
 
 export const SelectBtn = ({ text, onPress, pressed }) => (
-    <View style={FlatBtn.btnContainer}>
-        <Pressable style={pressed ? FlatBtn.highlightedRowBtn : FlatBtn.selectBtn} onPress={onPress}>
-            <Text style={{ fontSize: TextSize.medium, color: pressed ? Colors.light : Colors.dark }}>
+    // <View style={FlatBtn.btnContainer}>
+        <Pressable style={FlatBtn.selectBtn} onPress={onPress}>
+            <Text style={pressed? FlatBtn.selected : FlatBtn.select}>
                 {text}
             </Text>
-            {/* <MaterialIcons name={pressed ? 'check-circle-outline' : 'radio-button-unchecked'} size={IconSize.medium} color={pressed ? Colors.light : Colors.dark} /> */}
+            <MaterialIcons
+                                name={'close'}
+                                size={IconSize.small}
+                                color={
+                                    pressed ?
+                                        Colors.dark :
+                                        Colors.background} />
         </Pressable>
-    </View>
+    // </View>
 );
 
 export function DropDownPicker(props) {
 
     const {
-        key,
+        btnLabel,
         values,
         selectedValues,
         setSelectedValues,
@@ -136,22 +143,22 @@ export function DropDownPicker(props) {
     };
 
     const toggleValue = (value) => {
-        // if (selectedValues.includes(value)) {
-        //     const newValues = selectedValues.filter((v) => v !== value);
-        //     setSelectedValues(newValues);
-        // } else {
+        if (selectedValues.includes(value)) {
+            const newValues = selectedValues.filter((v) => v !== value);
+            setSelectedValues(newValues);
+        } else {
             setSelectedValues([...selectedValues, value]);
-        // }
+        }
     }
 
     return (
         <View style={DropDownPickerStyle.container}>
             <Pressable
-                style={DropDownPickerStyle.labelBtn}
+                style={isOpen ? DropDownPickerStyle.labelBtn : DropDownPickerStyle.closedLabelBtn}
                 onPress={toggleDropdown}
             >
                 <Text style={DropDownPickerStyle.label}>
-                    {key}
+                    {btnLabel}
                 </Text>
                 <MaterialIcons
                     name={
@@ -169,11 +176,17 @@ export function DropDownPicker(props) {
                             style={DropDownPickerStyle.dropdown}
                             onPress={() => toggleValue(value)}
                         >
-                            <Text style={DropDownPickerStyle.value}>
+                            <Text style={selectedValues.includes(value) ? DropDownPickerStyle.selectedValue : DropDownPickerStyle.value}>
                                 {value}
                             </Text>
-                            {/* {selectedValues.includes(value) &&
-                                <MaterialIcons name={'close'} size={IconSize.small} color={Colors.dark} />} */}
+
+                            <MaterialIcons
+                                name={'close'}
+                                size={IconSize.small}
+                                color={
+                                    selectedValues.includes(value) ?
+                                        Colors.dark :
+                                        Colors.background} />
                         </Pressable>
                     ))}
                 </View>

@@ -167,7 +167,7 @@ export const FlatBtn = StyleSheet.create({
     btnTxt: {
         fontSize: TextSize.medium,
         color: Colors.dark,
-        
+
     },
 
     btn: {
@@ -185,7 +185,7 @@ export const FlatBtn = StyleSheet.create({
     btnTxtH: {
         fontSize: TextSize.medium,
         color: Colors.light,
-        
+
     },
 
     btnStartH: {
@@ -221,22 +221,33 @@ export const FlatBtn = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 30,
         paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: Colors.light,
+        // paddingHorizontal: 20,
+        // padding: 10,
     },
     //
-    highlightedRowBtn: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 30,
+    select: {
+        fontSize: TextSize.medium,
+        color: Colors.dark,
         paddingVertical: 10,
         paddingHorizontal: 20,
+        // padding: 10,
+        borderColor: Colors.light,
+        borderWidth: 1,
+        borderRadius: 30,
+        backgroundColor: Colors.light,
+    },
+    // 
+    selected: {
+        fontSize: TextSize.medium,
+        color: Colors.light,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        borderRadius: 30,
         backgroundColor: Colors.dark,
     },
-
 });
 
 export const ModalStyle = StyleSheet.create({
@@ -354,13 +365,6 @@ export const DropDownPickerStyle = StyleSheet.create({
         marginVertical: 2,
         alignItems: 'center',
         justifyContent: 'center',
-
-    },
-    // 1
-    label: {
-        color: Colors.dark,
-        fontSize: TextSize.medium,
-        fontWeight: '500',
     },
     //
     labelBtn: {
@@ -370,8 +374,8 @@ export const DropDownPickerStyle = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
-    // 1
-    dropdown: {
+    // 
+    closedLabelBtn: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -384,11 +388,41 @@ export const DropDownPickerStyle = StyleSheet.create({
         marginVertical: 2,
     },
     // 1
-    value: {
+    label: {
         color: Colors.dark,
         fontSize: TextSize.medium,
+        fontWeight: '500',
         marginHorizontal: 5,
-        marginRight: 10,
     },
-
+// 
+    dropdown: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        // paddingHorizontal: 20,
+    },
+    // 1
+    value: {
+        fontSize: TextSize.medium,
+        color: Colors.dark,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        // padding: 10,
+        borderColor: Colors.light,
+        borderWidth: 1,
+        borderRadius: 30,
+        backgroundColor: Colors.light,
+    },
+    // 
+    selectedValue: {
+        fontSize: TextSize.medium,
+        color: Colors.light,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        borderRadius: 30,
+        backgroundColor: Colors.dark,
+    },
 });

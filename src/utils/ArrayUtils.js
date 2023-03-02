@@ -71,17 +71,18 @@ export const getuniqueKeyswithValues = (arr) => {
     return uniqueKeysWithValues;
 }
 
-export function extractValues(arr, keys) {
+export function extractUniqueValues(arr, keys) {
     let result = {};
     for (let obj of arr) {
       for (let key of keys) {
         if (obj.hasOwnProperty(key)) {
           if (!result.hasOwnProperty(key)) {
-            result[key] = [];
+            result[key] = new Set();
           }
-          result[key].push(obj[key]);
+          result[key].add(obj[key]);
         }
       }
     }
-    return Object.entries(result).map(([key, value]) => ({ [key]: value }));
+    return Object.entries(result).map(([key, value]) => ({ [key]: Array.from(value) }));
   }
+  

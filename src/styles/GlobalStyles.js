@@ -36,6 +36,16 @@ export const Containers = StyleSheet.create({
         // backgroundColor: Colors.gray800,
     },
 
+    holderContainer: {
+        flex: 1,
+        alignContent: 'center',
+        justifyContent: 'center',
+        backgroundColor: Colors.gray,
+        width: '50%',
+        height: '50%',
+        
+    },
+
 
 });
 

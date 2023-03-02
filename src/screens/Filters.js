@@ -148,30 +148,22 @@ export default function FilterScreen({ navigation, route }) {
         />
       </View>
     );
-  } 
+  }
 
   return (
     <SafeAreaView style={Containers.container}>
       {selectorKeyValues.length === 0 && <View style={Containers.holderContainer}>
         <Text>Select filters to narrow down your photos</Text>
-        </View>
+      </View>
       }
-      {selectorKeyValues.length > 0 && <FlatList style={Containers.container}>
-        {selectorKeyValues.map((obj, index) => {
-          const valuesArray = Object.values(obj)[0];
-          console.log('valuesArray: ', valuesArray);
-          return (
-            <View key={index}>
-              <DropDownPicker
-                btnLabel={Object.keys(obj)}
-                values={valuesArray}
-                selectedValues={selectedValues}
-                setSelectedValues={setSelectedValues}
-              />
-            </View>
-          );
-        })}
-      </FlatList>
+      {selectorKeyValues.length > 0 &&
+        <FlatList
+          style={Containers.container}
+          data={selectorKeyValues}
+          renderItem={({ item, index }) => renderSelectorDropDown(item, index)}
+          keyExtractor={(item, index) => index.toString()}
+        >
+        </FlatList>
       }
 
       <View style={Containers.menuContainer}>

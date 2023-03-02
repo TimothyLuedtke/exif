@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, Text, View } from 'react-native';
 import * as Location from 'expo-location';
 import { Containers } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
@@ -135,12 +135,31 @@ export default function FilterScreen({ navigation, route }) {
     navigation.navigate('Photos');
   }
 
+  function renderSelectorDropDown(obj, index) {
+    const valuesArray = Object.values(obj)[0];
+    console.log('valuesArray: ', valuesArray);
+    return (
+      <View key={index}>
+        <DropDownPicker
+          btnLabel={Object.keys(obj)}
+          values={valuesArray}
+          selectedValues={selectedValues}
+          setSelectedValues={setSelectedValues}
+        />
+      </View>
+    );
+  } 
+
   return (
     <SafeAreaView style={Containers.container}>
-      <View style={Containers.container}>
+      {selectorKeyValues.length === 0 && <View style={Containers.holderContainer}>
+        <Text>Select filters to narrow down your photos</Text>
+        </View>
+      }
+      {selectorKeyValues.length > 0 && <FlatList style={Containers.container}>
         {selectorKeyValues.map((obj, index) => {
-          const valuesArray = Object.values(obj)[0]; 
-           console.log('valuesArray: ', valuesArray);
+          const valuesArray = Object.values(obj)[0];
+          console.log('valuesArray: ', valuesArray);
           return (
             <View key={index}>
               <DropDownPicker
@@ -152,14 +171,8 @@ export default function FilterScreen({ navigation, route }) {
             </View>
           );
         })}
-
-        {/* <DropDownPicker
-          btnLabel={'KeyVal'}
-          values={['value1', 'value2', 'value3']}
-          selectedValues={selectedValues}
-          setSelectedValues={setSelectedValues}
-        /> */}
-      </View>
+      </FlatList>
+      }
 
       <View style={Containers.menuContainer}>
         <FilterMenu

@@ -20,21 +20,9 @@ export const Closebtn = ({ onPress }) => (
     </View>
 );
 
-// export const FlatIconBtn = ({ icon, color, onPress }) => (
-//     <View style={FlatBtn.btnContainer}>
-//         <Pressable style={FlatBtn.editBtn} onPress={onPress}>
-//             <MaterialIcons
-//                 name={icon}
-//                 size={IconSize.medium}
-//                 color={color ? color : Colors.dark}
-//             />
-//         </Pressable>
-//     </View>
-// );
-
 export const SubmitBtn = ({ text, onPress }) => (
     <View style={FlatBtn.btnContainer}>
-        <Pressable style={FlatBtn.highlightedRowBtn} onPress={onPress}>
+        <Pressable style={FlatBtn.submitBtn} onPress={onPress}>
             <Text style={{ fontSize: TextSize.medium, color: Colors.light }}>
                 {text}
             </Text>
@@ -44,7 +32,7 @@ export const SubmitBtn = ({ text, onPress }) => (
 
 export const SubmitIcon = ({ icon, onPress }) => (
     <View style={FlatBtn.btnContainer}>
-        <Pressable style={FlatBtn.highlightedRowBtn} onPress={onPress}>
+        <Pressable style={FlatBtn.submitBtn} onPress={onPress}>
             <MaterialIcons name={icon} size={IconSize.medium} color={Colors.light} />
         </Pressable>
     </View>
@@ -109,21 +97,20 @@ export function PiecedBtn({ text1, text2, text3, onPress1, onPress2, onPress3 })
     )
 }
 
-
 export const SelectBtn = ({ text, onPress, pressed }) => (
     // <View style={FlatBtn.btnContainer}>
-        <Pressable style={FlatBtn.selectBtn} onPress={onPress}>
-            <Text style={pressed? FlatBtn.selected : FlatBtn.select}>
-                {text}
-            </Text>
-            <MaterialIcons
-                                name={'close'}
-                                size={IconSize.small}
-                                color={
-                                    pressed ?
-                                        Colors.dark :
-                                        Colors.background} />
-        </Pressable>
+    <Pressable style={FlatBtn.selectBtn} onPress={onPress}>
+        <Text style={pressed ? FlatBtn.selected : FlatBtn.select}>
+            {text}
+        </Text>
+        <MaterialIcons
+            name={'close'}
+            size={IconSize.small}
+            color={
+                pressed ?
+                    Colors.dark :
+                    Colors.background} />
+    </Pressable>
     // </View>
 );
 
@@ -154,7 +141,7 @@ export function DropDownPicker(props) {
     return (
         <View style={DropDownPickerStyle.container}>
             <Pressable
-                style={isOpen ? DropDownPickerStyle.labelBtn : DropDownPickerStyle.closedLabelBtn}
+                style={DropDownPickerStyle.labelBtn}
                 onPress={toggleDropdown}
             >
                 <Text style={DropDownPickerStyle.label}>

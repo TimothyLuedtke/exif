@@ -135,32 +135,45 @@ export default function FilterScreen({ navigation, route }) {
     navigation.navigate('Photos');
   }
 
-
   return (
     <SafeAreaView style={Containers.container}>
-      {/* <View style={Containers.container}>
+      <View style={Containers.container}>
+        {selectorKeyValues.map((obj, index) => {
+          const valuesArray = Object.values(obj)[0]; 
+           console.log('valuesArray: ', valuesArray);
+          return (
+            <View key={index}>
+              <DropDownPicker
+                btnLabel={Object.keys(obj)}
+                values={valuesArray}
+                selectedValues={selectedValues}
+                setSelectedValues={setSelectedValues}
+              />
+            </View>
+          );
+        })}
 
-      </View> */}
-      <DropDownPicker
-        btnLabel = {'KeyVal'}
-        values = {['value1', 'value2', 'value3']}
-        selectedValues = {selectedValues}
-        setSelectedValues = {setSelectedValues}
+        {/* <DropDownPicker
+          btnLabel={'KeyVal'}
+          values={['value1', 'value2', 'value3']}
+          selectedValues={selectedValues}
+          setSelectedValues={setSelectedValues}
+        /> */}
+      </View>
+
+      <View style={Containers.menuContainer}>
+        <FilterMenu
+          assets={assets}
+          parsedKeys={parsedKeys}
+          exifKeys={exifKeys}
+          tags={tags}
+          menuOpen={menuOpen}
+          setMenuOpen={setMenuOpen}
+          setSelectorKeys={setSelectorKeys}
+          setSelectorKeyValues={setSelectorKeyValues}
+          selectorKeys={selectorKeys}
         />
-
-<View style={Containers.menuContainer}>
-      <FilterMenu
-        assets={assets}
-        parsedKeys={parsedKeys}
-        exifKeys={exifKeys}
-        tags={tags}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        setSelectorKeys={setSelectorKeys}
-        setSelectorKeyValues={setSelectorKeyValues}
-        selectorKeys={selectorKeys}
-      />
-    </View>
+      </View>
 
     </SafeAreaView>
   );

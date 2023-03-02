@@ -151,6 +151,18 @@ export const FlatBtn = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
+    // 
+    submitBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        backgroundColor: Colors.dark,
+        borderRadius: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
 
     // 
     piecedBtn: {
@@ -343,8 +355,7 @@ export const ModalStyle = StyleSheet.create({
     // 1
     modalFooter: {
         flexDirection: 'row',
-        // align items to bottom
-        justifyContent: 'flex-end',
+        justifyContent: 'space-around',
         marginTop: 10,
     },
 
@@ -367,32 +378,27 @@ export const DropDownPickerStyle = StyleSheet.create({
         justifyContent: 'center',
     },
     //
+    // 
     labelBtn: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-    },
-    // 
-    closedLabelBtn: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
         borderColor: Colors.dark,
-        borderWidth: 1,
-        borderRadius: 30,
-        // paddingVertical: 10,
-        // paddingHorizontal: 20,
-        padding: 10,
+        paddingVertical: 10,
+        // paddingHorizontal: 40,
+        width: '100%',
         marginVertical: 2,
+
     },
     // 1
     label: {
         color: Colors.dark,
         fontSize: TextSize.medium,
         fontWeight: '500',
-        marginHorizontal: 5,
+        marginHorizontal: 10,
+        textTransform: 'uppercase',
     },
 // 
     dropdown: {

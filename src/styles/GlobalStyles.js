@@ -12,6 +12,12 @@ export const Containers = StyleSheet.create({
         backgroundColor: Colors.background,
     },
 
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     // 1
     bottomRow: {
         flexDirection: 'row',
@@ -35,17 +41,6 @@ export const Containers = StyleSheet.create({
         zIndex: 2,
         // backgroundColor: Colors.gray800,
     },
-
-    holderContainer: {
-        flex: 1,
-        alignContent: 'center',
-        justifyContent: 'center',
-        backgroundColor: Colors.gray,
-        width: '50%',
-        height: '50%',
-        
-    },
-
 
 });
 
@@ -189,7 +184,6 @@ export const FlatBtn = StyleSheet.create({
     btnTxt: {
         fontSize: TextSize.medium,
         color: Colors.dark,
-
     },
 
     btn: {
@@ -269,6 +263,23 @@ export const FlatBtn = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 30,
         backgroundColor: Colors.dark,
+    },
+
+    placeholderBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderColor: Colors.light,
+        borderWidth: 1,
+        borderRadius: 30,
+        backgroundColor: Colors.light,
+    },
+
+    placeholderTxt: {
+        fontSize: TextSize.medium,
+        color: Colors.dark,
     },
 });
 

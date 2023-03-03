@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
-import { Checkbox } from '../components/buttons/FlatButtons';
+import { Checkbox, PlaceholderBtn } from '../components/buttons/FlatButtons';
 import MenuButton from '../components/buttons/MenuButton';
 import SelectionMenu from '../components/buttons/SelectionMenu';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';
@@ -113,7 +113,7 @@ export default function PhotosScreen({ navigation, route }) {
             console.log('Picked image(s).');
             // console.log('Result: ', result);
             const newPhotoAssets = [...displayedAssets, ...result.assets.map((item) => {
-                
+
                 return {
                     exif: item.exif,
                     uri: item.uri,
@@ -152,38 +152,49 @@ export default function PhotosScreen({ navigation, route }) {
 
     return (
         <SafeAreaView style={Containers.container}>
-
-            <FlatGrid
-                key={key}
-                itemDimension={(width / 2)}
-                data={displayedAssets}
-                style={Containers.container}
-                spacing={0}
-                renderItem={({ item }) => (
-                    <View>
-                        <Image
-                            source={{ uri: item.uri }}
-                            style={ImageStyle.halfCoverImage}
+            <View style={Containers.container}>
+                {displayedAssets.length === 0 &&
+                    <View style={Containers.centered}>
+                        <PlaceholderBtn
+                            text="Import Photos"
+                            onPress={pickImage}
                         />
-                        {selectMode && (
-                            <Checkbox
-                                check={false} />
-                        )}
-
-                        {selectMode && (
-                            <Pressable
-                                style={ImageStyle.overlay}
-                                onPress={() => selectPhoto(item.uri)}
-                            />
-                        )}
-                        {selectMode && selectedAssets.includes(item.uri) && (
-                            <Checkbox
-                                check={true} />
-                        )}
                     </View>
+                }
+                {displayedAssets.length > 0 && (
+                    <FlatGrid
+                        key={key}
+                        itemDimension={(width / 2)}
+                        data={displayedAssets}
+                        style={Containers.container}
+                        spacing={0}
+                        renderItem={({ item }) => (
+                            <View>
+                                <Image
+                                    source={{ uri: item.uri }}
+                                    style={ImageStyle.halfCoverImage}
+                                />
+                                {selectMode && (
+                                    <Checkbox
+                                        check={false} />
+                                )}
 
+                                {selectMode && (
+                                    <Pressable
+                                        style={ImageStyle.overlay}
+                                        onPress={() => selectPhoto(item.uri)}
+                                    />
+                                )}
+                                {selectMode && selectedAssets.includes(item.uri) && (
+                                    <Checkbox
+                                        check={true} />
+                                )}
+                            </View>
+
+                        )}
+                    />
                 )}
-            />
+            </View>
             <View>
                 {!selectMode && (<MenuButton
                     menuOpen={menuOpen}

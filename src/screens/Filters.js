@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, SafeAreaView, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
-import { Containers } from '../styles/GlobalStyles';
+import { Containers, ModalStyle } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
-import { getUniqueKeys, getUniqueValues, getKeyValues } from '../utils/arrayUtils';
-import { DropDownPicker } from '../components/buttons/FlatButtons';
+import { getUniqueKeys, returnFilteredAssetURI } from '../utils/arrayUtils';
+import { Closebtn, DropDownPicker, SubmitBtn, EditBtn, PlaceholderBtn } from '../components/buttons/FlatButtons';
+import { IconBtn } from '../components/buttons/FloatingButtons';
 import FilterMenu from '../components/buttons/FilterMenu';
+
 export default function FilterScreen({ navigation, route }) {
 
   const importedAssets = route.params.importedAssets;
   const rawExif = importedAssets.map((asset) => {
     return asset.exif;
   });
-
+  const [filteredAssets, setFilteredAssets] = useState([]);
   const [assets, setAssets] = useState([]);
   const [parsedKeys, setParsedKeys] = useState([]);
   const [parsedKeyValues, setParsedKeyValues] = useState([]);
@@ -21,7 +23,8 @@ export default function FilterScreen({ navigation, route }) {
   const [selectorKeys, setSelectorKeys] = useState([]);
   const [selectorKeyValues, setSelectorKeyValues] = useState([]);
   const [selectedValues, setSelectedValues] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedKeyValues, setSelectedKeyValues] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(true);
 
 
 
@@ -130,14 +133,31 @@ export default function FilterScreen({ navigation, route }) {
     }
   }
 
-  function backToPhotos() {
+  const filterAssets = () => {
+    let filteredAssets = [];
+    if (selectedValues.length > 0) {
+      for (let i = 0; i < importedAssets.length; i++) {
+        for (let j = 0; j < selectedValues.length; j++) {
+          if (importedAssets[i].data[selectedValues[j].key] === selectedValues[j].value) {
+            filteredAssets.push(importedAssets[i]);
+          }
+        }
+      }
+      setFilteredAssets(filteredAssets);
+      console.log('Filtered assets: ', filteredAssets);
+    } else {
+      console.log('No filters selected');
+      alert('No filters selected');
+    }
+  }
+  function navigateToPhotos() {
     console.log('Going back to Photos.js without filtering');
     navigation.navigate('Photos');
   }
 
   function renderSelectorDropDown(obj, index) {
     const valuesArray = Object.values(obj)[0];
-    console.log('valuesArray: ', valuesArray);
+    // console.log('valuesArray: ', valuesArray);
     return (
       <View key={index}>
         <DropDownPicker
@@ -152,21 +172,69 @@ export default function FilterScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={Containers.container}>
-      {selectorKeyValues.length === 0 && <View style={Containers.holderContainer}>
-        <Text>Select filters to narrow down your photos</Text>
+      <View style={Containers.container}>
+        {selectorKeyValues.length === 0 &&
+          <View style={Containers.centered}>
+            <PlaceholderBtn
+              text="Add filters..."
+              onPress={() => setMenuOpen(true)}
+            />
+          </View>
+        }
+        {selectorKeyValues.length > 0 &&
+          <FlatList
+            // contentContainerStyle={FlatBtn.btnContainer}
+            data={selectorKeyValues}
+            renderItem={({ item, index }) => renderSelectorDropDown(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+          >
+          </FlatList>
+        }
       </View>
-      }
-      {selectorKeyValues.length > 0 &&
-        <FlatList
-          style={Containers.container}
-          data={selectorKeyValues}
-          renderItem={({ item, index }) => renderSelectorDropDown(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-        >
-        </FlatList>
+
+      {selectorKeyValues.length > 0 && menuOpen === false &&
+        <View style={ModalStyle.bottomModal}>
+          <View style={ModalStyle.modalClose}>
+            <Closebtn
+              onPress={() => {
+                setSelectorKeyValues([]);
+                setSelectedValues([]);
+                navigateToPhotos();
+              }}
+            />
+          </View>
+          <View style={ModalStyle.modalHeader}>
+
+          </View>
+          <View style={ModalStyle.modalFooter}>
+            <EditBtn
+              text={`Clear (${selectedValues.length})`}
+              onPress={() => {
+                setSelectedValues([]);
+              }}
+            />
+            <EditBtn
+              text="Filters"
+              onPress={() => setMenuOpen(true)}
+            />
+            <SubmitBtn
+              text="Apply"
+              onPress={() => {
+                filterAssets(assets, selectorKeys, selectedValues);
+                navigateToPhotos();
+              }}
+            />
+          </View>
+        </View>
       }
 
       <View style={Containers.menuContainer}>
+        {menuOpen === false && selectorKeyValues.length === 0 &&
+          <IconBtn
+            icon={'add'}
+            onPress={() => setMenuOpen(true)}
+          />
+        }
         <FilterMenu
           assets={assets}
           parsedKeys={parsedKeys}
@@ -179,7 +247,6 @@ export default function FilterScreen({ navigation, route }) {
           selectorKeys={selectorKeys}
         />
       </View>
-
     </SafeAreaView>
   );
 };

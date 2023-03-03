@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
-import { Containers, ModalStyle } from '../../styles/GlobalStyles';
-import { extractUniqueValues } from '../../utils/arrayUtils';
-import { IconBtn } from './FloatingButtons';
+import { ModalStyle } from '../../styles/GlobalStyles';
+import { extractUniqueValues, removeSingleValuePairs } from '../../utils/arrayUtils';
 import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
 
 export default function FilterMenu(props) {
@@ -51,9 +50,14 @@ export default function FilterMenu(props) {
     const submitMenu = () => {
         setMenuOpen(false);
         setSelectorKeys(selectedKeys);
-        setSelectorKeyValues(extractUniqueValues(assets, selectedKeys));
-        console.log('Selected key values: ', extractUniqueValues(assets, selectedKeys));
+        setSelectorKeyValues(filterUsableKeyVals(assets, selectedKeys));
+        console.log('Selected key values: ', filterUsableKeyVals(assets, selectedKeys));
         // resetMenu();
+    }
+
+    const filterUsableKeyVals = (arr, keys) => {
+        uniqueKeyVals = extractUniqueValues(arr, keys);
+        return removeSingleValuePairs(uniqueKeyVals);
     }
 
     return (
@@ -148,14 +152,7 @@ export default function FilterMenu(props) {
                     </View>
                 </Modal>
             )}
-            {isLoaded && (
-            <View style={Containers.menuContainer}>
-                <IconBtn
-                    icon={'add'}
-                    onPress={toggleMenu}
-                />
-            </View>
-            )}
+
         </View>
     )
 }

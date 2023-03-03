@@ -74,15 +74,38 @@ export const getuniqueKeyswithValues = (arr) => {
 export function extractUniqueValues(arr, keys) {
     let result = {};
     for (let obj of arr) {
-      for (let key of keys) {
-        if (obj.hasOwnProperty(key)) {
-          if (!result.hasOwnProperty(key)) {
-            result[key] = new Set();
-          }
-          result[key].add(obj[key]);
+        for (let key of keys) {
+            if (obj.hasOwnProperty(key)) {
+                if (!result.hasOwnProperty(key)) {
+                    result[key] = new Set();
+                }
+                result[key].add(obj[key]);
+            }
         }
-      }
     }
     return Object.entries(result).map(([key, value]) => ({ [key]: Array.from(value) }));
-  }
-  
+}
+
+export function removeSingleValuePairs(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        for (let key in arr[i]) {
+            if (arr[i][key].length <= 1) {
+                if (arr[i][key].length === 0) {
+                    delete arr[i][key];
+                } else {
+                    if (!arr[i][key][0]) {
+                        delete arr[i][key];
+                    }
+                }
+            }
+        }
+    }
+    return arr.filter(item => Object.keys(item).length !== 0);
+}
+
+export const returnFilteredAssetURI = (data, values) => {
+    const filteredData = data.filter((item) => Object.values(item).some((val) => values.includes(val)));
+    const filteredDataURI = filteredData.map((item) => item.uri);
+    return filteredDataURI;
+};
+

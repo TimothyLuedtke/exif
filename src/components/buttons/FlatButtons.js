@@ -130,11 +130,14 @@ export function DropDownPicker(props) {
     };
 
     const toggleValue = (value) => {
+
         if (selectedValues.includes(value)) {
             const newValues = selectedValues.filter((v) => v !== value);
             setSelectedValues(newValues);
+            console.log('current selected values: ', newValues);
         } else {
             setSelectedValues([...selectedValues, value]);
+            console.log('current selected values: ', setSelectedValues([...selectedValues, value]));
         }
     }
 
@@ -156,7 +159,7 @@ export function DropDownPicker(props) {
                     color={Colors.dark}
                 />
             </Pressable>
-            {isOpen && (
+            {isOpen === true && (
                 <View style={DropDownPickerStyle.container}>
                     {values.map(value => (
                         <Pressable
@@ -182,4 +185,14 @@ export function DropDownPicker(props) {
         </View>
     );
 }
+
+export const PlaceholderBtn = ({ text, onPress }) => (
+    <View style={FlatBtn.btnContainer}>
+        <Pressable style={FlatBtn.placeholderBtn} onPress={onPress}>
+            <Text style={FlatBtn.placeholderTxt}>
+                {text}
+            </Text>
+        </Pressable>
+    </View>
+);
 

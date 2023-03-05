@@ -3,7 +3,7 @@ import { FlatList, SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
 import { Containers, ModalStyle } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
-import { getUniqueKeys, returnFilteredAssetURI } from '../utils/arrayUtils';
+import { combineObjects, removeArrays } from '../utils/arrayUtils';
 import { Closebtn, DropDownPicker, SubmitBtn, EditBtn, PlaceholderBtn } from '../components/buttons/FlatButtons';
 import { IconBtn } from '../components/buttons/FloatingButtons';
 import FilterMenu from '../components/buttons/FilterMenu';
@@ -11,43 +11,39 @@ import FilterMenu from '../components/buttons/FilterMenu';
 export default function FilterScreen({ navigation, route }) {
 
   const importedAssets = route.params.importedAssets;
-  const rawExif = importedAssets.map((asset) => {
-    return asset.exif;
-  });
-  const [filteredAssets, setFilteredAssets] = useState([]);
   const [assets, setAssets] = useState([]);
-  const [parsedKeys, setParsedKeys] = useState([]);
-  const [parsedKeyValues, setParsedKeyValues] = useState([]);
+  const [masterAsset, setMasterAsset] = useState([]);
+  const [masterKeys, setMasterKeys] = useState([]);
   const [exifKeys, setExifKeys] = useState([]);
+  const [dataKeys, setDataKeys] = useState([]);
+  const [uriVals, setUriVals] = useState([]);
   const [tags, setTags] = useState([]);
-  const [selectorKeys, setSelectorKeys] = useState([]);
+
+  // const [selectorKeys, setSelectorKeys] = useState([]);
   const [selectorKeyValues, setSelectorKeyValues] = useState([]);
   const [selectedValues, setSelectedValues] = useState([]);
-  const [selectedKeyValues, setSelectedKeyValues] = useState([]);
   const [menuOpen, setMenuOpen] = useState(true);
-
 
 
   const [assetsTransformed, setAssetsTransformed] = useState(false);
   useEffect(() => {
     (async () => {
       if (importedAssets) {
-        tagsParser();
-        setAssets(dateTimeParser());
+        dataFiller();
         setAssetsTransformed(true);
-        console.log('Assets received in Filters.js: ', importedAssets);
-        // console.log('Raw EXIF data received in Filters.js: ');
-        // console.log(rawExif);
       } else {
         console.log('No assets received in Filters.js');
       }
     })();
   }, [importedAssets]);
 
-  // parses importedAssets and adds location data to each asset
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    if (assetsTransformed) {
-      let locatesParsed = assets;
+    if (assetsTransformed === true) {
+      let locatesParsed = importedAssets.map((asset) => {
+        return asset.data;
+      });
+      // console.log('assets to locatesParsed: ', locatesParsed);
       (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
@@ -75,83 +71,61 @@ export default function FilterScreen({ navigation, route }) {
             }
             importedAssets[i].data = locatesParsed[i];
           }
-          setAssets(locatesParsed);
-          setParsedKeys(getUniqueKeys(locatesParsed));
-          setExifKeys(getUniqueKeys(rawExif));
-          console.log("assets set to locatedParsed data...", locatesParsed);
+          // console.log('Parsed assets: ', importedAssets);
+          const combinedAssets = combineObjects(importedAssets);
+          setMasterAsset(combinedAssets);
+          console.log('masterAsset: ', combinedAssets);
+          setMasterKeys(Object.keys(combinedAssets));
+          console.log('masterKeys: ', Object.keys(combinedAssets));
+          setExifKeys(Object.keys(combinedAssets.exif));
+          console.log('exifKeys: ', Object.keys(combinedAssets.exif));
+          setDataKeys(Object.keys(combinedAssets.data));
+          console.log('dataKeys: ', Object.keys(combinedAssets.data));
+          setUriVals(Object.keys(combinedAssets.uri));
+          console.log('uriVals: ', Object.values(combinedAssets.uri));
+          // setTags(Object.keys(combineObjects(importedAssets).tags));
+          // console.log('tags: ', Object.keys(combineObjects(importedAssets).tags));
+          setLoaded(true);
         }
       })();
+    }
+  }, [assetsTransformed === true]);
+
+  const dataFiller = () => {
+    if (importedAssets === undefined) {
+      return;
+    } else if (assetsTransformed === false) {
+      return (
+        importedAssets.map((photo) => {
+          let dateTimeValue = formatDateTime(photo.exif.DateTime);
+          let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No data';
+          let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No data';
+          let defaultData = {
+            latitude: photo.exif.GPSLatitude,
+            longitude: photo.exif.GPSLongitude,
+            date: dateValue,
+            time: timeValue,
+            city: 'No data',
+            country: 'No data',
+            district: 'No data',
+            postalCode: 'No data',
+            region: 'No data',
+            subregion: 'No data',
+            street: 'No data',
+            cityState: 'No data',
+            address: 'No data',
+            fullAddress: 'No data',
+          };
+          photo.data = defaultData;
+        })
+      );
     } else {
-      console.log('Assets not transformed yet...');
+      console.log('Assets already transformed...');
+      setAssetsTransformed(true);
     }
-  }, [assetsTransformed === true, assets.length > 0]);
-
-  const dateTimeParser = () => {
-    return (
-      importedAssets.map((photo) => {
-        let dateTimeValue = formatDateTime(photo.exif.DateTime);
-        let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No data';
-        let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No data';
-        return {
-          latitude: photo.exif.GPSLatitude,
-          longitude: photo.exif.GPSLongitude,
-          date: dateValue,
-          time: timeValue,
-          city: 'No data',
-          country: 'No data',
-          district: 'No data',
-          postalCode: 'No data',
-          region: 'No data',
-          subregion: 'No data',
-          street: 'No data',
-          cityState: 'No data',
-          address: 'No data',
-          fullAddress: 'No data',
-          uri: photo.uri,
-        };
-      })
-    );
-  }
-
-  const tagsParser = () => {
-    let uniqueTags = [];
-    for (let i = 0; i < importedAssets.length; i++) {
-      if (importedAssets[i].tags !== undefined) {
-        uniqueTags = uniqueTags.concat(importedAssets[i].tags);
-      }
-    }
-    setTags(uniqueTags.filter((item, index) => { return uniqueTags.indexOf(item) === index; }));
   }
 
   function navigateToPhotos() {
-    if (filteredAssets.length > 0) {
-      console.log('Sending filtered assets to Photos.js');
-      navigation.navigate('Photos', { filteredAssets: filteredAssets });
-    } else {
-      console.log('No photos match the selected filters');
-      alert('No photos match the selected filters');
-    }
-  }
-
-  const filterAssets = () => {
-    let filteredAssets = [];
-    if (selectedValues.length > 0) {
-      for (let i = 0; i < importedAssets.length; i++) {
-        for (let j = 0; j < selectedValues.length; j++) {
-          if (importedAssets[i].data[selectedValues[j].key] === selectedValues[j].value) {
-            filteredAssets.push(importedAssets[i]);
-          }
-        }
-      }
-      setFilteredAssets(filteredAssets);
-      console.log('Filtered assets: ', filteredAssets);
-    } else {
-      console.log('No filters selected');
-      alert('No filters selected');
-    }
-  }
-  function navigateToPhotos() {
-    console.log('Going back to Photos.js without filtering');
     navigation.navigate('Photos');
   }
 
@@ -217,35 +191,37 @@ export default function FilterScreen({ navigation, route }) {
               text="Filters"
               onPress={() => setMenuOpen(true)}
             />
-            <SubmitBtn
+            {/* <SubmitBtn
               text="Apply"
-              onPress={() => {
-                filterAssets(assets, selectorKeys, selectedValues);
-                navigateToPhotos();
-              }}
-            />
+              onPress={
+            /> */}
           </View>
         </View>
       }
 
       <View style={Containers.menuContainer}>
-        {menuOpen === false && selectorKeyValues.length === 0 &&
+        {menuOpen === false &&
+          selectorKeyValues != undefined &&
           <IconBtn
             icon={'add'}
             onPress={() => setMenuOpen(true)}
           />
         }
-        <FilterMenu
-          assets={assets}
-          parsedKeys={parsedKeys}
-          exifKeys={exifKeys}
-          tags={tags}
-          menuOpen={menuOpen}
-          setMenuOpen={setMenuOpen}
-          setSelectorKeys={setSelectorKeys}
-          setSelectorKeyValues={setSelectorKeyValues}
-          selectorKeys={selectorKeys}
-        />
+        {menuOpen === true &&
+        loaded === true &&
+          <FilterMenu
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            // setSelectorKeys={setSelectorKeys}
+            setSelectorKeyValues={setSelectorKeyValues}
+            masterAsset={masterAsset}
+            masterKeys={masterKeys}
+            exifKeys={exifKeys}
+            dataKeys={dataKeys}
+            uriVals={uriVals}
+            // tags={tags}
+          />
+        }
       </View>
     </SafeAreaView>
   );

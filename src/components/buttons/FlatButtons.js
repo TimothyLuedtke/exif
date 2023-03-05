@@ -130,11 +130,10 @@ export function DropDownPicker(props) {
     };
 
     const toggleValue = (value) => {
-
         if (selectedValues.includes(value)) {
             const newValues = selectedValues.filter((v) => v !== value);
             setSelectedValues(newValues);
-            console.log('current selected values: ', newValues);
+            console.log('current selected values: ', setSelectedValues(newValues));
         } else {
             setSelectedValues([...selectedValues, value]);
             console.log('current selected values: ', setSelectedValues([...selectedValues, value]));

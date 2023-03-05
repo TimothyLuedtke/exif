@@ -1,36 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { ModalStyle } from '../../styles/GlobalStyles';
+import { combineObjects } from '../../utils/arrayUtils';
 import { extractUniqueValues, removeSingleValuePairs } from '../../utils/arrayUtils';
 import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
 
 export default function FilterMenu(props) {
 
     const {
-        assets,
-        tags,
-        parsedKeys,
-        exifKeys,
         menuOpen,
         setMenuOpen,
-        setSelectorKeys,
         setSelectorKeyValues,
+        // setSelectorKeys,
+        masterAsset,
+        masterKeys,
+        exifKeys,
+        dataKeys,
+        uriVals,
     } = props;
 
-    const [isLoaded, setIsLoaded] = useState(false);
+    // const [isLoaded, setIsLoaded] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState([]);
-    const [keys, setKeys] = useState(parsedKeys);
+    const [keys, setKeys] = useState(exifKeys);
+    const [selectedExifKeys, setSelectedExifKeys] = useState([]);
+    const [selectedDataKeys, setSelectedDataKeys] = useState([]);
 
-    useEffect(() => {
-        setKeys(exifKeys);
-        setIsLoaded(true);
-    }, [exifKeys]);
+    const organizeKeys = (keys) => {
+        setSelectedExifKeys(keys.filter((key) => exifKeys.includes(key)));
+        setSelectedDataKeys(keys.filter((key) => dataKeys.includes(key)));
+        console.log('Selected exif keys: ', keys.filter((key) => exifKeys.includes(key)));
+        console.log('Selected data keys: ', keys.filter((key) => dataKeys.includes(key)));
+    }
 
     const toggleSelected = (key) => {
         if (selectedKeys.includes(key)) {
             setSelectedKeys(selectedKeys.filter((item) => item !== key));
+            organizeKeys(selectedKeys.filter((item) => item !== key));
+            console.log('Selected keys: ', selectedKeys.filter((item) => item !== key));
         } else {
             setSelectedKeys([...selectedKeys, key]);
+            organizeKeys([...selectedKeys, key]);
+            console.log('Selected keys: ', [...selectedKeys, key]);
         }
     }
 
@@ -40,6 +50,9 @@ export default function FilterMenu(props) {
 
     const resetSelected = () => {
         setSelectedKeys([]);
+        setSelectedExifKeys([]);
+        setSelectedDataKeys([]);
+        console.log('Selected keys reset');
     }
 
     const resetMenu = () => {
@@ -49,7 +62,7 @@ export default function FilterMenu(props) {
 
     const submitMenu = () => {
         setMenuOpen(false);
-        setSelectorKeys(selectedKeys);
+        // setSelectorKeys(selectedKeys);
         setSelectorKeyValues(filterUsableKeyVals(assets, selectedKeys));
         console.log('Selected key values: ', filterUsableKeyVals(assets, selectedKeys));
         // resetMenu();
@@ -62,7 +75,7 @@ export default function FilterMenu(props) {
 
     return (
         <View>
-            {menuOpen && isLoaded && (
+            {menuOpen && (
                 <Modal
                     animationType='slide'
                     transparent={true}
@@ -92,7 +105,6 @@ export default function FilterMenu(props) {
                                     text={`Clear (${selectedKeys.length})`}
                                     onPress={() => {
                                         resetSelected();
-                                        console.log('Selected keys reset');
                                         // console.log('Loaded keys: ', loadedKeys);   
                                     }}
                                     pressed={false}
@@ -115,7 +127,6 @@ export default function FilterMenu(props) {
                                             text={item}
                                             onPress={() => {
                                                 toggleSelected(item);
-                                                console.log(([...selectedKeys] + ', ' + item));
                                             }}
                                             pressed={selectedKeys.includes(item)}
                                         />
@@ -137,11 +148,11 @@ export default function FilterMenu(props) {
                                 }}
                                 text2={2}
                                 onPress2={() => {
-                                    setKeys(parsedKeys);
+                                    setKeys(dataKeys);
                                 }}
                                 text3={3}
                                 onPress3={() => {
-                                    setKeys(tags);
+                                    setKeys(uriVals);
                                 }}
                             />
                             <SubmitBtn

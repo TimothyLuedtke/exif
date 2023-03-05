@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { ModalStyle } from '../../styles/GlobalStyles';
-import { combineObjects } from '../../utils/arrayUtils';
+import { getKeyValues } from '../../utils/arrayUtils';
 import { extractUniqueValues, removeSingleValuePairs } from '../../utils/arrayUtils';
 import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
 
@@ -10,20 +10,22 @@ export default function FilterMenu(props) {
     const {
         menuOpen,
         setMenuOpen,
-        setSelectorKeyValues,
         // setSelectorKeys,
         masterAsset,
-        masterKeys,
+        setFilteringAsset,
         exifKeys,
+        selectedExifKeys,
+        setSelectedExifKeys,
         dataKeys,
+        selectedDataKeys,
+        setSelectedDataKeys,
         uriVals,
+        // tags,
     } = props;
 
     // const [isLoaded, setIsLoaded] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState([]);
     const [keys, setKeys] = useState(exifKeys);
-    const [selectedExifKeys, setSelectedExifKeys] = useState([]);
-    const [selectedDataKeys, setSelectedDataKeys] = useState([]);
 
     const organizeKeys = (keys) => {
         setSelectedExifKeys(keys.filter((key) => exifKeys.includes(key)));
@@ -44,14 +46,30 @@ export default function FilterMenu(props) {
         }
     }
 
+    const toggleAll = () => {
+        if (keys === exifKeys) {
+            setSelectedExifKeys(exifKeys);
+            setSelectedKeys(
+                selectedKeys.filter((key) => dataKeys.includes(key)).concat(exifKeys)
+            );
+            console.log('Selected keys: ', selectedKeys.filter((key) => dataKeys.includes(key)).concat(exifKeys));
+        } else {
+            setSelectedDataKeys(dataKeys);
+            setSelectedKeys(
+                selectedKeys.filter((key) => exifKeys.includes(key)).concat(dataKeys)
+            );
+            console.log('Selected keys: ', selectedKeys.filter((key) => exifKeys.includes(key)).concat(dataKeys));
+        }
+    }
+
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     }
 
     const resetSelected = () => {
         setSelectedKeys([]);
-        setSelectedExifKeys([]);
         setSelectedDataKeys([]);
+        setSelectedExifKeys([]);
         console.log('Selected keys reset');
     }
 
@@ -60,18 +78,43 @@ export default function FilterMenu(props) {
         resetSelected();
     }
 
+    const reduceMasterAsset = () => {
+        const reduce = (source, keys) => {
+            const result = {};
+            for (const key of keys) {
+                result[key] = source[key];
+            }
+            return result;
+        };
+
+        const reducedExif = reduce(masterAsset.exif, selectedExifKeys);
+        console.log('Reduced exif:', reducedExif);
+
+        const reducedData = reduce(masterAsset.data, selectedDataKeys);
+        console.log('Reduced data:', reducedData);
+
+        return {
+            exif: reducedExif,
+            data: reducedData,
+        };
+    };
+
+
+
     const submitMenu = () => {
-        setMenuOpen(false);
-        // setSelectorKeys(selectedKeys);
-        setSelectorKeyValues(filterUsableKeyVals(assets, selectedKeys));
-        console.log('Selected key values: ', filterUsableKeyVals(assets, selectedKeys));
-        // resetMenu();
+        // setSelectedExifKeys(selectedKeys.filter((key) => exifKeys.includes(key)));
+        // setSelectedDataKeys(selectedKeys.filter((key) => dataKeys.includes(key)));
+        // console.log('Selected exif keys: ', selectedKeys.filter((key) => exifKeys.includes(key)));
+        // console.log('Selected data keys: ', selectedKeys.filter((key) => dataKeys.includes(key)));
+        setFilteringAsset(reduceMasterAsset());
+        console.log('Filtering asset: ', reduceMasterAsset());
+        resetMenu();
     }
 
-    const filterUsableKeyVals = (arr, keys) => {
-        uniqueKeyVals = extractUniqueValues(arr, keys);
-        return removeSingleValuePairs(uniqueKeyVals);
-    }
+    // const filterUsableKeyVals = (arr, keys) => {
+    //     uniqueKeyVals = extractUniqueValues(arr, keys);
+    //     return removeSingleValuePairs(uniqueKeyVals);
+    // }
 
     return (
         <View>
@@ -102,7 +145,7 @@ export default function FilterMenu(props) {
                         <View style={ModalStyle.modalBody}>
                             <View style={ModalStyle.row}>
                                 <EditBtn
-                                    text={`Clear (${selectedKeys.length})`}
+                                    text={`Unselect (${selectedKeys.length})`}
                                     onPress={() => {
                                         resetSelected();
                                         // console.log('Loaded keys: ', loadedKeys);   
@@ -112,11 +155,12 @@ export default function FilterMenu(props) {
                                 <EditBtn
                                     text={'Select All'}
                                     onPress={() => {
-                                        setSelectedKeys(keys);
-                                        console.log('All keys selected');
+                                        toggleAll();
                                     }}
                                     pressed={false}
                                 />
+                            </View>
+                            <View style={ModalStyle.row}>
                             </View>
                             <View style={{ height: 300 }}>
                                 <Text style={ModalStyle.modalDivider} />
@@ -142,19 +186,20 @@ export default function FilterMenu(props) {
                         </View>
                         <View style={ModalStyle.modalFooter}>
                             <PiecedBtn
-                                text1={1}
+                                text1={'Exif'}
                                 onPress1={() => {
                                     setKeys(exifKeys);
                                 }}
-                                text2={2}
+                                text2={'Data'}
                                 onPress2={() => {
                                     setKeys(dataKeys);
                                 }}
-                                text3={3}
-                                onPress3={() => {
-                                    setKeys(uriVals);
-                                }}
+                            // text3={3}
+                            // onPress3={() => {
+                            //     setTags(tags);
+                            // }}
                             />
+
                             <SubmitBtn
                                 text={'Apply'}
                                 onPress={submitMenu}

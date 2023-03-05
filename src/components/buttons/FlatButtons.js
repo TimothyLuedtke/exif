@@ -51,28 +51,28 @@ export const EditBtn = ({ text, onPress }) => (
 export function PiecedBtn({ text1, text2, text3, onPress1, onPress2, onPress3 }) {
     const [pressed1, setPressed1] = useState(true);
     const [pressed2, setPressed2] = useState(false);
-    const [pressed3, setPressed3] = useState(false);
+    // const [pressed3, setPressed3] = useState(false);
 
     const handlePressed1 = () => {
         setPressed1(true);
         setPressed2(false);
-        setPressed3(false);
+        // setPressed3(false);
         onPress1();
     }
 
     const handlePressed2 = () => {
         setPressed1(false);
         setPressed2(true);
-        setPressed3(false);
+        // setPressed3(false);
         onPress2();
     }
 
-    const handlePressed3 = () => {
-        setPressed1(false);
-        setPressed2(false);
-        setPressed3(true);
-        onPress3();
-    }
+    // const handlePressed3 = () => {
+    //     setPressed1(false);
+    //     setPressed2(false);
+    //     setPressed3(true);
+    //     onPress3();
+    // }
 
     return (
         <View style={FlatBtn.btnContainer}>
@@ -82,16 +82,16 @@ export function PiecedBtn({ text1, text2, text3, onPress1, onPress2, onPress3 })
                         {text1}
                     </Text>
                 </Pressable>
-                <Pressable style={pressed2 === true ? FlatBtn.btnH : FlatBtn.btn} onPress={() => handlePressed2()}>
+                <Pressable style={pressed2 === true ? FlatBtn.btnEndH : FlatBtn.btnEnd} onPress={() => handlePressed2()}>
                     <Text style={pressed2 === true ? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
                         {text2}
                     </Text>
                 </Pressable>
-                <Pressable style={pressed3 === true ? FlatBtn.btnEndH : FlatBtn.btnEnd} onPress={() => handlePressed3()}>
+                {/* <Pressable style={pressed3 === true ? FlatBtn.btnEndH : FlatBtn.btnEnd} onPress={() => handlePressed3()}>
                     <Text style={pressed3 === true ? FlatBtn.btnTxtH : FlatBtn.btnTxt}>
                         {text3}
                     </Text>
-                </Pressable>
+                </Pressable> */}
             </View>
         </View>
     )

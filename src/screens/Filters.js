@@ -13,11 +13,14 @@ export default function FilterScreen({ navigation, route }) {
   const importedAssets = route.params.importedAssets;
   const [assets, setAssets] = useState([]);
   const [masterAsset, setMasterAsset] = useState([]);
-  const [masterKeys, setMasterKeys] = useState([]);
+  const [keyCategories, setKeyCategories] = useState([]);
   const [exifKeys, setExifKeys] = useState([]);
+  const [selectedExifKeys, setSelectedExifKeys] = useState([]);
   const [dataKeys, setDataKeys] = useState([]);
+  const [selectedDataKeys, setSelectedDataKeys] = useState([]);
   const [uriVals, setUriVals] = useState([]);
   const [tags, setTags] = useState([]);
+  const [filteringAsset, setFilteringAsset] = useState([]);
 
   // const [selectorKeys, setSelectorKeys] = useState([]);
   const [selectorKeyValues, setSelectorKeyValues] = useState([]);
@@ -75,13 +78,13 @@ export default function FilterScreen({ navigation, route }) {
           const combinedAssets = combineObjects(importedAssets);
           setMasterAsset(combinedAssets);
           console.log('masterAsset: ', combinedAssets);
-          setMasterKeys(Object.keys(combinedAssets));
-          console.log('masterKeys: ', Object.keys(combinedAssets));
+          setKeyCategories(Object.keys(combinedAssets));
+          console.log('keyCategories: ', Object.keys(combinedAssets));
           setExifKeys(Object.keys(combinedAssets.exif));
           console.log('exifKeys: ', Object.keys(combinedAssets.exif));
           setDataKeys(Object.keys(combinedAssets.data));
           console.log('dataKeys: ', Object.keys(combinedAssets.data));
-          setUriVals(Object.keys(combinedAssets.uri));
+          setUriVals(Object.values(combinedAssets.uri));
           console.log('uriVals: ', Object.values(combinedAssets.uri));
           // setTags(Object.keys(combineObjects(importedAssets).tags));
           // console.log('tags: ', Object.keys(combineObjects(importedAssets).tags));
@@ -215,9 +218,14 @@ export default function FilterScreen({ navigation, route }) {
             // setSelectorKeys={setSelectorKeys}
             setSelectorKeyValues={setSelectorKeyValues}
             masterAsset={masterAsset}
-            masterKeys={masterKeys}
+            setMasterAsset={setMasterAsset}
+            setFilteringAsset={setFilteringAsset}
             exifKeys={exifKeys}
+            selectedExifKeys={selectedExifKeys}
+            setSelectedExifKeys={setSelectedExifKeys}
             dataKeys={dataKeys}
+            selectedDataKeys={selectedDataKeys}
+            setSelectedDataKeys={setSelectedDataKeys}
             uriVals={uriVals}
             // tags={tags}
           />

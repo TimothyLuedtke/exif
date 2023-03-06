@@ -133,10 +133,12 @@ export function DropDownPicker(props) {
         if (selectedValues.includes(value)) {
             const newValues = selectedValues.filter((v) => v !== value);
             setSelectedValues(newValues);
-            console.log('current selected values: ', setSelectedValues(newValues));
+            console.log('removed value: ', value);
+            console.log('new selectedValues: ', newValues);
         } else {
             setSelectedValues([...selectedValues, value]);
-            console.log('current selected values: ', setSelectedValues([...selectedValues, value]));
+            console.log('added value: ', value);
+            console.log('new selectedValues: ', [...selectedValues, value]);
         }
     }
 

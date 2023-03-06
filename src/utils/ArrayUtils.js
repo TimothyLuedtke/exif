@@ -137,13 +137,18 @@ export function combineObjects(arr) {
     return result;
   }
   
-export function removeArrays(arr) {
-    for (let i = 0; i < arr.length; i++) {
-        for (let key in arr[i]) {
-            if (Array.isArray(arr[i][key])) {
-                delete arr[i][key];
-            }
-        }
-    }
-    return arr.filter(item => Object.keys(item).length !== 0);
+// export function removeArrays(arr) {
+//     for (let i = 0; i < arr.length; i++) {
+//         for (let key in arr[i]) {
+//             if (Array.isArray(arr[i][key])) {
+//                 delete arr[i][key];
+//             }
+//         }
+//     }
+//     return arr.filter(item => Object.keys(item).length !== 0);
+// }
+
+export const shapedArray = (setKeychain, keys, keychain) => {
+    setKeychain(keychain.filter((key) => keys.includes(key)));
+    console.log('set keys: ', keychain.filter((key) => keys.includes(key)));
 }

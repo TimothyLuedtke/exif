@@ -337,6 +337,10 @@ export const ModalStyle = StyleSheet.create({
         elevation: 5,
     },
 
+    fullScreen: {
+        flex: 1,
+    },
+
     // 
     modalClose: {
         position: 'absolute',

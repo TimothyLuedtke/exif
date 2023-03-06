@@ -183,10 +183,7 @@ export default function FilterScreen({ navigation, route }) {
           />
         </View>
         <View style={ModalStyle.modalHeader}>
-
-        </View>
-        <View style={ModalStyle.modalFooter}>
-          <EditBtn
+        <EditBtn
             text={`Clear (${selectedValues.length})`}
             onPress={() => {
               setSelectedValues([]);
@@ -196,10 +193,22 @@ export default function FilterScreen({ navigation, route }) {
             text="Filters"
             onPress={() => setMenuOpen(true)}
           />
-          {/* <SubmitBtn
+        </View>
+        <View style={ModalStyle.modalFooter}>
+          <PiecedBtn
+            text1={'Exif'}
+            text2={'Data'}
+            onPress1={() => {
+              setSelectorKeyValues(selectorExif);
+            }}
+            onPress2={() => {
+              setSelectorKeyValues(selectorData);
+            }}
+          />
+          <SubmitBtn
             text="Apply"
-            onPress={
-          /> */}
+            
+          />
         </View>
       </View>
     }

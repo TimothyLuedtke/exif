@@ -24,6 +24,7 @@ export default function FilterScreen({ navigation, route }) {
   const [selectorKeyValues, setSelectorKeyValues] = useState([]);
   const [selectedKeyValues, setSelectedKeyValues] = useState([]);
   const [menuOpen, setMenuOpen] = useState(true);
+  const [filterBtnOpen, setFilterBtnOpen] = useState(false);
 
   const [assetsTransformed, setAssetsTransformed] = useState(false);
   useEffect(() => {

@@ -265,6 +265,17 @@ export const FlatBtn = StyleSheet.create({
         backgroundColor: Colors.dark,
     },
 
+    outlineSelected: {
+        fontSize: TextSize.medium,
+        color: Colors.dark,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        borderRadius: 30,
+        backgroundColor: Colors.light,
+    },
+
     placeholderBtn: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -304,7 +315,7 @@ export const ModalStyle = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadiusTopLeft: 10,
         borderRadiusTopRight: 10,
-        paddingVertical: 10,
+        paddingBottom: 10,
         zIndex: 2,
         shadowColor: Colors.black,
         shadowOffset: {
@@ -314,6 +325,11 @@ export const ModalStyle = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+    },
+    bottomModalClose: {
+        width: '100%',
+        alignItems: 'flex-end',
+        marginBottom: 40,
     },
 
     // 1
@@ -337,16 +353,13 @@ export const ModalStyle = StyleSheet.create({
         elevation: 5,
     },
 
-    fullScreen: {
-        flex: 1,
-    },
-
     // 
     modalClose: {
         position: 'absolute',
         top: 0,
         right: 0,
         zIndex: 2,
+        // backgroundColor: Colors.gray,
     },
 
     // 
@@ -354,7 +367,7 @@ export const ModalStyle = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical: 20,
+        marginVertical: 10,
     },
 
     // 1
@@ -374,14 +387,14 @@ export const ModalStyle = StyleSheet.create({
     // 1
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-end',
     },
 
     // 1
     modalFooter: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: 10,
+        // marginTop: 10,
     },
 
     // 1
@@ -398,40 +411,50 @@ export const DropDownPickerStyle = StyleSheet.create({
     container: {
         // backgroundColor: Colors.gray,
         // borderRadius: 50,
-        marginVertical: 2,
+        marginVertical: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    //
+    // 1
+    row: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        // backgroundColor: Colors.gray,
+    },
     // 
     labelBtn: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomWidth: 1,
-        borderTopWidth: 1,
         borderColor: Colors.dark,
+        borderWidth: 1,
+        borderRadius: 30,
         paddingVertical: 10,
-        // paddingHorizontal: 40,
-        width: '100%',
-        marginVertical: 2,
-
+        paddingHorizontal: 20,
     },
     // 1
     label: {
         color: Colors.dark,
         fontSize: TextSize.medium,
-        fontWeight: '500',
-        marginHorizontal: 10,
-        textTransform: 'uppercase',
+        // fontWeight: '500',
+        // marginRight: 10,
+        // textTransform: 'uppercase',
     },
-// 
+    subLabel: {
+        color: Colors.dark,
+        fontSize: TextSize.medium,
+        // fontWeight: '500',
+        // marginRight: 10,
+        // textTransform: 'uppercase',
+    },
+    // 
     dropdown: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 10,
         // paddingHorizontal: 20,
+        // backgroundColor: Colors.gray,
     },
     // 1
     value: {

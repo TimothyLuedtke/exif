@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { View, Pressable, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Modal, Pressable, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ImageStyle, FlatBtn, DropDownPickerStyle } from '../../styles/GlobalStyles';
+import { ImageStyle, FlatBtn, DropDownPickerStyle, ModalStyle } from '../../styles/GlobalStyles';
+import { filterNestedObjArr } from '../../utils/objUtils';
 import { IconSize, TextSize } from '../../styles/Sizing';
 import Colors from '../../styles/Colors';
 
@@ -117,13 +118,32 @@ export const SelectBtn = ({ text, onPress, pressed }) => (
 export function DropDownPicker(props) {
 
     const {
-        btnLabel,
-        values,
-        selectedValues,
-        setSelectedValues,
+        assets,
+        index,
+        item,
+        options,
+        selectedKeyValues,
+        setFilteredAssets,
+        setSelectedKeyValues,
     } = props;
 
+    // const assetsClone = [...assets];
+
     const [isOpen, setIsOpen] = useState(false);
+    const [toggled, setToggled] = useState(false);
+
+    const label = Object.keys(item)[0];
+    const values = Object.values(item)[0];
+    const assetsClone = assets;
+
+    const [selectedValues, setSelectedValues] = useState([]);
+
+    useEffect(() => {
+        setFilteredAssets(filterNestedObjArr(assetsClone, selectedKeyValues));
+        console.log('filteredAssets: ', filterNestedObjArr(assetsClone, selectedKeyValues));
+        setToggled(false);
+    }, [toggled === true]);
+
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -133,41 +153,62 @@ export function DropDownPicker(props) {
         if (selectedValues.includes(value)) {
             const newValues = selectedValues.filter((v) => v !== value);
             setSelectedValues(newValues);
-            console.log('removed value: ', value);
-            console.log('new selectedValues: ', newValues);
+            if (newValues.length > 0) {
+                setSelectedKeyValues({ ...selectedKeyValues, [label]: newValues });
+                console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: newValues });
+            } else {
+                delete selectedKeyValues[label];
+                console.log('selectedKeyValues: ', selectedKeyValues);
+            }
+            setToggled(true);
+            // console.log('removed value: ', value);
+            // console.log('new selectedValues: ', newValues);
         } else {
             setSelectedValues([...selectedValues, value]);
-            console.log('added value: ', value);
-            console.log('new selectedValues: ', [...selectedValues, value]);
+            if (selectedValues.length > 0) {
+                setSelectedKeyValues({ ...selectedKeyValues, [label]: [...selectedValues, value] });
+                console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: [...selectedValues, value] });
+            } else {
+                setSelectedKeyValues({ ...selectedKeyValues, [label]: [value] });
+                console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: [value] });
+            }
+            setToggled(true);
+            // console.log('added value: ', value);
+            // console.log('new selectedValues: ', [...selectedValues, value]);
         }
+
     }
 
     return (
         <View style={DropDownPickerStyle.container}>
-            <Pressable
-                style={DropDownPickerStyle.labelBtn}
-                onPress={toggleDropdown}
-            >
-                <Text style={DropDownPickerStyle.label}>
-                    {btnLabel}
-                </Text>
-                <MaterialIcons
-                    name={
-                        isOpen ?
-                            'keyboard-arrow-up'
-                            : 'keyboard-arrow-down'}
-                    size={IconSize.medium}
-                    color={Colors.dark}
-                />
-            </Pressable>
+                <View>
+                    <Pressable
+                        style={FlatBtn.selectBtn}
+                        onPress={toggleDropdown}
+                    >
+                        <View style={DropDownPickerStyle.row}>
+                            <Text style={selectedValues.length > 0 ?
+                                FlatBtn.selected : FlatBtn.select}>
+                                {label}
+                            </Text>
+                        </View>
+                    </Pressable>
+                    {selectedValues.length > 0 &&
+                        <Text style={DropDownPickerStyle.subLabel}>
+                            selected: {selectedValues.length}
+                        </Text>
+                    }
+                </View>
+            
             {isOpen === true && (
                 <View style={DropDownPickerStyle.container}>
-                    {values.map(value => (
+                    {values.map((value, index) => (
                         <Pressable
-                            style={DropDownPickerStyle.dropdown}
+                            style={FlatBtn.selectBtn}
+                            key={index}
                             onPress={() => toggleValue(value)}
                         >
-                            <Text style={selectedValues.includes(value) ? DropDownPickerStyle.selectedValue : DropDownPickerStyle.value}>
+                            <Text style={selectedValues.includes(value) ? FlatBtn.selected : FlatBtn.select}>
                                 {value}
                             </Text>
 

@@ -118,7 +118,8 @@ export default function PhotosScreen({ navigation, route }) {
                     exif: item.exif,
                     uri: item.uri,
                     tags: [],
-                    data: "no data",
+                    data: {},
+                    // data: "no data",
                 };
             })];
 

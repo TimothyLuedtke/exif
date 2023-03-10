@@ -10,8 +10,12 @@ export default function FilterMenu(props) {
     const {
         menuOpen,
         setMenuOpen,
+        setFiltersLoaded,
         setSelectorKeyValues,
+        selectorKeyValues,
         masterAsset,
+        assets,
+        setAssets,
         exifKeys,
         selectedExifKeys,
         setSelectedExifKeys,
@@ -20,24 +24,16 @@ export default function FilterMenu(props) {
         selectedDataKeys,
         setSelectedDataKeys,
         setSelectorData,
-        uriVals,
         // tags,
     } = props;
 
     const [selectedKeys, setSelectedKeys] = useState([]);
     const [keys, setKeys] = useState(exifKeys);
-    const [reducedExif, setReducedExif] = useState({});
-    const [reducedData, setReducedData] = useState({});
 
     useEffect(() => {
-        if (menuOpen) {
             setSelectedKeys(selectedExifKeys.concat(selectedDataKeys));
             console.log('Selected keys Preset: ', selectedExifKeys.concat(selectedDataKeys));
-        } else {
-            setSelectedKeys([]);
-            console.log('Selected keys Reset: ', selectedKeys);
-        }
-    }, [menuOpen]);
+    }, [menuOpen === true]);   
 
     const toggleSelected = (key) => {
         if (selectedKeys.includes(key)) {
@@ -87,34 +83,33 @@ export default function FilterMenu(props) {
         // resetSelected();
     }
 
-    // const reduceMasterAsset = () => {
-
-    //     return {
-    //         exif: reducedExif,
-    //         data: reducedData,
-    //     };
-    // };
-
-    const submitMenu = () => {
-        // setReducedExif(reduceObjFromKeys(masterAsset.exif, selectedExifKeys));
-        // console.log('Reduced exif object:', reduceObjFromKeys(masterAsset.exif, selectedExifKeys));
-        // setReducedData(reduceObjFromKeys(masterAsset.data, selectedDataKeys));
-        // console.log('Reduced data object:', reduceObjFromKeys(masterAsset.data, selectedDataKeys));
-        // setFilteringAsset(reduceMasterAsset());
-        // console.log('Filtering asset: ', reduceMasterAsset());
-        setSelectorExif(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
-        console.log('selectedExif set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
-        setSelectorData(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys)));
-        console.log('selectedData set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys)));
-        setSelectorKeyValues(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
-        console.log('selectedKeyValues set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
-        resetMenu();
+    const reduceAssetsFromKeys = () => {
+        let reducedAssets = [];
+        assets.forEach((asset) => {
+            let reducedAsset = {
+                exif: reduceObjFromKeys(asset.exif, selectedExifKeys),
+                data: reduceObjFromKeys(asset.data, selectedDataKeys),
+                tags: asset.tags,
+                uri: asset.uri,
+            };
+            reducedAssets.push(reducedAsset);
+        });
+        // console.log('Assets reduced: ', reducedAssets);
+        setAssets(reducedAssets);
     }
 
-    // const filterUsableKeyVals = (arr, keys) => {
-    //     uniqueKeyVals = extractUniqueValues(arr, keys);
-    //     return removeSingleValuePairs(uniqueKeyVals);
-    // }
+    const submitMenu = () => {
+        // setSelectorExif(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
+        // console.log('selectedExif set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
+        // setSelectorData(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys)));
+        // console.log('selectedData set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys)));
+        setSelectorKeyValues(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)).concat(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys))));
+        console.log('selectedKeyValues set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)).concat(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys))));
+        reduceAssetsFromKeys();
+        console.log('Assets reduced');
+        setFiltersLoaded(true);
+        resetMenu();
+    }
 
     return (
         <View>

@@ -13,3 +13,28 @@ export const morphObjToArrKeyValObjs = (obj) => {
     });
     return arr;
 }
+
+export function removeEmptyUniqueVals(obj) {
+    for (let key in obj) {
+        if (
+        // Array.isArray(obj[key]) && obj[key].length < 2 ||
+            obj[key] === null ||
+            obj[key] === undefined) {
+            delete obj[key];
+        }
+    }
+    return obj;
+}
+
+export function filterNestedObjArr(data, criteria) {
+    return data.filter(obj => {
+        for (let key in criteria) {
+          if (!criteria[key].includes(obj.data[key]) && !criteria[key].includes(obj.exif[key])) {
+            return false;
+          }
+        }
+        return true;
+      });
+}
+  
+  

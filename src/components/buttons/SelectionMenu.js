@@ -25,10 +25,12 @@ export default function SelectionMenu(props) {
 
     return (
         <View style={ModalStyle.bottomModal}>
-            <View style={ModalStyle.modalClose}>
-                <Closebtn
+            <View style={ModalStyle.bottomModalClose} >
+                <View style={ModalStyle.modalClose} >
+                <Closebtn               
                     onPress={close}
                 />
+                </View>
             </View>
             <View style={ModalStyle.modalHeader}>
             </View>

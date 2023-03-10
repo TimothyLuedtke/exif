@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
-import { Containers, ModalStyle } from '../styles/GlobalStyles';
+import { Containers, FlatBtn, ModalStyle } from '../styles/GlobalStyles';
 import { formatDateTime } from '../utils/formatUtils';
 import { combineObjects } from '../utils/arrayUtils';
+import { removeEmptyUniqueVals } from '../utils/objUtils';
 import { Closebtn, DropDownPicker, EditBtn, PiecedBtn, PlaceholderBtn, SubmitBtn } from '../components/buttons/FlatButtons';
 import { IconBtn } from '../components/buttons/FloatingButtons';
 import FilterMenu from '../components/buttons/FilterMenu';
@@ -12,28 +13,23 @@ export default function FilterScreen({ navigation, route }) {
 
   const importedAssets = route.params.importedAssets;
   const [assets, setAssets] = useState([]);
+  const [filteredAssets, setFilteredAssets] = useState([]);
   const [masterAsset, setMasterAsset] = useState([]);
-  const [keyCategories, setKeyCategories] = useState([]);
   const [exifKeys, setExifKeys] = useState([]);
   const [selectedExifKeys, setSelectedExifKeys] = useState([]);
-  const [selectorExif, setSelectorExif] = useState([]);
   const [dataKeys, setDataKeys] = useState([]);
   const [selectedDataKeys, setSelectedDataKeys] = useState([]);
-  const [selectorData, setSelectorData] = useState([]);
-  const [uriVals, setUriVals] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [filteringAsset, setFilteringAsset] = useState([]);
 
   // const [selectorKeys, setSelectorKeys] = useState([]);
   const [selectorKeyValues, setSelectorKeyValues] = useState([]);
-  const [selectedValues, setSelectedValues] = useState([]);
+  const [selectedKeyValues, setSelectedKeyValues] = useState([]);
   const [menuOpen, setMenuOpen] = useState(true);
-
 
   const [assetsTransformed, setAssetsTransformed] = useState(false);
   useEffect(() => {
     (async () => {
       if (importedAssets) {
+        console.log('Assets received in Filters.js: ', importedAssets);
         dataFiller();
         setAssetsTransformed(true);
       } else {
@@ -41,6 +37,40 @@ export default function FilterScreen({ navigation, route }) {
       }
     })();
   }, [importedAssets]);
+
+  const dataFiller = () => {
+    if (importedAssets === undefined) {
+      return;
+    } else if (assetsTransformed === false) {
+      return (
+        importedAssets.map((photo) => {
+          let dateTimeValue = formatDateTime(photo.exif.DateTime);
+          let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No Data';
+          let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No Data';
+          let defaultData = {
+            latitude: photo.exif.GPSLatitude,
+            longitude: photo.exif.GPSLongitude,
+            date: dateValue,
+            time: timeValue,
+            city: 'No Data',
+            country: 'No Data',
+            district: 'No Data',
+            postalCode: 'No Data',
+            region: 'No Data',
+            subregion: 'No Data',
+            street: 'No Data',
+            cityState: 'No Data',
+            address: 'No Data',
+            fullAddress: 'No Data',
+          };
+          photo.data = defaultData;
+        })
+      );
+    } else {
+      console.log('Assets already transformed...');
+      setAssetsTransformed(true);
+    }
+  };
 
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -56,8 +86,10 @@ export default function FilterScreen({ navigation, route }) {
         } else {
           for (let i = 0; i < locatesParsed.length; i++) {
             if (locatesParsed[i].latitude === undefined || locatesParsed[i].longitude === undefined) {
-              console.log('No GPS data for asset: ' + locatesParsed[i].uri);
-              continue;
+              locatesParsed[i].latitude = 'No Data';
+              locatesParsed[i].longitude = 'No Data';
+              console.log('No location data for asset: ', locatesParsed[i]);
+
             } else {
               let location = await Location.reverseGeocodeAsync({
                 latitude: locatesParsed[i].latitude,
@@ -76,18 +108,17 @@ export default function FilterScreen({ navigation, route }) {
             }
             importedAssets[i].data = locatesParsed[i];
           }
-          // console.log('Parsed assets: ', importedAssets);
+          console.log('Parsed assets: ', importedAssets);
           const combinedAssets = combineObjects(importedAssets);
-          setMasterAsset(combinedAssets);
           // console.log('masterAsset: ', combinedAssets);
-          setKeyCategories(Object.keys(combinedAssets));
-          console.log('keyCategories: ', Object.keys(combinedAssets));
+          const valuedAssets = removeEmptyUniqueVals(combinedAssets);
+          setMasterAsset(valuedAssets);
+          setAssets(importedAssets);
+          // console.log('assets: ', importedAssets);
           setExifKeys(Object.keys(combinedAssets.exif));
-          console.log('exifKeys: ', Object.keys(combinedAssets.exif));
+          // console.log('exifKeys: ', Object.keys(combinedAssets.exif));
           setDataKeys(Object.keys(combinedAssets.data));
-          console.log('dataKeys: ', Object.keys(combinedAssets.data));
-          setUriVals(Object.values(combinedAssets.uri));
-          console.log('uriVals: ', Object.values(combinedAssets.uri));
+          // console.log('dataKeys: ', Object.keys(combinedAssets.data));
           // setTags(Object.keys(combineObjects(importedAssets).tags));
           // console.log('tags: ', Object.keys(combineObjects(importedAssets).tags));
           setLoaded(true);
@@ -96,150 +127,153 @@ export default function FilterScreen({ navigation, route }) {
     }
   }, [assetsTransformed === true]);
 
-  const dataFiller = () => {
-    if (importedAssets === undefined) {
-      return;
-    } else if (assetsTransformed === false) {
-      return (
-        importedAssets.map((photo) => {
-          let dateTimeValue = formatDateTime(photo.exif.DateTime);
-          let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No data';
-          let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No data';
-          let defaultData = {
-            latitude: photo.exif.GPSLatitude,
-            longitude: photo.exif.GPSLongitude,
-            date: dateValue,
-            time: timeValue,
-            city: 'No data',
-            country: 'No data',
-            district: 'No data',
-            postalCode: 'No data',
-            region: 'No data',
-            subregion: 'No data',
-            street: 'No data',
-            cityState: 'No data',
-            address: 'No data',
-            fullAddress: 'No data',
-          };
-          photo.data = defaultData;
-        })
-      );
+  const [filtersLoaded, setFiltersLoaded] = useState(false);
+  useEffect(() => {
+    if (filtersLoaded === true) {
+      // console.log('assets: ', assets);
+      console.log('Filters loading...');
+      setFiltersLoaded(false);
     } else {
-      console.log('Assets already transformed...');
-      setAssetsTransformed(true);
+      console.log('Filters loaded.');
     }
+  }, [filtersLoaded]);
+
+  const backToFilterModal = () => {
+    setAssets(importedAssets);
+    setMenuOpen(true);
+    setOptions(true);
   }
 
   function navigateToPhotos() {
     navigation.navigate('Photos');
   }
 
+  const [options, setOptions] = useState(true);
   function renderSelectorDropDown(item, index) {
-    const valuesArray = Object.values(item)[0];
-    // console.log('valuesArray: ', valuesArray);
+    // console.log('item: ', item);
+    if (selectedKeyValues.length > 0) {
+      console.log('selectedKeyValues: ', selectedKeyValues);
+    }
+
     return (
-      <View key={{ index }}>
+      <View>
         <DropDownPicker
-          btnLabel={Object.keys(item)}
-          values={valuesArray}
-          selectedValues={selectedValues}
-          setSelectedValues={setSelectedValues}
+          assets={assets}
+          index={index}
+          item={item}
+          options={options}
+          selectedKeyValues={selectedKeyValues}
+          setFilteredAssets={setFilteredAssets}
+          setSelectedKeyValues={setSelectedKeyValues}
         />
       </View>
     );
   }
 
   return (
+
     <SafeAreaView style={Containers.container}>
-    <View style={Containers.container}>
-      {selectorKeyValues.length === 0 &&
-        <View style={Containers.centered}>
-          <PlaceholderBtn
-            text="Add filters..."
-            onPress={() => setMenuOpen(true)}
-          />
-        </View>
-      }
-      {selectorKeyValues.length > 0 &&
-        <FlatList
-          // contentContainerStyle={FlatBtn.btnContainer}
-          data={selectorKeyValues}
-          renderItem={({ item, index }) => renderSelectorDropDown(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-        >
-        </FlatList>
-      }
-    </View>
-
-    {selectorKeyValues.length > 0 && menuOpen === false &&
-      <View style={ModalStyle.bottomModal}>
-        <View style={ModalStyle.modalClose}>
-          <Closebtn
-            onPress={() => {
-              setSelectorKeyValues([]);
-              setSelectedValues([]);
-              navigateToPhotos();
-            }}
-          />
-        </View>
-        <View style={ModalStyle.modalHeader}>
-        <EditBtn
-            text={`Clear (${selectedValues.length})`}
-            onPress={() => {
-              setSelectedValues([]);
-            }}
-          />
-          <EditBtn
-            text="Filters"
-            onPress={() => setMenuOpen(true)}
-          />
-        </View>
-        <View style={ModalStyle.modalFooter}>
-          <PiecedBtn
-            text1={'Exif'}
-            text2={'Data'}
-            onPress1={() => {
-              setSelectorKeyValues(selectorExif);
-            }}
-            onPress2={() => {
-              setSelectorKeyValues(selectorData);
-            }}
-          />
-          <SubmitBtn
-            text="Apply"
-            
-          />
-        </View>
+      <View style={Containers.container}>
+        {selectorKeyValues.length === 0 &&
+          <View style={Containers.centered}>
+            <PlaceholderBtn
+              text="Add filters..."
+              onPress={() => setMenuOpen(true)}
+            />
+          </View>
+        }
+        {selectorKeyValues.length > 0 &&
+          <FlatList
+            // contentContainerStyle={FlatBtn.btnContainer}
+            data={selectorKeyValues}
+            renderItem={({ item, index }) => renderSelectorDropDown(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={3}
+            columnWrapperStyle={{ flexWrap: 'wrap', justifyContent: 'space-around' }}
+          >
+          </FlatList>
+        }
       </View>
-    }
 
-    <View style={Containers.menuContainer}>
-      {menuOpen === false &&
-        selectorKeyValues === 0 &&
-        <IconBtn
-          icon={'add'}
-          onPress={() => setMenuOpen(true)}
-        />
+      {selectorKeyValues.length > 0 && menuOpen === false &&
+        <View style={ModalStyle.bottomModal}>
+          <View style={ModalStyle.modalHeader}>
+            {/* <EditBtn
+              text={`Clear (${selectedKeyValues.length})`} CHNGE THIS VALUE
+              onPress={() => {
+                setSelectedKeyValues([]);
+              }}
+            /> */}
+            {/* <PiecedBtn
+              text1={
+                'Options'
+              }
+              text2={
+                'Selected'
+              }
+              onPress1={() => {
+                setOptions(true);
+              }}
+              onPress2={() => {
+                setOptions(false);
+              }}
+            /> */}
+            <EditBtn
+              text={'Filters'}
+              onPress={() => {
+                backToFilterModal();
+              }}
+            />
+
+          </View>
+          <View style={ModalStyle.modalFooter}>
+            <EditBtn
+              text={'Reset'}
+              onPress={() => {
+                setSelectedKeyValues([]);
+                setFilteredAssets(assets);
+
+                console.log('FilteredAssets Reset...', assets);
+
+              }}
+            />
+
+            <SubmitBtn
+              text={'Photos' + ' (' + filteredAssets.length + ')'}
+            />
+          </View>
+        </View>
       }
+
+      <View style={Containers.menuContainer}>
+        {menuOpen === false &&
+          selectorKeyValues === 0 &&
+          <IconBtn
+            icon={'add'}
+            onPress={() => setMenuOpen(true)}
+          />
+        }
         {menuOpen === true &&
           loaded === true &&
           <FilterMenu
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
+            setFiltersLoaded={setFiltersLoaded}
             // setSelectorKeys={setSelectorKeys}
             setSelectorKeyValues={setSelectorKeyValues}
+            // selectorKeyValues={selectorKeyValues}
             masterAsset={masterAsset}
+            assets={assets}
+            setAssets={setAssets}
             setMasterAsset={setMasterAsset}
-            setFilteringAsset={setFilteringAsset}
             exifKeys={exifKeys}
             selectedExifKeys={selectedExifKeys}
             setSelectedExifKeys={setSelectedExifKeys}
-            setSelectorExif={setSelectorExif}
+            // setSelectorExif={setSelectorExif}
             dataKeys={dataKeys}
             selectedDataKeys={selectedDataKeys}
             setSelectedDataKeys={setSelectedDataKeys}
-            setSelectorData={setSelectorData}
-            uriVals={uriVals}
+          // setSelectorData={setSelectorData}
           // tags={tags}
           />
         }

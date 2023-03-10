@@ -29,7 +29,7 @@ export default function FilterScreen({ navigation, route }) {
   useEffect(() => {
     (async () => {
       if (importedAssets) {
-        console.log('Assets received in Filters.js: ', importedAssets);
+        // console.log('Assets received in Filters.js: ', importedAssets);
         dataFiller();
         setAssetsTransformed(true);
       } else {
@@ -108,7 +108,7 @@ export default function FilterScreen({ navigation, route }) {
             }
             importedAssets[i].data = locatesParsed[i];
           }
-          console.log('Parsed assets: ', importedAssets);
+          // console.log('Parsed assets: ', importedAssets);
           const combinedAssets = combineObjects(importedAssets);
           // console.log('masterAsset: ', combinedAssets);
           const valuedAssets = removeEmptyUniqueVals(combinedAssets);
@@ -175,6 +175,7 @@ export default function FilterScreen({ navigation, route }) {
     <SafeAreaView style={Containers.container}>
       <View style={Containers.container}>
         {selectorKeyValues.length === 0 &&
+        loaded === true &&
           <View style={Containers.centered}>
             <PlaceholderBtn
               text="Add filters..."

@@ -140,7 +140,7 @@ export function DropDownPicker(props) {
 
     useEffect(() => {
         setFilteredAssets(filterNestedObjArr(assetsClone, selectedKeyValues));
-        console.log('filteredAssets: ', filterNestedObjArr(assetsClone, selectedKeyValues));
+        // console.log('filteredAssets: ', filterNestedObjArr(assetsClone, selectedKeyValues));
         setToggled(false);
     }, [toggled === true]);
 

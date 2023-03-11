@@ -28,12 +28,12 @@ export default function FilterMenu(props) {
     } = props;
 
     const [selectedKeys, setSelectedKeys] = useState([]);
-    const [keys, setKeys] = useState(exifKeys);
+    const [keys, setKeys] = useState(exifKeys.concat(dataKeys));
 
     useEffect(() => {
-            setSelectedKeys(selectedExifKeys.concat(selectedDataKeys));
-            console.log('Selected keys Preset: ', selectedExifKeys.concat(selectedDataKeys));
-    }, [menuOpen === true]);   
+        setSelectedKeys(selectedExifKeys.concat(selectedDataKeys));
+        console.log('Selected keys Preset: ', selectedExifKeys.concat(selectedDataKeys));
+    }, [menuOpen === true]);
 
     const toggleSelected = (key) => {
         if (selectedKeys.includes(key)) {
@@ -72,6 +72,7 @@ export default function FilterMenu(props) {
         }
     }
 
+
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     }
@@ -88,20 +89,20 @@ export default function FilterMenu(props) {
         // resetSelected();
     }
 
-    const reduceAssetsFromKeys = () => {
-        let reducedAssets = [];
-        assets.forEach((asset) => {
-            let reducedAsset = {
-                exif: reduceObjFromKeys(asset.exif, selectedExifKeys),
-                data: reduceObjFromKeys(asset.data, selectedDataKeys),
-                tags: asset.tags,
-                uri: asset.uri,
-            };
-            reducedAssets.push(reducedAsset);
-        });
-        // console.log('Assets reduced: ', reducedAssets);
-        setAssets(reducedAssets);
-    }
+    // const reduceAssetsFromKeys = () => {
+    //     let reducedAssets = [];
+    //     assets.forEach((asset) => {
+    //         let reducedAsset = {
+    //             exif: reduceObjFromKeys(asset.exif, selectedExifKeys),
+    //             data: reduceObjFromKeys(asset.data, selectedDataKeys),
+    //             tags: asset.tags,
+    //             uri: asset.uri,
+    //         };
+    //         reducedAssets.push(reducedAsset);
+    //     });
+    //     // console.log('Assets reduced: ', reducedAssets);
+    //     setAssets(reducedAssets);
+    // }
 
     const submitMenu = () => {
         // setSelectorExif(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
@@ -110,8 +111,8 @@ export default function FilterMenu(props) {
         // console.log('selectedData set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys)));
         setSelectorKeyValues(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)).concat(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys))));
         console.log('selectedKeyValues set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)).concat(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.data, selectedDataKeys))));
-        reduceAssetsFromKeys();
-        console.log('Assets reduced');
+        // reduceAssetsFromKeys();
+        // console.log('Assets reduced');
         setFiltersLoaded(true);
         closeMenu();
     }
@@ -138,30 +139,23 @@ export default function FilterMenu(props) {
                             />
                         </View>
                         <View style={ModalStyle.modalHeader}>
-                            <Text style={ModalStyle.modalTitle}>
-                                Filter Options
-                            </Text>
+
+                            <PiecedBtn
+                                text1={'All'}
+                                onPress1={() => {
+                                    setKeys(exifKeys.concat(dataKeys));
+                                }}
+                                text2={'Exif'}
+                                onPress2={() => {
+                                    setKeys(exifKeys);
+                                }}
+                                text3={'Data'}
+                                onPress3={() => {
+                                    setKeys(dataKeys);
+                                }}
+                            />
                         </View>
                         <View style={ModalStyle.modalBody}>
-                            <View style={ModalStyle.row}>
-                                <EditBtn
-                                    text={`Unselect (${selectedKeys.length})`}
-                                    onPress={() => {
-                                        resetSelected();
-                                        // console.log('Loaded keys: ', loadedKeys);   
-                                    }}
-                                    pressed={false}
-                                />
-                                <EditBtn
-                                    text={'Select All'}
-                                    onPress={() => {
-                                        toggleAll();
-                                    }}
-                                    pressed={false}
-                                />
-                            </View>
-                            <View style={ModalStyle.row}>
-                            </View>
                             <View style={{ height: 300 }}>
                                 <Text style={ModalStyle.modalDivider} />
                                 <FlatList
@@ -184,20 +178,21 @@ export default function FilterMenu(props) {
                                 <Text style={ModalStyle.modalDivider} />
                             </View>
                         </View>
-                        <View style={ModalStyle.modalFooter}>
-                            <PiecedBtn
-                                text1={'All'}
-                                onPress1={() => {
-                                    setKeys(exifKeys.concat(dataKeys));
+                        <View style={ModalStyle.rowEnd}>
+                            <EditBtn
+                                text={'Select'}
+                                onPress={() => {
+                                    toggleAll();
                                 }}
-                                text2={'Exif'}
-                                onPress2={() => {
-                                    setKeys(exifKeys);
+                                pressed={false}
+                            />
+                            <EditBtn
+                                text={selectedKeys.length + '/' + (exifKeys.length + dataKeys.length)}
+                                onPress={() => {
+                                    resetSelected();
+                                    // console.log('Loaded keys: ', loadedKeys);   
                                 }}
-                                text3={'Data'}
-                                onPress3={() => {
-                                    setKeys(dataKeys);
-                                }}
+                                pressed={false}
                             />
 
                             <SubmitBtn

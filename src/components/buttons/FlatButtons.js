@@ -33,7 +33,7 @@ export const SubmitBtn = ({ text, onPress }) => (
 
 export const SubmitIcon = ({ icon, onPress }) => (
     <View style={FlatBtn.btnContainer}>
-        <Pressable style={FlatBtn.submitBtn} onPress={onPress}>
+        <Pressable style={FlatBtn.submitIconBtn} onPress={onPress}>
             <MaterialIcons name={icon} size={IconSize.medium} color={Colors.light} />
         </Pressable>
     </View>
@@ -43,6 +43,16 @@ export const EditBtn = ({ text, onPress }) => (
     <View style={FlatBtn.btnContainer}>
         <Pressable style={FlatBtn.editBtn} onPress={onPress}>
             <Text style={{ fontSize: TextSize.medium, color: Colors.dark }}>
+                {text}
+            </Text>
+        </Pressable>
+    </View>
+);
+
+export const InvertedEditBtn = ({ text, onPress }) => (
+    <View style={FlatBtn.btnContainer}>
+        <Pressable style={FlatBtn.invertedEditBtn} onPress={onPress}>
+            <Text style={{ fontSize: TextSize.medium, color: Colors.light }}>
                 {text}
             </Text>
         </Pressable>
@@ -99,20 +109,21 @@ export function PiecedBtn({ text1, text2, text3, onPress1, onPress2, onPress3 })
 }
 
 export const SelectBtn = ({ text, onPress, pressed }) => (
-    // <View style={FlatBtn.btnContainer}>
-    <Pressable style={FlatBtn.selectBtn} onPress={onPress}>
-        <Text style={pressed ? FlatBtn.selected : FlatBtn.select}>
-            {text}
-        </Text>
-        <MaterialIcons
-            name={'close'}
-            size={IconSize.small}
-            color={
-                pressed ?
-                    Colors.dark :
-                    Colors.background} />
-    </Pressable>
-    // </View>
+    <View style={FlatBtn.btnContainer}>
+        <Pressable style={FlatBtn.selectBtn} onPress={onPress}>
+            <Text style={pressed ? FlatBtn.selected : FlatBtn.select}>
+                {text}
+            </Text>
+            <MaterialIcons
+                name={'close'}
+                size={IconSize.small}
+                color={
+                    pressed ?
+                        Colors.dark :
+                        Colors.light}
+            />
+        </Pressable>
+    </View>
 );
 
 export function DropDownPicker(props) {
@@ -181,25 +192,25 @@ export function DropDownPicker(props) {
 
     return (
         <View style={DropDownPickerStyle.container}>
-                <View>
-                    <Pressable
-                        style={FlatBtn.selectBtn}
-                        onPress={toggleDropdown}
-                    >
-                        <View style={DropDownPickerStyle.row}>
-                            <Text style={selectedValues.length > 0 ?
-                                FlatBtn.selected : FlatBtn.select}>
-                                {label}
-                            </Text>
-                        </View>
-                    </Pressable>
-                    {selectedValues.length > 0 &&
-                        <Text style={DropDownPickerStyle.subLabel}>
-                            selected: {selectedValues.length}
+            <View>
+                <Pressable
+                    style={FlatBtn.selectBtn}
+                    onPress={toggleDropdown}
+                >
+                    <View style={DropDownPickerStyle.row}>
+                        <Text style={selectedValues.length > 0 ?
+                            FlatBtn.selected : FlatBtn.select}>
+                            {label}
                         </Text>
-                    }
-                </View>
-            
+                    </View>
+                </Pressable>
+                {selectedValues.length > 0 &&
+                    <Text style={DropDownPickerStyle.subLabel}>
+                        selected: {selectedValues.length}
+                    </Text>
+                }
+            </View>
+
             {isOpen === true && (
                 <View style={DropDownPickerStyle.container}>
                     {values.map((value, index) => (

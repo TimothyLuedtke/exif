@@ -5,7 +5,7 @@ import { FlatBtn, ModalStyle } from '../../styles/GlobalStyles';
 import { IconSize, TextSize } from '../../styles/Sizing';
 import Colors from '../../styles/Colors';
 import { filterNestedObjArr } from '../../utils/objUtils';
-import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
+import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn, SubmitIcon } from './FlatButtons';
 
 export default function FilterButton(props) {
 
@@ -86,7 +86,7 @@ export default function FilterButton(props) {
                 }}
                 pressed={selectedValues.length > 0}
             />
-            { isOpen && (
+            {isOpen && (
                 <Modal
                     animationType='slide'
                     transparent={true}
@@ -113,15 +113,6 @@ export default function FilterButton(props) {
                             </Text>
                         </View>
                         <View style={ModalStyle.modalBody}>
-                            <View style={ModalStyle.row}>
-                                <EditBtn
-                                text={selectedValues.length === values.length ? 'Unselect All' : 'Select All'}
-                                onPress={toggleAll}
-                            />
-
-                            </View>
-                            <View style={ModalStyle.row}>
-                            </View>
                             <View style={{ height: 300 }}>
                                 <Text style={ModalStyle.modalDivider} />
                                 <FlatList
@@ -143,12 +134,17 @@ export default function FilterButton(props) {
                                 <Text style={ModalStyle.modalDivider} />
                             </View>
                         </View>
-                        <View style={ModalStyle.modalFooter}>
-
-                            {/* <SubmitBtn
-                            text={'Apply'}
-                            onPress={submitMenu}
-                        /> */}
+                        <View style={ModalStyle.rowEnd}>
+                            <EditBtn
+                                text={selectedValues.length === values.length ? 'Unselect All' : 'Select All'}
+                                onPress={toggleAll}
+                            />
+                            <SubmitIcon
+                            icon={'check'}
+                            onPress={() => {
+                                setIsOpen(!isOpen);
+                            }}
+                            />
                         </View>
                     </View>
                 </Modal>

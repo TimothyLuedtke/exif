@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {ActivityIndicator, FlatList, ScrollView, SafeAreaView, View } from 'react-native';
+import { ActivityIndicator, FlatList, ScrollView, SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
 import { Containers, FlatBtn, ModalStyle, LoadingIcon } from '../styles/GlobalStyles';
 import Colors from '../styles/Colors';
 import { formatDateTime } from '../utils/formatUtils';
 import { combineObjects } from '../utils/arrayUtils';
 import { removeEmptyUniqueVals } from '../utils/objUtils';
-import { Closebtn, DropDownPicker, EditBtn, PiecedBtn, PlaceholderBtn, SubmitBtn } from '../components/buttons/FlatButtons';
+import { Closebtn, DropDownPicker, EditBtn, InvertedEditBtn, PiecedBtn, PlaceholderBtn, SubmitBtn, SubmitIcon } from '../components/buttons/FlatButtons';
 import { IconBtn } from '../components/buttons/FloatingButtons';
 import FilterMenu from '../components/buttons/FilterMenu';
 import FilterButton from '../components/buttons/FilterButton';
@@ -46,9 +46,9 @@ export default function FilterScreen({ navigation, route }) {
     } else if (assetsTransformed === false) {
       return (
         importedAssets.map((photo) => {
-          let dateTimeValue = formatDateTime(photo.exif.DateTime);
-          let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No Data';
-          let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No Data';
+          let dateTimeValue = formatDateTime(photo.exif.DateTimeOriginal);
+          let dateValue = photo.exif.DateTimeOriginal !== undefined ? dateTimeValue.split('|')[0] : 'No Data';
+          let timeValue = photo.exif.DateTimeOriginal !== undefined ? dateTimeValue.split('|')[1] : 'No Data';
           let defaultData = {
             latitude: photo.exif.GPSLatitude !== undefined ? photo.exif.GPSLatitude : 'No Data',
             longitude: photo.exif.GPSLongitude !== undefined ? photo.exif.GPSLongitude : 'No Data',
@@ -113,6 +113,7 @@ export default function FilterScreen({ navigation, route }) {
           // console.log('masterAsset: ', combinedAssets);
           const valuedAssets = removeEmptyUniqueVals(combinedAssets);
           setMasterAsset(valuedAssets);
+          // console.log('masterAsset: ', valuedAssets);
           setAssets(importedAssets);
           // console.log('assets: ', importedAssets);
           setExifKeys(Object.keys(combinedAssets.exif));
@@ -162,15 +163,15 @@ export default function FilterScreen({ navigation, route }) {
       console.log('selectedKeyValues: ', selectedKeyValues);
     }
     return (
-        <FilterButton
-          assets={assets}
-          index={index}
-          item={item}
-          // options={options}
-          selectedKeyValues={selectedKeyValues}
-          setFilteredAssets={setFilteredAssets}
-          setSelectedKeyValues={setSelectedKeyValues}
-        />
+      <FilterButton
+        assets={assets}
+        index={index}
+        item={item}
+        // options={options}
+        selectedKeyValues={selectedKeyValues}
+        setFilteredAssets={setFilteredAssets}
+        setSelectedKeyValues={setSelectedKeyValues}
+      />
     );
   }
 
@@ -184,7 +185,7 @@ export default function FilterScreen({ navigation, route }) {
           </View>
         }
         {selectorKeyValues.length === 0 &&
-        loaded === true &&
+          loaded === true &&
           <View style={Containers.centered}>
             <PlaceholderBtn
               text="Add filters..."
@@ -193,6 +194,7 @@ export default function FilterScreen({ navigation, route }) {
           </View>
         }
         {selectorKeyValues.length > 0 &&
+        <View style={Containers.centered}>
           <FlatList
             // contentContainerStyle={FlatBtn.btnContainer}
             data={selectorKeyValues}
@@ -201,27 +203,21 @@ export default function FilterScreen({ navigation, route }) {
             numColumns={3}
             columnWrapperStyle={{ flexWrap: 'wrap', justifyContent: 'space-around' }}
           />
+        </View>
         }
       </View>
 
       {selectorKeyValues.length > 0 && menuOpen === false &&
         <View style={ModalStyle.bottomModal}>
-          <View style={ModalStyle.modalHeader}>
-            {/* <EditBtn
-              text={`Clear (${selectedKeyValues.length})`} CHNGE THIS VALUE
-              onPress={() => {
-                setSelectedKeyValues([]);
-              }}
-            /> */}
+          <View style={ModalStyle.rowEnd}>
+
             <EditBtn
-              text={'Filters'}
+              text={filteredAssets.length + '/' + assets.length}
               onPress={() => {
-                backToFilterModal();
+                console.log('FilteredAssets...', filteredAssets);
+                console.log('Assets...', assets);
               }}
             />
-
-          </View>
-          <View style={ModalStyle.modalFooter}>
             <EditBtn
               text={'Reset'}
               onPress={() => {
@@ -231,12 +227,19 @@ export default function FilterScreen({ navigation, route }) {
 
               }}
             />
-
-            <SubmitBtn
-              text={'Photos' + ' (' + filteredAssets.length + ')'}
-            onPress={() => {
-              navigateToFilteredPhotos();
-            }}
+          </View>
+          <View style={ModalStyle.darkRowEnd}>
+            <InvertedEditBtn
+              text={'Filters'}
+              onPress={() => {
+                backToFilterModal();
+              }}
+            />
+            <InvertedEditBtn
+              text={'Photos '}
+              onPress={() => {
+                navigateToFilteredPhotos();
+              }}
             />
           </View>
         </View>
@@ -262,7 +265,6 @@ export default function FilterScreen({ navigation, route }) {
             masterAsset={masterAsset}
             assets={assets}
             setAssets={setAssets}
-            setMasterAsset={setMasterAsset}
             exifKeys={exifKeys}
             selectedExifKeys={selectedExifKeys}
             setSelectedExifKeys={setSelectedExifKeys}

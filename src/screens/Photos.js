@@ -198,14 +198,10 @@ export default function PhotosScreen({ navigation, route }) {
             <View>
                 {!selectMode &&
                     <View>
-                        {filteredAssets.length > 0 &&
-                            <EditBtn
-                                text={'Reset'}
-                                onPress={resetFilters}
-                            />
-                        }
                         <MenuButton
                             menuOpen={menuOpen}
+                            resetFilters={resetFilters}
+                            setDisplayedAssets={setDisplayedAssets}
                             setMenuOpen={setMenuOpen}
                             selectMode={selectMode}
                             setSelectMode={setSelectMode}

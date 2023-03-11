@@ -1,12 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Containers } from '../../styles/GlobalStyles';
+import { Containers, ModalStyle } from '../../styles/GlobalStyles';
 import { IconBtn } from './FloatingButtons';
+import { Closebtn, SelectBtn, SubmitBtn, SubmitIcon, EditBtn, PiecedBtn } from './FlatButtons';
 
 export default function MenuButton(props) {
 
     const {
         menuOpen,
+        resetFilters,
+        setDisplayAssets,
         setMenuOpen,
         selectMode,
         setSelectMode,
@@ -24,27 +27,45 @@ export default function MenuButton(props) {
     }
 
     return (
-        <View style={Containers.menuContainer}>
+        <View>
             {menuOpen && (
-                <View>
+
+                <View style={ModalStyle.bottomModal}>
+                    <View style={ModalStyle.darkRow}>
+                        <SubmitIcon
+                            icon='settings'
+                            onPress={ () =>
+                                alert("This button is really peripheral to the app's function...")
+                            }
+                        />
+                            <SubmitIcon
+                                icon='edit'
+                                onPress={toggleSelectMode}
+                            />
+                        <SubmitIcon
+                            icon='add-a-photo'
+                            onPress={pickImage}
+                        />
+                        <SubmitIcon
+                            icon='filter-alt'
+                            onPress={navigateToFilters}
+                        />
+                        <SubmitIcon
+                            icon='menu'
+                            onPress={toggleMenu}
+                        />
+                    </View>
+                </View>
+
+            )}
+            {!menuOpen && (
+                <View style={Containers.menuContainer}>
                     <IconBtn
-                        icon='add-a-photo'
-                        onPress={pickImage}
-                    />
-                    <IconBtn
-                        icon='edit'
-                        onPress={toggleSelectMode}
-                    />
-                    <IconBtn
-                        icon='filter-alt'
-                        onPress={navigateToFilters}
+                        icon='menu'
+                        onPress={toggleMenu}
                     />
                 </View>
             )}
-            <IconBtn
-                icon={menuOpen ? 'keyboard-arrow-down' : 'menu'}
-                onPress={toggleMenu}
-            />
         </View>
     );
 }

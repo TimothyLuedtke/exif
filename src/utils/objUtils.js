@@ -36,5 +36,3 @@ export function filterNestedObjArr(data, criteria) {
         return true;
       });
 }
-  
-  

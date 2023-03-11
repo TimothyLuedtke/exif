@@ -94,7 +94,7 @@ export const FloatBtn = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 30,
+        borderRadius: 50,
         padding: 12,
         backgroundColor: Colors.dark,
         shadowColor: Colors.black,
@@ -111,7 +111,7 @@ export const FloatBtn = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 30,
+        borderRadius: 50,
         padding: 12,
         width: 150,
         backgroundColor: Colors.white,
@@ -133,29 +133,51 @@ export const FlatBtn = StyleSheet.create({
         margin: 5,
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: Colors.gray,
+        // backgroundColor: Colors.light,
     },
 
     // 1
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 30,
+        borderRadius: 50,
         padding: 12,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.light,
     },
 
+    invertedEditBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Colors.dark,
+        borderColor: Colors.white,
+        borderWidth: 1,
+        borderRadius: 50,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
     //
     editBtn: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: Colors.light,
         borderColor: Colors.dark,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
+    submitIconBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+
+        backgroundColor: Colors.dark,
+        borderRadius: 50,
+        padding: 10,
+        paddingHorizontal: 10,
+    },    
     // 
     submitBtn: {
         flexDirection: 'row',
@@ -164,8 +186,8 @@ export const FlatBtn = StyleSheet.create({
         borderColor: Colors.dark,
         borderWidth: 1,
         backgroundColor: Colors.dark,
-        borderRadius: 30,
-        paddingVertical: 10,
+        borderRadius: 50,
+        padding: 10,
         paddingHorizontal: 20,
     },
 
@@ -176,7 +198,7 @@ export const FlatBtn = StyleSheet.create({
         justifyContent: 'center',
         borderColor: Colors.dark,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
         // paddingVertical: 10,
         // paddingHorizontal: 20,
     },
@@ -248,10 +270,10 @@ export const FlatBtn = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         // padding: 10,
-        borderColor: Colors.light,
+        borderColor: Colors.dark,
         borderWidth: 1,
-        borderRadius: 30,
-        backgroundColor: Colors.light,
+        borderRadius: 50,
+        backgroundColor: Colors.white,
     },
     // 
     selected: {
@@ -261,7 +283,7 @@ export const FlatBtn = StyleSheet.create({
         paddingHorizontal: 20,
         borderColor: Colors.dark,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
         backgroundColor: Colors.dark,
     },
 
@@ -272,8 +294,8 @@ export const FlatBtn = StyleSheet.create({
         paddingHorizontal: 20,
         borderColor: Colors.dark,
         borderWidth: 1,
-        borderRadius: 30,
-        backgroundColor: Colors.light,
+        borderRadius: 50,
+        backgroundColor: Colors.white,
     },
 
     placeholderBtn: {
@@ -284,7 +306,7 @@ export const FlatBtn = StyleSheet.create({
         paddingHorizontal: 20,
         borderColor: Colors.light,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
         backgroundColor: Colors.light,
     },
 
@@ -311,20 +333,20 @@ export const ModalStyle = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        alignItems: 'center',
-        backgroundColor: Colors.white,
-        borderRadiusTopLeft: 10,
-        borderRadiusTopRight: 10,
-        paddingBottom: 10,
-        zIndex: 2,
-        shadowColor: Colors.black,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        // alignItems: 'center',
+        backgroundColor: Colors.transparent,
+        // borderRadiusTopLeft: 10,
+        // borderRadiusTopRight: 10,
+        // paddingBottom: 10,
+        // zIndex: 2,
+        // shadowColor: Colors.black,
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 2,
+        // },
+        // shadowOpacity: 0.25,
+        // shadowRadius: 3.84,
+        // elevation: 5,
     },
     bottomModalClose: {
         width: '100%',
@@ -339,7 +361,7 @@ export const ModalStyle = StyleSheet.create({
         right: 10,
         bottom: 50,
         justifyContent: 'flex-end',
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.light,
         borderRadius: 10,
         padding: 10,
         zIndex: 2,
@@ -375,6 +397,7 @@ export const ModalStyle = StyleSheet.create({
         fontSize: TextSize.large,
         fontWeight: 'bold',
         textAlign: 'center',
+        textDecorationColor: Colors.dark,
         // marginVertical: 15,
     },
 
@@ -387,7 +410,28 @@ export const ModalStyle = StyleSheet.create({
     // 1
     row: {
         flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+
+    darkRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: Colors.dark,
+    },
+
+    darkRowEnd: {
+        flexDirection: 'row',
         justifyContent: 'flex-end',
+        backgroundColor: Colors.dark,
+    },
+
+    rowEnd: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+
+    column: {
+        flexDirection: 'column',
     },
 
     // 1
@@ -395,6 +439,18 @@ export const ModalStyle = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         // marginTop: 10,
+    },
+
+    modalTabFooter: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: Colors.dark,
+        // paddingVertical: 10,
+        // paddingHorizontal: 20,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
     },
 
     // 1
@@ -428,7 +484,7 @@ export const DropDownPickerStyle = StyleSheet.create({
         justifyContent: 'center',
         borderColor: Colors.dark,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
@@ -465,7 +521,7 @@ export const DropDownPickerStyle = StyleSheet.create({
         // padding: 10,
         borderColor: Colors.light,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
         backgroundColor: Colors.light,
     },
     // 
@@ -476,7 +532,7 @@ export const DropDownPickerStyle = StyleSheet.create({
         paddingHorizontal: 20,
         borderColor: Colors.dark,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
         backgroundColor: Colors.dark,
     },
 });

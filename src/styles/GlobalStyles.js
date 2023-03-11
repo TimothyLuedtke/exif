@@ -329,12 +329,13 @@ export const ModalStyle = StyleSheet.create({
     },
 
     bottomModal: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        // position: 'absolute',
+        // bottom: 0,
+        // left: 0,
+        // right: 0,
+        width: '100%',
         // alignItems: 'center',
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         // borderRadiusTopLeft: 10,
         // borderRadiusTopRight: 10,
         // paddingBottom: 10,
@@ -411,6 +412,7 @@ export const ModalStyle = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-around',
+        backgroundColor: Colors.transparent,
     },
 
     darkRow: {
@@ -419,15 +421,16 @@ export const ModalStyle = StyleSheet.create({
         backgroundColor: Colors.dark,
     },
 
+    rowEnd: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        backgroundColor: Colors.transparent,
+    },
+
     darkRowEnd: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         backgroundColor: Colors.dark,
-    },
-
-    rowEnd: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
     },
 
     column: {

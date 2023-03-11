@@ -210,16 +210,8 @@ export default function FilterScreen({ navigation, route }) {
       {selectorKeyValues.length > 0 && menuOpen === false &&
         <View style={ModalStyle.bottomModal}>
           <View style={ModalStyle.rowEnd}>
-
-            <EditBtn
-              text={filteredAssets.length + '/' + assets.length}
-              onPress={() => {
-                console.log('FilteredAssets...', filteredAssets);
-                console.log('Assets...', assets);
-              }}
-            />
-            <EditBtn
-              text={'Reset'}
+          <EditBtn
+              text={'Photos: ' + filteredAssets.length + '/' + assets.length}
               onPress={() => {
                 setSelectedKeyValues([]);
                 setFilteredAssets(assets);
@@ -227,16 +219,14 @@ export default function FilterScreen({ navigation, route }) {
 
               }}
             />
-          </View>
-          <View style={ModalStyle.darkRowEnd}>
-            <InvertedEditBtn
+            <EditBtn
               text={'Filters'}
               onPress={() => {
                 backToFilterModal();
               }}
             />
-            <InvertedEditBtn
-              text={'Photos '}
+            <SubmitBtn
+              text={'Apply'}
               onPress={() => {
                 navigateToFilteredPhotos();
               }}

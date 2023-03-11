@@ -33,13 +33,13 @@ export default function MenuButton(props) {
                 <View style={ModalStyle.bottomModal}>
                     <View style={ModalStyle.darkRow}>
                         <SubmitIcon
-                            icon='settings'
+                            icon='share'
                             onPress={ () =>
                                 alert("This button is really peripheral to the app's function...")
                             }
                         />
                             <SubmitIcon
-                                icon='edit'
+                                icon='delete'
                                 onPress={toggleSelectMode}
                             />
                         <SubmitIcon

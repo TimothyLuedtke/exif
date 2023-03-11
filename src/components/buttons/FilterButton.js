@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
-import { ModalStyle } from '../../styles/GlobalStyles';
-import { shapedArray } from '../../utils/arrayUtils';
-import { reduceObjFromKeys, morphObjToArrKeyValObjs } from '../../utils/objUtils';
+import { MaterialIcons } from '@expo/vector-icons';
+import { FlatBtn, ModalStyle } from '../../styles/GlobalStyles';
+import { IconSize, TextSize } from '../../styles/Sizing';
+import Colors from '../../styles/Colors';
+import { filterNestedObjArr } from '../../utils/objUtils';
 import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
 
 export default function FilterButton(props) {
 
     const {
-        filterBtnOpen,
-        setFilterBtnOpen,
         assets,
-        index,
         item,
-        options,
+        // options,
         selectedKeyValues,
         setFilteredAssets,
         setSelectedKeyValues,
@@ -33,6 +32,20 @@ export default function FilterButton(props) {
         // console.log('filteredAssets: ', filterNestedObjArr(assetsClone, selectedKeyValues));
         setToggled(false);
     }, [toggled === true]);
+
+    const toggleAll = () => {
+        if (selectedValues.length === values.length) {
+            setSelectedValues([]);
+            delete selectedKeyValues[label];
+            console.log('selectedKeyValues: ', selectedKeyValues);
+            setToggled(true);
+        } else {
+            setSelectedValues(values);
+            setSelectedKeyValues({ ...selectedKeyValues, [label]: values });
+            console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: values });
+            setToggled(true);
+        }
+    };
 
     const toggleValue = (value) => {
         if (selectedValues.includes(value)) {
@@ -65,96 +78,82 @@ export default function FilterButton(props) {
 
     return (
 
-
-
         <View>
-
-            <Modal
-                animationType='slide'
-                transparent={true}
-                visible={filterBtnOpen}
-            >
-                <Pressable
-                    style={ModalStyle.modalOverlay}
-                    onPress={() => {
-                        setFilterBtnOpen(!filterBtnOpen);
-                    }
-                    }
-                />
-                <View style={ModalStyle.modal}>
-                    <View style={ModalStyle.modalClose}>
-                        <Closebtn
-                            onPress={() => {
-                                setFilterBtnOpen(!filterBtnOpen);
-                            }}
-                        />
-                    </View>
-                    <View style={ModalStyle.modalHeader}>
-                        <Text style={ModalStyle.modalTitle}>
-                            {label}
-                        </Text>
-                    </View>
-                    <View style={ModalStyle.modalBody}>
-                        <View style={ModalStyle.row}>
-                            {/* <EditBtn
-                                text={`Unselect (${selectedKeys.length})`}
+            <SelectBtn
+                text={label}
+                onPress={() => {
+                    setIsOpen(!isOpen);
+                }}
+                pressed={selectedValues.length > 0}
+            />
+            { isOpen && (
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={isOpen}
+                >
+                    <Pressable
+                        style={ModalStyle.modalOverlay}
+                        onPress={() => {
+                            setIsOpen(!isOpen);
+                        }
+                        }
+                    />
+                    <View style={ModalStyle.modal}>
+                        <View style={ModalStyle.modalClose}>
+                            <Closebtn
                                 onPress={() => {
-                                    resetSelected();
-                                    // console.log('Loaded keys: ', loadedKeys);   
+                                    setIsOpen(!isOpen);
                                 }}
-                                pressed={false}
                             />
-                            <EditBtn
-                                text={'Select All'}
-                                onPress={() => {
-                                    toggleAll();
-                                }}
-                                pressed={false}
-                            /> */}
                         </View>
-                        <View style={ModalStyle.row}>
-                        </View>
-                        <View style={{ height: 300 }}>
-                            <Text style={ModalStyle.modalDivider} />
-                            <FlatList
-                                data={values}
-                                renderItem={({ value, index }) => (
-                                    <Pressable
-                            style={FlatBtn.selectBtn}
-                            key={index}
-                            onPress={() => toggleValue(value)}
-                        >
-                            <Text style={selectedValues.includes(value) ? FlatBtn.selected : FlatBtn.select}>
-                                {value}
+                        <View style={ModalStyle.modalHeader}>
+                            <Text style={ModalStyle.modalTitle}>
+                                {label}
                             </Text>
-
-                            <MaterialIcons
-                                name={'close'}
-                                size={IconSize.small}
-                                color={
-                                    selectedValues.includes(value) ?
-                                        Colors.dark :
-                                        Colors.background} />
-                        </Pressable>
-                                )}
-                                keyExtractor={(item) => item}
-                                numColumns={5}
-                                columnWrapperStyle={{
-                                    flexWrap: 'wrap',
-                                }}
-                            />
-                            <Text style={ModalStyle.modalDivider} />
                         </View>
-                    </View>
-                    <View style={ModalStyle.modalFooter}>
+                        <View style={ModalStyle.modalBody}>
+                            <View style={ModalStyle.row}>
+                                <EditBtn
+                                text={selectedValues.length === values.length ? 'Unselect All' : 'Select All'}
+                                onPress={toggleAll}
+                            />
 
-                        {/* <SubmitBtn
+                            </View>
+                            <View style={ModalStyle.row}>
+                            </View>
+                            <View style={{ height: 300 }}>
+                                <Text style={ModalStyle.modalDivider} />
+                                <FlatList
+                                    data={values}
+                                    renderItem={({ item, index }) => (
+                                        <SelectBtn
+                                            text={item}
+                                            key={index}
+                                            onPress={() => toggleValue(item)}
+                                            pressed={selectedValues.includes(item)}
+                                        />
+                                    )}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    numColumns={2}
+                                    columnWrapperStyle={{
+                                        flexWrap: 'wrap',
+                                    }}
+                                />
+                                <Text style={ModalStyle.modalDivider} />
+                            </View>
+                        </View>
+                        <View style={ModalStyle.modalFooter}>
+
+                            {/* <SubmitBtn
                             text={'Apply'}
                             onPress={submitMenu}
                         /> */}
+                        </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
+            )}
         </View>
+
     );
 }

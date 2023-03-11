@@ -58,12 +58,17 @@ export default function FilterMenu(props) {
                 selectedKeys.filter((key) => dataKeys.includes(key)).concat(exifKeys)
             );
             console.log('Selected keys: ', selectedKeys.filter((key) => dataKeys.includes(key)).concat(exifKeys));
-        } else {
+        } else if (keys === dataKeys) {
             setSelectedDataKeys(dataKeys);
             setSelectedKeys(
                 selectedKeys.filter((key) => exifKeys.includes(key)).concat(dataKeys)
             );
             console.log('Selected keys: ', selectedKeys.filter((key) => exifKeys.includes(key)).concat(dataKeys));
+        } else {
+            setSelectedExifKeys(exifKeys);
+            setSelectedDataKeys(dataKeys);
+            setSelectedKeys(exifKeys.concat(dataKeys));
+            console.log('Selected keys: ', exifKeys.concat(dataKeys));
         }
     }
 
@@ -78,7 +83,7 @@ export default function FilterMenu(props) {
         console.log('Selected keys reset');
     }
 
-    const resetMenu = () => {
+    const closeMenu = () => {
         setMenuOpen(false);
         // resetSelected();
     }
@@ -108,7 +113,7 @@ export default function FilterMenu(props) {
         reduceAssetsFromKeys();
         console.log('Assets reduced');
         setFiltersLoaded(true);
-        resetMenu();
+        closeMenu();
     }
 
     return (
@@ -122,7 +127,7 @@ export default function FilterMenu(props) {
                     <Pressable
                         style={ModalStyle.modalOverlay}
                         onPress={() => {
-                            resetMenu();
+                            closeMenu();
                         }
                         }
                     />
@@ -171,7 +176,7 @@ export default function FilterMenu(props) {
                                         />
                                     )}
                                     keyExtractor={(item) => item}
-                                    numColumns={5}
+                                    numColumns={2}
                                     columnWrapperStyle={{
                                         flexWrap: 'wrap',
                                     }}
@@ -181,18 +186,18 @@ export default function FilterMenu(props) {
                         </View>
                         <View style={ModalStyle.modalFooter}>
                             <PiecedBtn
-                                text1={'Exif'}
+                                text1={'All'}
                                 onPress1={() => {
+                                    setKeys(exifKeys.concat(dataKeys));
+                                }}
+                                text2={'Exif'}
+                                onPress2={() => {
                                     setKeys(exifKeys);
                                 }}
-                                text2={'Data'}
-                                onPress2={() => {
+                                text3={'Data'}
+                                onPress3={() => {
                                     setKeys(dataKeys);
                                 }}
-                            // text3={3}
-                            // onPress3={() => {
-                            //     setTags(tags);
-                            // }}
                             />
 
                             <SubmitBtn

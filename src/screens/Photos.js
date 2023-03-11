@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
-import { Checkbox, PlaceholderBtn } from '../components/buttons/FlatButtons';
+import { Checkbox, EditBtn, PlaceholderBtn } from '../components/buttons/FlatButtons';
 import MenuButton from '../components/buttons/MenuButton';
 import SelectionMenu from '../components/buttons/SelectionMenu';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';
@@ -15,11 +15,11 @@ const PHOTOS_ASSETS_STORAGE_KEY = 'photos_assets';
 export default function PhotosScreen({ navigation, route }) {
     const [key, setKey] = useState(0);
     const [displayedAssets, setDisplayedAssets] = useState([]);
-    const [filteredAssets, setFilteredAssets] = useState([]);
     const [selectedAssets, setSelectedAssets] = useState([]);
+    const [filteredAssets, setFilteredAssets] = useState([]);
     const [selectMode, setSelectMode] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-
+    const [screenLoaded, setScreenLoaded] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -35,46 +35,45 @@ export default function PhotosScreen({ navigation, route }) {
     useEffect(() => {
         (async () => {
             const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
-            if (storedPhotoAssets) {
+            if (storedPhotoAssets && filteredAssets.length === 0) {
                 setDisplayedAssets(storedPhotoAssets);
                 console.log('Displaying stored Assets...');
+                setScreenLoaded(true);
+            } else if (filteredAssets.length > 0) {
+                setDisplayedAssets(filteredAssets);
+                console.log('Displaying filtered Assets...');
+                setScreenLoaded(true);
             } else {
-                setDisplayedAssets([]);
                 console.log('No stored Assets.');
             }
         })();
-    }, [route.params.filteredAssets < 0 || route.params.filteredAssets > null]);
+    }, [screenLoaded === false]);
 
     useEffect(() => {
         if (route.params.filteredAssets && route.params.filteredAssets.length > 0) {
             setFilteredAssets(route.params.filteredAssets);
-            setDisplayedAssets(filteredAssets);
+            setDisplayedAssets(route.params.filteredAssets);  
+            setScreenLoaded(true); 
             console.log('Displaying filtered Assets...');
         } else {
             console.log('No filtered Assets.');
         }
-    }, [route.params.filteredAssets && route.params.filteredAssets.length > 0]);
+    }, [route.params.filteredAssets]);
 
-    const resetFilters = async () => {
-        const storedPhotoAssets = await retrieveData(PHOTOS_ASSETS_STORAGE_KEY);
-        if (storedPhotoAssets) {
-            setDisplayedAssets(storedPhotoAssets);
-            setFilteredAssets([]);
-            setSelectedAssets([]);
-            console.log('Reset filters and displaying stored assets.');
-            console.log('Stored assets: ', storedPhotoAssets);
-        } else {
-            setDisplayedAssets([]);
-            setFilteredAssets([]);
-            setSelectedAssets([]);
-            console.log('No stored assets to display.');
-        }
+    useEffect(() => {
+        setKey(key + 1);
+    }, [displayedAssets]);
+
+    const resetFilters = () => {
+        setFilteredAssets([]);
+        setKey(key + 1);
+        setScreenLoaded(false);
+        console.log('Resetting filters...');
     };
 
     const resetStorage = async () => {
         await clearStorage();
         setDisplayedAssets([]);
-        setFilteredAssets([]);
         setSelectedAssets([]);
         setKey(key + 1);
         console.log('Reset storage.');
@@ -197,15 +196,25 @@ export default function PhotosScreen({ navigation, route }) {
                 )}
             </View>
             <View>
-                {!selectMode && (<MenuButton
-                    menuOpen={menuOpen}
-                    setMenuOpen={setMenuOpen}
-                    selectMode={selectMode}
-                    setSelectMode={setSelectMode}
-                    navigateToFilters={navigateToFilters}
-                    pickImage={pickImage}
-                />
-                )}
+                {!selectMode &&
+                    <View>
+                        {filteredAssets.length > 0 &&
+                            <EditBtn
+                                text={'Reset'}
+                                onPress={resetFilters}
+                            />
+                        }
+                        <MenuButton
+                            menuOpen={menuOpen}
+                            setMenuOpen={setMenuOpen}
+                            selectMode={selectMode}
+                            setSelectMode={setSelectMode}
+                            navigateToFilters={navigateToFilters}
+                            pickImage={pickImage}
+                        />
+                    </View>
+
+                }
                 {selectMode && (
                     <View>
                         <SelectionMenu

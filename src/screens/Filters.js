@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, SafeAreaView, View } from 'react-native';
+import {ActivityIndicator, FlatList, ScrollView, SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
-import { Containers, FlatBtn, ModalStyle } from '../styles/GlobalStyles';
+import { Containers, FlatBtn, ModalStyle, LoadingIcon } from '../styles/GlobalStyles';
+import Colors from '../styles/Colors';
 import { formatDateTime } from '../utils/formatUtils';
 import { combineObjects } from '../utils/arrayUtils';
 import { removeEmptyUniqueVals } from '../utils/objUtils';
 import { Closebtn, DropDownPicker, EditBtn, PiecedBtn, PlaceholderBtn, SubmitBtn } from '../components/buttons/FlatButtons';
 import { IconBtn } from '../components/buttons/FloatingButtons';
 import FilterMenu from '../components/buttons/FilterMenu';
+import FilterButton from '../components/buttons/FilterButton';
 
 export default function FilterScreen({ navigation, route }) {
 
@@ -24,7 +26,6 @@ export default function FilterScreen({ navigation, route }) {
   const [selectorKeyValues, setSelectorKeyValues] = useState([]);
   const [selectedKeyValues, setSelectedKeyValues] = useState([]);
   const [menuOpen, setMenuOpen] = useState(true);
-  const [filterBtnOpen, setFilterBtnOpen] = useState(false);
 
   const [assetsTransformed, setAssetsTransformed] = useState(false);
   useEffect(() => {
@@ -49,8 +50,8 @@ export default function FilterScreen({ navigation, route }) {
           let dateValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[0] : 'No Data';
           let timeValue = photo.exif.DateTime !== undefined ? dateTimeValue.split('|')[1] : 'No Data';
           let defaultData = {
-            latitude: photo.exif.GPSLatitude,
-            longitude: photo.exif.GPSLongitude,
+            latitude: photo.exif.GPSLatitude !== undefined ? photo.exif.GPSLatitude : 'No Data',
+            longitude: photo.exif.GPSLongitude !== undefined ? photo.exif.GPSLongitude : 'No Data',
             date: dateValue,
             time: timeValue,
             city: 'No Data',
@@ -86,9 +87,7 @@ export default function FilterScreen({ navigation, route }) {
           alert('Sorry, we need location permissions to make this work!');
         } else {
           for (let i = 0; i < locatesParsed.length; i++) {
-            if (locatesParsed[i].latitude === undefined || locatesParsed[i].longitude === undefined) {
-              locatesParsed[i].latitude = 'No Data';
-              locatesParsed[i].longitude = 'No Data';
+            if (locatesParsed[i].latitude === 'No Data' || locatesParsed[i].longitude === 'No Data') {
               console.log('No location data for asset: ', locatesParsed[i]);
 
             } else {
@@ -142,32 +141,36 @@ export default function FilterScreen({ navigation, route }) {
   const backToFilterModal = () => {
     setAssets(importedAssets);
     setMenuOpen(true);
-    setOptions(true);
+    // setOptions(true);
   }
 
   function navigateToPhotos() {
     navigation.navigate('Photos');
   }
 
-  const [options, setOptions] = useState(true);
-  function renderSelectorDropDown(item, index) {
+  function navigateToFilteredPhotos() {
+    console.log('Navigating to Photos with filtered assets...');
+    console.log('filteredAssets: ', filteredAssets);
+    navigation.navigate('Photos', { filteredAssets: filteredAssets });
+  }
+
+  // const [options, setOptions] = useState(true);
+  // const [filterBtnOpen, setFilterBtnOpen] = useState(false);
+  function addFilterBtns(item, index) {
     // console.log('item: ', item);
     if (selectedKeyValues.length > 0) {
       console.log('selectedKeyValues: ', selectedKeyValues);
     }
-
     return (
-      <View>
-        <DropDownPicker
+        <FilterButton
           assets={assets}
           index={index}
           item={item}
-          options={options}
+          // options={options}
           selectedKeyValues={selectedKeyValues}
           setFilteredAssets={setFilteredAssets}
           setSelectedKeyValues={setSelectedKeyValues}
         />
-      </View>
     );
   }
 
@@ -175,6 +178,11 @@ export default function FilterScreen({ navigation, route }) {
 
     <SafeAreaView style={Containers.container}>
       <View style={Containers.container}>
+        {loaded === false &&
+          <View style={Containers.centered}>
+            <ActivityIndicator size="large" color={Colors.dark} />
+          </View>
+        }
         {selectorKeyValues.length === 0 &&
         loaded === true &&
           <View style={Containers.centered}>
@@ -188,12 +196,11 @@ export default function FilterScreen({ navigation, route }) {
           <FlatList
             // contentContainerStyle={FlatBtn.btnContainer}
             data={selectorKeyValues}
-            renderItem={({ item, index }) => renderSelectorDropDown(item, index)}
+            renderItem={({ item, index }) => addFilterBtns(item, index)}
             keyExtractor={(item, index) => index.toString()}
             numColumns={3}
             columnWrapperStyle={{ flexWrap: 'wrap', justifyContent: 'space-around' }}
-          >
-          </FlatList>
+          />
         }
       </View>
 
@@ -204,20 +211,6 @@ export default function FilterScreen({ navigation, route }) {
               text={`Clear (${selectedKeyValues.length})`} CHNGE THIS VALUE
               onPress={() => {
                 setSelectedKeyValues([]);
-              }}
-            /> */}
-            {/* <PiecedBtn
-              text1={
-                'Options'
-              }
-              text2={
-                'Selected'
-              }
-              onPress1={() => {
-                setOptions(true);
-              }}
-              onPress2={() => {
-                setOptions(false);
               }}
             /> */}
             <EditBtn
@@ -234,7 +227,6 @@ export default function FilterScreen({ navigation, route }) {
               onPress={() => {
                 setSelectedKeyValues([]);
                 setFilteredAssets(assets);
-
                 console.log('FilteredAssets Reset...', assets);
 
               }}
@@ -242,6 +234,9 @@ export default function FilterScreen({ navigation, route }) {
 
             <SubmitBtn
               text={'Photos' + ' (' + filteredAssets.length + ')'}
+            onPress={() => {
+              navigateToFilteredPhotos();
+            }}
             />
           </View>
         </View>

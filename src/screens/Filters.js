@@ -14,6 +14,8 @@ import FilterButton from '../components/buttons/FilterButton';
 export default function FilterScreen({ navigation, route }) {
 
   const importedAssets = route.params.importedAssets;
+
+  const [reloads, setReloads] = useState(0);
   const [assets, setAssets] = useState([]);
   const [filteredAssets, setFilteredAssets] = useState([]);
   const [masterAsset, setMasterAsset] = useState([]);
@@ -50,20 +52,20 @@ export default function FilterScreen({ navigation, route }) {
           let dateValue = photo.exif.DateTimeOriginal !== undefined ? dateTimeValue.split('|')[0] : 'No Data';
           let timeValue = photo.exif.DateTimeOriginal !== undefined ? dateTimeValue.split('|')[1] : 'No Data';
           let defaultData = {
-            latitude: photo.exif.GPSLatitude !== undefined ? photo.exif.GPSLatitude : 'No Data',
-            longitude: photo.exif.GPSLongitude !== undefined ? photo.exif.GPSLongitude : 'No Data',
-            date: dateValue,
-            time: timeValue,
-            city: 'No Data',
-            country: 'No Data',
-            district: 'No Data',
-            postalCode: 'No Data',
-            region: 'No Data',
-            subregion: 'No Data',
-            street: 'No Data',
-            cityState: 'No Data',
-            address: 'No Data',
-            fullAddress: 'No Data',
+            Latitude: photo.exif.GPSLatitude !== undefined ? photo.exif.GPSLatitude : 'No Data',
+            Longitude: photo.exif.GPSLongitude !== undefined ? photo.exif.GPSLongitude : 'No Data',
+            Date: dateValue,
+            Time: timeValue,
+            City: 'No Data',
+            Country: 'No Data',
+            District: 'No Data',
+            PostalCode: 'No Data',
+            Region: 'No Data',
+            Subregion: 'No Data',
+            Street: 'No Data',
+            CityState: 'No Data',
+            Address: 'No Data',
+            FullAddress: 'No Data',
           };
           photo.data = defaultData;
         })
@@ -87,24 +89,24 @@ export default function FilterScreen({ navigation, route }) {
           alert('Sorry, we need location permissions to make this work!');
         } else {
           for (let i = 0; i < locatesParsed.length; i++) {
-            if (locatesParsed[i].latitude === 'No Data' || locatesParsed[i].longitude === 'No Data') {
+            if (locatesParsed[i].Latitude === 'No Data' || locatesParsed[i].Longitude === 'No Data') {
               console.log('No location data for asset: ', locatesParsed[i]);
 
             } else {
               let location = await Location.reverseGeocodeAsync({
-                latitude: locatesParsed[i].latitude,
-                longitude: locatesParsed[i].longitude,
+                latitude: locatesParsed[i].Latitude,
+                longitude: locatesParsed[i].Longitude,
               });
-              locatesParsed[i].city = location[0].city;
-              locatesParsed[i].country = location[0].country;
-              locatesParsed[i].district = location[0].district;
-              locatesParsed[i].postalCode = location[0].postalCode;
-              locatesParsed[i].region = location[0].region;
-              locatesParsed[i].subregion = location[0].subregion;
-              locatesParsed[i].street = location[0].street;
-              locatesParsed[i].cityState = location[0].city + ', ' + location[0].region;
-              locatesParsed[i].address = location[0].name + ' ' + location[0].street;
-              locatesParsed[i].fullAddress = location[0].name + ' ' + location[0].street + ', ' + location[0].city + ', ' + location[0].region + ' ' + location[0].postalCode;
+              locatesParsed[i].City = location[0].city;
+              locatesParsed[i].Country = location[0].country;
+              locatesParsed[i].District = location[0].district;
+              locatesParsed[i].PostalCode = location[0].postalCode;
+              locatesParsed[i].Region = location[0].region;
+              locatesParsed[i].Subregion = location[0].subregion;
+              locatesParsed[i].Street = location[0].street;
+              locatesParsed[i].CityState = location[0].city + ', ' + location[0].region;
+              locatesParsed[i].Address = location[0].name + ' ' + location[0].street;
+              locatesParsed[i].FullAddress = location[0].name + ' ' + location[0].street + ', ' + location[0].city + ', ' + location[0].region + ' ' + location[0].postalCode;
             }
             importedAssets[i].data = locatesParsed[i];
           }

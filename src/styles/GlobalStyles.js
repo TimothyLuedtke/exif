@@ -52,8 +52,8 @@ export const ImageStyle = StyleSheet.create({
         top: 0,
         left: 0,
         zIndex: 1,
-        width: width / 2,
-        height: width / 2,
+        width: width / 3,
+        height: width / 3,
     },
 
     // 1
@@ -68,8 +68,8 @@ export const ImageStyle = StyleSheet.create({
     // 1
     halfCoverImage: {
         position: 'relative',
-        width: width / 2,
-        height: width / 2,
+        width: width / 3,
+        height: width / 3,
         resizeMode: 'cover',
     },
 

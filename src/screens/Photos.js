@@ -164,7 +164,7 @@ export default function PhotosScreen({ navigation, route }) {
                 {displayedAssets.length > 0 && (
                     <FlatGrid
                         key={key}
-                        itemDimension={(width / 2)}
+                        itemDimension={(width / 3)}
                         data={displayedAssets}
                         style={Containers.container}
                         spacing={0}

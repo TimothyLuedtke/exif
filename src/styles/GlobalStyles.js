@@ -1,8 +1,8 @@
 import { Dimensions, StyleSheet } from "react-native";
 import Colors from "./Colors";
-import { IconSize, TextSize } from "./Sizing";
+import { TextSize } from "./Sizing";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 
 export const Containers = StyleSheet.create({
@@ -461,81 +461,5 @@ export const ModalStyle = StyleSheet.create({
         height: 1,
         backgroundColor: Colors.black,
         marginVertical: 10,
-    },
-});
-
-export const DropDownPickerStyle = StyleSheet.create({
-
-    // 1
-    container: {
-        // backgroundColor: Colors.gray,
-        // borderRadius: 50,
-        marginVertical: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    // 1
-    row: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        // backgroundColor: Colors.gray,
-    },
-    // 
-    labelBtn: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: Colors.dark,
-        borderWidth: 1,
-        borderRadius: 50,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-    },
-    // 1
-    label: {
-        color: Colors.dark,
-        fontSize: TextSize.medium,
-        // fontWeight: '500',
-        // marginRight: 10,
-        // textTransform: 'uppercase',
-    },
-    subLabel: {
-        color: Colors.dark,
-        fontSize: TextSize.medium,
-        // fontWeight: '500',
-        // marginRight: 10,
-        // textTransform: 'uppercase',
-    },
-    // 
-    dropdown: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        // paddingHorizontal: 20,
-        // backgroundColor: Colors.gray,
-    },
-    // 1
-    value: {
-        fontSize: TextSize.medium,
-        color: Colors.dark,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        // padding: 10,
-        borderColor: Colors.light,
-        borderWidth: 1,
-        borderRadius: 50,
-        backgroundColor: Colors.light,
-    },
-    // 
-    selectedValue: {
-        fontSize: TextSize.medium,
-        color: Colors.light,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderColor: Colors.dark,
-        borderWidth: 1,
-        borderRadius: 50,
-        backgroundColor: Colors.dark,
     },
 });

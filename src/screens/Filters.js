@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, FlatList, ScrollView, SafeAreaView, View } from 'react-native';
+import { ActivityIndicator, FlatList, SafeAreaView, View } from 'react-native';
 import * as Location from 'expo-location';
-import { Containers, FlatBtn, ModalStyle, LoadingIcon } from '../styles/GlobalStyles';
+import { Containers, ModalStyle } from '../styles/GlobalStyles';
 import Colors from '../styles/Colors';
 import { formatDateTime } from '../utils/formatUtils';
 import { combineObjects } from '../utils/arrayUtils';
 import { removeEmptyUniqueVals } from '../utils/objUtils';
-import { Closebtn, DropDownPicker, EditBtn, InvertedEditBtn, PiecedBtn, PlaceholderBtn, SubmitBtn, SubmitIcon } from '../components/buttons/FlatButtons';
+import { EditBtn, PlaceholderBtn, SubmitBtn } from '../components/buttons/FlatButtons';
 import { IconBtn } from '../components/buttons/FloatingButtons';
 import FilterMenu from '../components/buttons/FilterMenu';
 import FilterButton from '../components/buttons/FilterButton';

@@ -2,14 +2,12 @@ import React from 'react';
 import { View } from 'react-native';
 import { Containers, ModalStyle } from '../../styles/GlobalStyles';
 import { IconBtn } from './FloatingButtons';
-import { Closebtn, SelectBtn, SubmitBtn, SubmitIcon, EditBtn, PiecedBtn } from './FlatButtons';
+import { SubmitIcon } from './FlatButtons';
 
 export default function MenuButton(props) {
 
     const {
         menuOpen,
-        resetFilters,
-        setDisplayAssets,
         setMenuOpen,
         selectMode,
         setSelectMode,

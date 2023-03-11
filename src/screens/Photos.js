@@ -2,8 +2,8 @@ import { Dimensions, Image, Pressable, Platform, SafeAreaView, View } from 'reac
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatGrid } from 'react-native-super-grid';
-import { clearStorage, storeData, retrieveData, removeData } from '../utils/storage/asyncStorage';
-import { Checkbox, EditBtn, PlaceholderBtn } from '../components/buttons/FlatButtons';
+import { clearStorage, storeData, retrieveData, } from '../utils/storage/asyncStorage';
+import { Checkbox, PlaceholderBtn } from '../components/buttons/FlatButtons';
 import MenuButton from '../components/buttons/MenuButton';
 import SelectionMenu from '../components/buttons/SelectionMenu';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';

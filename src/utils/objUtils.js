@@ -1,3 +1,4 @@
+
 export const reduceObjFromKeys = (source, keys) => {
     const obj = {};
     keys.forEach(key => {
@@ -17,7 +18,7 @@ export const morphObjToArrKeyValObjs = (obj) => {
 export function removeEmptyUniqueVals(obj) {
     for (let key in obj) {
         if (
-        // Array.isArray(obj[key]) && obj[key].length < 2 ||
+
             obj[key] === null ||
             obj[key] === undefined) {
             delete obj[key];

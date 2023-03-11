@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { ModalStyle } from '../../styles/GlobalStyles';
-import { Closebtn, SubmitIcon, EditBtn, InvertedEditBtn, SubmitBtn } from './FlatButtons';
+import { SubmitIcon, EditBtn } from './FlatButtons';
 
 export default function SelectionMenu(props) {
 
@@ -10,7 +10,6 @@ export default function SelectionMenu(props) {
         deleteSelected,
         selectAll,
         deselectAll,
-        selectedAssets,
     } = props;
 
     const deleter = () => {

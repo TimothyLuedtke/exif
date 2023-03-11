@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { FlatBtn, ModalStyle } from '../../styles/GlobalStyles';
-import { IconSize, TextSize } from '../../styles/Sizing';
-import Colors from '../../styles/Colors';
+import { ModalStyle } from '../../styles/GlobalStyles';
 import { filterNestedObjArr } from '../../utils/objUtils';
-import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn, SubmitIcon } from './FlatButtons';
+import { Closebtn, SelectBtn, EditBtn, SubmitIcon } from './FlatButtons';
 
 export default function FilterButton(props) {
 

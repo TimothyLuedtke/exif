@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Modal, Pressable, Text, View } from 'react-native';
-import { ModalStyle } from '../../styles/GlobalStyles';
-import { shapedArray } from '../../utils/arrayUtils';
-import { reduceObjFromKeys, morphObjToArrKeyValObjs } from '../../utils/objUtils';
-import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './FlatButtons';
+import { Containers, ModalStyle } from '../styles/GlobalStyles';
+import { shapedArray } from '../utils/arrayUtils';
+import { reduceObjFromKeys, morphObjToArrKeyValObjs } from '../utils/objUtils';
+import { Closebtn, SelectBtn, SubmitBtn, EditBtn, PiecedBtn } from './buttons/FlatButtons';
 
 export default function FilterMenu(props) {
 
@@ -89,21 +89,6 @@ export default function FilterMenu(props) {
         // resetSelected();
     }
 
-    // const reduceAssetsFromKeys = () => {
-    //     let reducedAssets = [];
-    //     assets.forEach((asset) => {
-    //         let reducedAsset = {
-    //             exif: reduceObjFromKeys(asset.exif, selectedExifKeys),
-    //             data: reduceObjFromKeys(asset.data, selectedDataKeys),
-    //             tags: asset.tags,
-    //             uri: asset.uri,
-    //         };
-    //         reducedAssets.push(reducedAsset);
-    //     });
-    //     // console.log('Assets reduced: ', reducedAssets);
-    //     setAssets(reducedAssets);
-    // }
-
     const submitMenu = () => {
         // setSelectorExif(morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
         // console.log('selectedExif set: ', morphObjToArrKeyValObjs(reduceObjFromKeys(masterAsset.exif, selectedExifKeys)));
@@ -156,8 +141,8 @@ export default function FilterMenu(props) {
                             />
                         </View>
                         <View style={ModalStyle.modalBody}>
+                            <Text style={ModalStyle.modalDivider} />
                             <View style={{ height: 300 }}>
-                                <Text style={ModalStyle.modalDivider} />
                                 <FlatList
                                     data={keys}
                                     renderItem={({ item }) => (
@@ -175,32 +160,41 @@ export default function FilterMenu(props) {
                                         flexWrap: 'wrap',
                                     }}
                                 />
-                                <Text style={ModalStyle.modalDivider} />
                             </View>
                         </View>
-                        <View style={ModalStyle.rowEnd}>
-                            <EditBtn
-                                text={'Select'}
-                                onPress={() => {
-                                    toggleAll();
-                                }}
-                                pressed={false}
-                            />
-                            <EditBtn
-                                text={selectedKeys.length + '/' + (exifKeys.length + dataKeys.length)}
-                                onPress={() => {
-                                    resetSelected();
-                                    // console.log('Loaded keys: ', loadedKeys);   
-                                }}
-                                pressed={false}
-                            />
+                        <View style={ModalStyle.modalDivider} />
+                            <View style={ModalStyle.row}>
+                                <View>
+                                    <Text style={ModalStyle.text}>Exif: {exifKeys.length}</Text>
+                                    <Text style={ModalStyle.text}>Data: {dataKeys.length}</Text>
+                                </View>
+                                <View>
+                                    <Text style={ModalStyle.text}>Selected: {selectedKeys.length}</Text>
+                                </View>
 
-                            <SubmitBtn
-                                text={'Apply'}
-                                onPress={submitMenu}
-                            />
+                            </View>
+                            <View style={ModalStyle.modalDivider} />
+                            <View style={ModalStyle.rowEnd}>
+                                <EditBtn
+                                    text={'Select All'}
+                                    onPress={() => {
+                                        toggleAll();
+                                    }}
+                                    pressed={false}
+                                />
+                                <EditBtn
+                                    text={'Reset'}
+                                    onPress={() => {
+                                        resetSelected();
+                                    }}
+                                    pressed={false}
+                                />
+                                <SubmitBtn
+                                    text={'Apply'}
+                                    onPress={submitMenu}
+                                />
+                            </View>
                         </View>
-                    </View>
                 </Modal>
             )}
 

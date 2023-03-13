@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ModalStyle } from '../../styles/GlobalStyles';
-import { SubmitIcon, EditBtn } from './FlatButtons';
+import { ModalStyle } from '../styles/GlobalStyles';
+import { Closebtn, SubmitIcon, EditBtn } from './buttons/FlatButtons';
 
 export default function SelectionMenu(props) {
 
@@ -24,25 +24,24 @@ export default function SelectionMenu(props) {
 
     return (
         <View style={ModalStyle.bottomModal}>
-            <View style={ModalStyle.row}>
-                <EditBtn
-                    text='Select All'
-                    onPress={selectAll}
+            <View style={ModalStyle.rowEnd}>
+
+                <Closebtn
+                    onPress={close}
                 />
+            </View>
+            <View style={ModalStyle.rowEnd}>
                 <EditBtn
                     text='Deselect All'
                     onPress={deselectAll}
                 />
-
-            </View>
-            <View style={ModalStyle.darkRowEnd}>
+                <EditBtn
+                    text='Select All'
+                    onPress={selectAll}
+                />
                 <SubmitIcon
                     icon='delete'
                     onPress={deleter}
-                />
-                <SubmitIcon
-                    icon='close'
-                    onPress={close}
                 />
             </View>
         </View>

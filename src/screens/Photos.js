@@ -5,7 +5,8 @@ import { FlatGrid } from 'react-native-super-grid';
 import { clearStorage, storeData, retrieveData, } from '../utils/storage/asyncStorage';
 import { Checkbox, PlaceholderBtn } from '../components/buttons/FlatButtons';
 import MenuButton from '../components/buttons/MenuButton';
-import SelectionMenu from '../components/buttons/SelectionMenu';
+import SelectionMenu from '../components/SelectionMenu';
+import SwiperWithRenderItems from '../components/SwiperWithRenderItems';
 import { Containers, ImageStyle } from '../styles/GlobalStyles';
 
 const { width } = Dimensions.get('window');
@@ -71,14 +72,6 @@ export default function PhotosScreen({ navigation, route }) {
         console.log('Resetting filters...');
     };
 
-    const resetStorage = async () => {
-        await clearStorage();
-        setDisplayedAssets([]);
-        setSelectedAssets([]);
-        setKey(key + 1);
-        console.log('Reset storage.');
-    };
-
     const deleteSelected = async () => {
         const newPhotoAssets = displayedAssets.filter(item => !selectedAssets.includes(item.uri));
         setDisplayedAssets(newPhotoAssets);
@@ -93,11 +86,6 @@ export default function PhotosScreen({ navigation, route }) {
         } else {
             setSelectedAssets([...selectedAssets, uri]);
         }
-    };
-
-    const rerender = () => {
-        setKey(key + 1);
-        console.log('Rerendering...', key);
     };
 
     const pickImage = async () => {
@@ -161,7 +149,14 @@ export default function PhotosScreen({ navigation, route }) {
                         />
                     </View>
                 }
-                {displayedAssets.length > 0 && (
+                {displayedAssets.length > 0 && !selectMode && (
+                    <View style={Containers.centered}>
+                    <SwiperWithRenderItems
+                        data={displayedAssets}
+                    />
+                    </View>
+                )}
+                {displayedAssets.length > 0 && selectMode && (
                     <FlatGrid
                         key={key}
                         itemDimension={(width / 3)}

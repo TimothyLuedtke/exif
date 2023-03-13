@@ -1,5 +1,5 @@
 export const IconSize = ({
-    small: 20,
+    small: 25,
     medium: 30,
     large: 60,
 });

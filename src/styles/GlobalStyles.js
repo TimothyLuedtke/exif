@@ -2,10 +2,11 @@ import { Dimensions, StyleSheet } from "react-native";
 import Colors from "./Colors";
 import { TextSize } from "./Sizing";
 
-const { width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 
 export const Containers = StyleSheet.create({
+
     // 1
     container: {
         flex: 1,
@@ -59,8 +60,8 @@ export const ImageStyle = StyleSheet.create({
     // 1
     overlayCheckBox: {
         position: 'absolute',
-        bottom: 5,
-        right: 5,
+        bottom: 0,
+        right: 0,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -71,6 +72,14 @@ export const ImageStyle = StyleSheet.create({
         width: width / 3,
         height: width / 3,
         resizeMode: 'cover',
+    },
+
+    fullScreen: {
+        flex: 1,
+        backgroundColor: Colors.background,
+        resizeMode: "contain",
+        height: height * 1,
+        width,
     },
 
 });
@@ -172,12 +181,13 @@ export const FlatBtn = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-
-        backgroundColor: Colors.dark,
+        // borderColor: Colors.dark,
+        // borderWidth: 1,
+        backgroundColor: Colors.light,
         borderRadius: 50,
         padding: 10,
         paddingHorizontal: 10,
-    },    
+    },
     // 
     submitBtn: {
         flexDirection: 'row',
@@ -259,9 +269,10 @@ export const FlatBtn = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 10,
-        // paddingHorizontal: 20,
-        // padding: 10,
+        // paddingVertical: 10,
+        paddingVertical: 5,
+        borderRadius: 50,
+        backgroundColor: Colors.background,
     },
     //
     select: {
@@ -360,7 +371,7 @@ export const ModalStyle = StyleSheet.create({
         position: 'absolute',
         left: 10,
         right: 10,
-        bottom: 50,
+        bottom: 30,
         justifyContent: 'flex-end',
         backgroundColor: Colors.light,
         borderRadius: 10,
@@ -433,8 +444,19 @@ export const ModalStyle = StyleSheet.create({
         backgroundColor: Colors.dark,
     },
 
+    rowStart: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        backgroundColor: Colors.transparent,
+    },
+
     column: {
         flexDirection: 'column',
+    },
+
+    text: {
+        fontSize: TextSize.medium,
+        color: Colors.dark,
     },
 
     // 1
@@ -461,5 +483,22 @@ export const ModalStyle = StyleSheet.create({
         height: 1,
         backgroundColor: Colors.black,
         marginVertical: 10,
+    },
+});
+
+export const PaginationStyle = StyleSheet.create({
+    paginationContainer: {
+        bottom: 0,
+
+    },
+    pagination: {
+        borderRadius: 100,
+        backgroundColor: Colors.transparent,
+        borderColor: Colors.dark,
+        borderWidth: 1,
+        width: 10,
+        height: 10,
+        marginHorizontal: 5,
+
     },
 });

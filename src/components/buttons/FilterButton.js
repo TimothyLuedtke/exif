@@ -12,6 +12,7 @@ export default function FilterButton(props) {
         // options,
         selectedKeyValues,
         setFilteredAssets,
+        filteredAssets,
         setSelectedKeyValues,
     } = props;
 
@@ -34,12 +35,12 @@ export default function FilterButton(props) {
         if (selectedValues.length === values.length) {
             setSelectedValues([]);
             delete selectedKeyValues[label];
-            console.log('selectedKeyValues: ', selectedKeyValues);
+            // console.log('selectedKeyValues: ', selectedKeyValues);
             setToggled(true);
         } else {
             setSelectedValues(values);
             setSelectedKeyValues({ ...selectedKeyValues, [label]: values });
-            console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: values });
+            // console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: values });
             setToggled(true);
         }
     };
@@ -50,10 +51,10 @@ export default function FilterButton(props) {
             setSelectedValues(newValues);
             if (newValues.length > 0) {
                 setSelectedKeyValues({ ...selectedKeyValues, [label]: newValues });
-                console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: newValues });
+                // console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: newValues });
             } else {
                 delete selectedKeyValues[label];
-                console.log('selectedKeyValues: ', selectedKeyValues);
+                // console.log('selectedKeyValues: ', selectedKeyValues);
             }
             setToggled(true);
             // console.log('removed value: ', value);
@@ -62,10 +63,10 @@ export default function FilterButton(props) {
             setSelectedValues([...selectedValues, value]);
             if (selectedValues.length > 0) {
                 setSelectedKeyValues({ ...selectedKeyValues, [label]: [...selectedValues, value] });
-                console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: [...selectedValues, value] });
+                // console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: [...selectedValues, value] });
             } else {
                 setSelectedKeyValues({ ...selectedKeyValues, [label]: [value] });
-                console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: [value] });
+                // console.log('selectedKeyValues: ', { ...selectedKeyValues, [label]: [value] });
             }
             setToggled(true);
             // console.log('added value: ', value);
@@ -109,9 +110,9 @@ export default function FilterButton(props) {
                                 {label}
                             </Text>
                         </View>
+                                <View style={ModalStyle.modalDivider} />
                         <View style={ModalStyle.modalBody}>
                             <View style={{ height: 300 }}>
-                                <Text style={ModalStyle.modalDivider} />
                                 <FlatList
                                     data={values}
                                     renderItem={({ item, index }) => (
@@ -128,10 +129,25 @@ export default function FilterButton(props) {
                                         flexWrap: 'wrap',
                                     }}
                                 />
-                                <Text style={ModalStyle.modalDivider} />
                             </View>
                         </View>
+                                <View style={ModalStyle.modalDivider} />
+                                    <View style={ModalStyle.row}>
+                                    <Text style={ModalStyle.text}>
+                                        {filteredAssets.length + ' of ' + assetsClone.length + ' matches'}
+                                    </Text>
+                                </View>
+                        <View style={ModalStyle.modalDivider} />
                         <View style={ModalStyle.rowEnd}>
+                            <EditBtn
+                                text={'Clear'}
+                                onPress={() => {
+                                    setSelectedValues([]);
+                                    delete selectedKeyValues[label];
+                                    console.log('selectedKeyValues: ', selectedKeyValues);
+                                    setToggled(true);
+                                }}
+                            />
                             <EditBtn
                                 text={selectedValues.length === values.length ? 'Unselect All' : 'Select All'}
                                 onPress={toggleAll}

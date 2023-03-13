@@ -21,7 +21,7 @@ export default function App() {
           name="Photos"
           component={PhotosScreen}
           options={{
-            // headerTransparent: true,
+            headerTransparent: true,
             headerTitle: 'Photos',
             headerTitleAlign: 'center',
             headerTitleStyle: {
@@ -33,14 +33,14 @@ export default function App() {
         <Stack.Screen
           name="Filters"
           component={FilterScreen}
-          options={{
-            // headerTransparent: true,
-            headerTitle: 'Filters',
-            headerTitleAlign: 'center',
-            headerTitleStyle: {
-              color: Colors.dark,
-            },
-          }}
+          // options={{
+          //   headerTransparent: true,
+          //   headerTitle: 'Filters',
+          //   headerTitleAlign: 'center',
+          //   headerTintColor: {
+          //     color: Colors.dark,
+          //   },
+          // }}
           initialParams={{ importedAssets: [] }}
         />
       </Stack.Navigator>

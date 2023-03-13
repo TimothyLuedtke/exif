@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, FlatList, SafeAreaView, View } from 'react-native';
+import { ActivityIndicator, FlatList, SafeAreaView, Text, View } from 'react-native';
 import * as Location from 'expo-location';
 import { Containers, ModalStyle } from '../styles/GlobalStyles';
 import Colors from '../styles/Colors';
@@ -8,7 +8,7 @@ import { combineObjects } from '../utils/arrayUtils';
 import { removeEmptyUniqueVals } from '../utils/objUtils';
 import { EditBtn, PlaceholderBtn, SubmitBtn } from '../components/buttons/FlatButtons';
 import { IconBtn } from '../components/buttons/FloatingButtons';
-import FilterMenu from '../components/buttons/FilterMenu';
+import FilterMenu from '../components/FilterMenu';
 import FilterButton from '../components/buttons/FilterButton';
 
 export default function FilterScreen({ navigation, route }) {
@@ -172,6 +172,7 @@ export default function FilterScreen({ navigation, route }) {
         // options={options}
         selectedKeyValues={selectedKeyValues}
         setFilteredAssets={setFilteredAssets}
+        filteredAssets={filteredAssets}
         setSelectedKeyValues={setSelectedKeyValues}
       />
     );
@@ -202,8 +203,7 @@ export default function FilterScreen({ navigation, route }) {
             data={selectorKeyValues}
             renderItem={({ item, index }) => addFilterBtns(item, index)}
             keyExtractor={(item, index) => index.toString()}
-            numColumns={3}
-            columnWrapperStyle={{ flexWrap: 'wrap', justifyContent: 'space-around' }}
+            initialNumToRender={10}
           />
         </View>
         }
@@ -211,16 +211,12 @@ export default function FilterScreen({ navigation, route }) {
 
       {selectorKeyValues.length > 0 && menuOpen === false &&
         <View style={ModalStyle.bottomModal}>
+          <View style={ModalStyle.modalDivider}></View>
+          <View style={ModalStyle.row}>
+            <Text style={ModalStyle.text}> {filteredAssets.length + ' of ' + assets.length + ' matches'}</Text>
+          </View>
+          <View style={ModalStyle.modalDivider}></View>
           <View style={ModalStyle.rowEnd}>
-          <EditBtn
-              text={'Photos: ' + filteredAssets.length + '/' + assets.length}
-              onPress={() => {
-                setSelectedKeyValues([]);
-                setFilteredAssets(assets);
-                console.log('FilteredAssets Reset...', assets);
-
-              }}
-            />
             <EditBtn
               text={'Filters'}
               onPress={() => {
@@ -251,20 +247,16 @@ export default function FilterScreen({ navigation, route }) {
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
             setFiltersLoaded={setFiltersLoaded}
-            // setSelectorKeys={setSelectorKeys}
             setSelectorKeyValues={setSelectorKeyValues}
-            // selectorKeyValues={selectorKeyValues}
             masterAsset={masterAsset}
             assets={assets}
             setAssets={setAssets}
             exifKeys={exifKeys}
             selectedExifKeys={selectedExifKeys}
             setSelectedExifKeys={setSelectedExifKeys}
-            // setSelectorExif={setSelectorExif}
             dataKeys={dataKeys}
             selectedDataKeys={selectedDataKeys}
             setSelectedDataKeys={setSelectedDataKeys}
-          // setSelectorData={setSelectorData}
           // tags={tags}
           />
         }

@@ -8,7 +8,7 @@ import Colors from '../../styles/Colors';
 
 export const Checkbox = ({ check }) => (
     <View style={ImageStyle.overlayCheckBox}>
-        <MaterialIcons name={check ? 'check-circle-outline' : 'radio-button-unchecked'} size={IconSize.medium} color={Colors.light} />
+        <MaterialIcons name={check ? 'check-box' : 'check-box-outline-blank'} size={IconSize.small} color={Colors.light} />
     </View>
 );
 
@@ -33,7 +33,7 @@ export const SubmitBtn = ({ text, onPress }) => (
 export const SubmitIcon = ({ icon, onPress }) => (
     <View style={FlatBtn.btnContainer}>
         <Pressable style={FlatBtn.submitIconBtn} onPress={onPress}>
-            <MaterialIcons name={icon} size={IconSize.medium} color={Colors.light} />
+            <MaterialIcons name={icon} size={IconSize.medium} color={Colors.dark} />
         </Pressable>
     </View>
 );
@@ -113,14 +113,14 @@ export const SelectBtn = ({ text, onPress, pressed }) => (
             <Text style={pressed ? FlatBtn.selected : FlatBtn.select}>
                 {text}
             </Text>
-            <MaterialIcons
+            {/* <MaterialIcons
                 name={'close'}
                 size={IconSize.small}
                 color={
                     pressed ?
                         Colors.dark :
                         Colors.light}
-            />
+            /> */}
         </Pressable>
     </View>
 );

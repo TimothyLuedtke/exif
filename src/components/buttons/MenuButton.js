@@ -29,9 +29,9 @@ export default function MenuButton(props) {
             {menuOpen && (
 
                 <View style={ModalStyle.bottomModal}>
-                    <View style={ModalStyle.darkRow}>
+                    <View style={ModalStyle.row}>
                             <SubmitIcon
-                                icon='delete'
+                                icon='edit'
                                 onPress={toggleSelectMode}
                             />
                         <SubmitIcon

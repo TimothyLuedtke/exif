@@ -21,7 +21,7 @@ export default function App() {
           name="Photos"
           component={PhotosScreen}
           options={{
-            headerTransparent: true,
+            // headerTransparent: true,
             headerTitle: 'Photos',
             headerTitleAlign: 'center',
             headerTitleStyle: {

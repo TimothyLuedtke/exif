@@ -63,7 +63,7 @@ export default function PhotosScreen({ navigation, route }) {
 
     useEffect(() => {
         setKey(key + 1);
-    }, [displayedAssets]);
+    }, [setDisplayedAssets, setScreenLoaded]);
 
     const resetFilters = () => {
         setFilteredAssets([]);
